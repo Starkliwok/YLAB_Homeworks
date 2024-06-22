@@ -2,7 +2,6 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.entity.roles.User;
-import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

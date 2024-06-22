@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.dao.implementation;
 
-import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.entity.roles.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

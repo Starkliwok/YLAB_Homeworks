@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.dao.implementation;
 
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
 import com.Y_LAB.homework.entity.reservation.Reservation;
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
