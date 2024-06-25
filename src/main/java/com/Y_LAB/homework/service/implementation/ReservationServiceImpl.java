@@ -24,77 +24,49 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDAO = new ReservationDAOImpl();
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#getAllReservations} для получения коллекции всех броней
-     * @return коллекция всех броней
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservations() {
         return reservationDAO.getAllReservations();
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#getAllReservationsByUsers} для получения коллекции всех броней отсортированных
-     * по пользователю
-     * @return коллекция всех броней отсортированных по пользователю
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByUsers() {
         return reservationDAO.getAllReservationsByUsers();
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#getAllReservationsByDate} для получения коллекции всех броней отсортированных
-     * по дате
-     * @return коллекция всех броней отсортированных по дате
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByDate() {
         return reservationDAO.getAllReservationsByDate();
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#getAllUserReservations} для получения коллекции всех броней пользователя
-     * @param user объект пользователя
-     * @return коллекция всех броней пользователя
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllUserReservations(User user) {
         return reservationDAO.getAllUserReservations(user);
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#getReservation} для получения брони по уникальному идентификатору
-     * @param id уникальный идентификатор брони
-     * @return объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public Reservation getReservation(int id) {
         return reservationDAO.getReservation(id);
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#addReservation} для сохранения объекта брони
-     * @param reservation объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void addReservation(Reservation reservation) {
         reservationDAO.addReservation(reservation);
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#updateReservation} для обновления брони
-     * @param reservation объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void updateReservation(Reservation reservation) {
         reservationDAO.updateReservation(reservation);
     }
 
-    /**
-     * Метод вызывает {@link ReservationDAO#deleteReservation}для удаления брони
-     * @param id уникальный идентификатор брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void deleteReservation(int id) {
         reservationDAO.deleteReservation(id);

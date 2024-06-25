@@ -12,9 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,8 +42,8 @@ class ReservationDAOImplTest {
         userDAO.addUserToUserSet(user);
         reservation.setReservationPlace(reservationPlace);
         reservation.setUser(userDAO.getUserFromUserSet(user.getUsername(), user.getPassword()));
-        reservation.setStartDate(Date.from(LocalDateTime.of(2024, 6, 22, 8, 0).atZone(ZoneId.systemDefault()).toInstant()));
-        reservation.setEndDate(Date.from(LocalDateTime.of(2024, 6, 22, 22, 0).atZone(ZoneId.systemDefault()).toInstant()));
+        reservation.setStartDate(LocalDateTime.of(2024, 6, 22, 8, 0));
+        reservation.setEndDate(LocalDateTime.of(2024, 6, 22, 22, 0));
     }
 
     @AfterEach

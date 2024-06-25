@@ -16,8 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static com.Y_LAB.homework.constants.ReservationConstants.END_HOUR_FOR_RESERVATION;
 import static com.Y_LAB.homework.constants.ReservationConstants.START_HOUR_FOR_RESERVATION;
@@ -92,8 +90,8 @@ class ReservationPlaceDAOImplTest {
         Reservation reservation = new Reservation();
         reservation.setReservationPlace(reservationPlace);
         reservation.setUser(userService.getUserFromUserSet(user.getUsername(), user.getPassword()));
-        reservation.setStartDate(Date.from(LocalDateTime.of(2024, 6, 22, 8, 0).atZone(ZoneId.systemDefault()).toInstant()));
-        reservation.setEndDate(Date.from(LocalDateTime.of(2024, 6, 22, 22, 0).atZone(ZoneId.systemDefault()).toInstant()));
+        reservation.setStartDate(LocalDateTime.now().withHour(8).withMinute(0).withSecond(0).withNano(0));
+        reservation.setEndDate(LocalDateTime.now().withHour(22).withMinute(0).withSecond(0).withNano(0));
         int expected = reservationPlaceDAO
                 .getAllAvailableDatesForReservePlace(reservationPlace).size() - (END_HOUR_FOR_RESERVATION - START_HOUR_FOR_RESERVATION) - 1;
         reservationService.addReservation(reservation);

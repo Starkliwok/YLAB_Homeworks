@@ -5,9 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 /**
  * Класс описывает бронь помещений
@@ -31,10 +30,10 @@ public class Reservation {
     private User user;
 
     /** Поле даты начала брони.*/
-    private Date startDate;
+    private LocalDateTime startDate;
 
     /** Поле даты окончания брони.*/
-    private Date endDate;
+    private LocalDateTime endDate;
 
     /** Поле места бронирования.*/
     private ReservationPlace reservationPlace;
@@ -49,10 +48,9 @@ public class Reservation {
         return "\nБронь" +
                 "\nИдентификатор пользователя = " + user.getId() +
                 "\nДата начала = " +
-                startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
+                startDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
                 "\nДата окончания = " +
-                endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
-                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + reservationPlace.toString();
+                endDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
+                reservationPlace.toString();
     }
 }

@@ -3,12 +3,11 @@ package com.Y_LAB.homework.dao.implementation;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.entity.reservation.Reservation;
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,36 +26,25 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
     public ReservationPlaceDAOImpl() {
     }
 
-    /**
-     * Метод для получения всех мест для бронирования из {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @return Коллекция всех мест для бронирования
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlaces() {
         return allReservationPlaces;
     }
 
-    /**
-     * Метод для получения мест для бронирования по типу места из {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @param reservationPlace объект места для бронирования
-     * @return Коллекция мест для бронирования определённого типа
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlacesByTypes(ReservationPlace reservationPlace) {
         return allReservationPlaces.stream().filter(x -> x.getClass() == reservationPlace.getClass()).collect(Collectors.toList());
     }
 
-    /**
-     * Метод для получения мест и доступных дат для бронирования этого места из
-     * {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @return Коллекция мест и доступных дат для бронирования места
-     */
+    /** {@inheritDoc}*/
     @Override
-    public Map<ReservationPlace, List<Date>> getAllAvailableReservations() {
-        Map<ReservationPlace, List<Date>> availableReservations = new HashMap<>();
+    public Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations() {
+        Map<ReservationPlace, List<LocalDateTime>> availableReservations = new HashMap<>();
 
         for(ReservationPlace reservationPlace : allReservationPlaces) {
-            List<Date> allAvailableDatesForReservePlace = getAllAvailableDatesForReservePlace(reservationPlace);
+            List<LocalDateTime> allAvailableDatesForReservePlace = getAllAvailableDatesForReservePlace(reservationPlace);
             availableReservations.put(reservationPlace, allAvailableDatesForReservePlace);
         }
         return availableReservations;
@@ -69,42 +57,37 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
      * дней вперёд, после чего исключает доступные даты для бронирования, в случае если те
      * уже заняты, а так же исключает даты, если в них нет временных промежутков для бронирования.
      * Метод исключает временные промежутки которые не имеют пары, то есть не могут быть зарезервированы под бронь
+     *
      * @param reservationPlace объект места для бронирования
      * @return Коллекция доступных дат для бронирования места
      */
     @Override
-    public List<Date> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
-        List<Reservation> allReservations = new ReservationServiceImpl().getAllReservations();
-        List<Date> availableDates = new ArrayList<>();
-
+    public List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
+        ReservationService reservationService = new ReservationServiceImpl();
+        List<Reservation> allReservations = reservationService.getAllReservations();
+        List<LocalDateTime> availableDates = new ArrayList<>();
         for(int i = 0; i <= RESERVATION_PERIOD; i++) {
             for(int j = START_HOUR_FOR_RESERVATION; j <= END_HOUR_FOR_RESERVATION; j++) {
-                LocalDateTime localDateTime = LocalDateTime.now()
+                availableDates.add(
+                        LocalDateTime.now()
                         .withMinute(0)
                         .withSecond(0)
                         .withNano(0)
-                        .withDayOfMonth(LocalDate.now().getDayOfMonth() + i)
-                        .withHour(j);
-                availableDates.add(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+                        .withHour(j).plusDays(i));
             }
         }
         for(Reservation reservation : allReservations) {
             if(reservationPlace.equals(reservation.getReservationPlace())) {
-                LocalDateTime localStartDate = reservation.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                LocalDateTime localEndDate = reservation.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                long durationInHours = Duration.between(localStartDate, localEndDate).toHours();
+                long durationInHours = Duration.between(reservation.getStartDate(), reservation.getEndDate()).toHours();
                 for(int i = 0; i < durationInHours; i++) {
-                    availableDates.remove(Date.from(localEndDate.minusHours(i + 1).atZone(ZoneId.systemDefault()).toInstant()));
+                    availableDates.remove(reservation.getEndDate().minusHours(i + 1));
                 }
-                List<Date> datesToRemove = availableDates.stream()
-                        .filter(x -> x.before(Date.from(localEndDate.withHour(23).atZone(ZoneId.systemDefault()).toInstant())))
+                List<LocalDateTime> datesToRemove = availableDates.stream()
+                        .filter(x -> x.isBefore(reservation.getEndDate().withHour(23)))
                         .toList();
                 if(datesToRemove.size() > 2) {
                     for (int i = 1; i < datesToRemove.size(); i++) {
-                        LocalDateTime localDateTime1 = datesToRemove.get(i - 1).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                        LocalDateTime localDateTime2 = datesToRemove.get(i).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-                        if (localDateTime1.getHour() != localDateTime2.getHour() - 1) {
+                        if (datesToRemove.get(i - 1).getHour() != datesToRemove.get(i).getHour() - 1) {
                             if (i == 1) {
                                 availableDates.remove(datesToRemove.get(0));
                             } else {
@@ -120,21 +103,14 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         return availableDates;
     }
 
-    /**
-     * Метод для получения объекта места для бронирования из {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @param id уникальный идентификатор места
-     * @return Объект места для бронирования
-     */
+    /** {@inheritDoc}*/
     @Override
     public ReservationPlace getReservationPlace(int id) {
         List<ReservationPlace> filterReservationPlace = allReservationPlaces.stream().filter(x -> x.getId() == id).toList();
         return filterReservationPlace.isEmpty() ? null : filterReservationPlace.get(0);
     }
 
-    /**
-     * Метод для добавления места для бронирования в {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @param reservationPlace объект места для бронирования
-     */
+    /** {@inheritDoc}*/
     @Override
     public void addReservationPlace(ReservationPlace reservationPlace) {
         if(getReservationPlace(reservationPlace.getId()) == null) {
@@ -142,20 +118,14 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         }
     }
 
-    /**
-     * Метод для обновления места для бронирования в {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @param reservationPlace объект места для бронирования
-     */
+    /** {@inheritDoc}*/
     @Override
     public void updateReservationPlace(ReservationPlace reservationPlace) {
         deleteReservationPlace(reservationPlace.getId());
         allReservationPlaces.add(reservationPlace);
     }
 
-    /**
-     * Метод для удаления места для бронирования в {@link ReservationPlaceDAOImpl#allReservationPlaces}
-     * @param id уникальный идентификатор места для бронирования
-     */
+    /** {@inheritDoc}*/
     @Override
     public void deleteReservationPlace(int id) {
         allReservationPlaces.remove(getReservationPlace(id));

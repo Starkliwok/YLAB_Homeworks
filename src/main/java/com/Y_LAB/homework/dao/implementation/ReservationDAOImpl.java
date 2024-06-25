@@ -22,58 +22,38 @@ public class ReservationDAOImpl implements ReservationDAO {
     public ReservationDAOImpl() {
     }
 
-    /**
-     * Метод для получения коллекции всех броней
-     * @return коллекция всех броней
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservations() {
         return allReservations;
     }
 
-    /**
-     * Метод для получения коллекции всех броней отсортированных по пользователю из {@link ReservationDAOImpl#allReservations}
-     * @return коллекция всех броней отсортированных по пользователю
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByUsers() {
         return allReservations.stream().sorted(Comparator.comparing(o -> o.getUser().getId())).toList();
     }
 
-    /**
-     * Метод для получения коллекции всех броней отсортированных по дате из {@link ReservationDAOImpl#allReservations}
-     * @return коллекция всех броней отсортированных по дате
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByDate() {
         return allReservations.stream().sorted(Comparator.comparing(Reservation::getStartDate)).collect(Collectors.toList());
     }
 
-    /**
-     * Метод для получения коллекции всех броней пользователя из {@link ReservationDAOImpl#allReservations}
-     * @param user объект пользователя
-     * @return коллекция всех броней пользователя
-     */
+    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllUserReservations(User user) {
         return allReservations.stream().filter(x -> x.getUser().equals(user)).toList();
     }
 
-    /**
-     * Метод для получения брони по уникальному идентификатору из {@link ReservationDAOImpl#allReservations}
-     * @param id уникальный идентификатор брони
-     * @return объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public Reservation getReservation(int id) {
         List<Reservation> filterReservations = allReservations.stream().filter(x -> x.getId() == id).toList();
         return filterReservations.isEmpty() ? null : filterReservations.get(0);
     }
 
-    /**
-     * Метод для добавления брони в {@link ReservationDAOImpl#allReservations}
-     * @param reservation объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void addReservation(Reservation reservation) {
         if(getReservation(reservation.getId()) == null) {
@@ -81,20 +61,14 @@ public class ReservationDAOImpl implements ReservationDAO {
         }
     }
 
-    /**
-     * Метод для обновления брони в {@link ReservationDAOImpl#allReservations}
-     * @param reservation объект брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void updateReservation(Reservation reservation) {
         deleteReservation(reservation.getId());
         addReservation(reservation);
     }
 
-    /**
-     * Метод для удаления брони в {@link ReservationDAOImpl#allReservations}
-     * @param id уникальный идентификатор брони
-     */
+    /** {@inheritDoc}*/
     @Override
     public void deleteReservation(int id) {
         allReservations.remove(getReservation(id));

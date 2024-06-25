@@ -24,39 +24,25 @@ public class UserDAOImpl implements UserDAO {
     public UserDAOImpl() {
     }
 
-    /**
-     * Метод для получения коллекции всех пользователей из {@link UserDAOImpl#userSet}
-     * @return все пользователи в виде множества
-     */
+    /** {@inheritDoc}*/
     @Override
     public Set<User> getUserSet() {
         return userSet;
     }
 
-    /**
-     * Метод для получения коллекции всех логинов из {@link UserDAOImpl#allReservedUsernamesAndPasswords}
-     * @return все логины в виде множества
-     */
+    /** {@inheritDoc}*/
     @Override
     public Set<String> getUsernameSet() {
         return allReservedUsernamesAndPasswords.keySet();
     }
 
-    /**
-     * Метод для получения коллекции всех логинов и их паролей из {@link UserDAOImpl#allReservedUsernamesAndPasswords}
-     * @return все логины и пароли пользователей в виде ключа = значение
-     */
+    /** {@inheritDoc}*/
     @Override
     public Map<String, String> getAllReservedUsernamesAndPasswords() {
         return allReservedUsernamesAndPasswords;
     }
 
-    /**
-     * Метод для получения пользователя из {@link UserDAOImpl#userSet}
-     * @param username логин пользователя
-     * @param password пароль пользователя
-     * @return возвращает пользователя,
-     */
+    /** {@inheritDoc}*/
     @Override
     public User getUserFromUserSet(String username, String password) {
         for (User element : userSet) {
@@ -67,23 +53,14 @@ public class UserDAOImpl implements UserDAO {
         return null;
     }
 
-    /**
-     * Метод для добавления пользователя в {@link UserDAOImpl#allReservedUsernamesAndPasswords} и
-     * {@link UserDAOImpl#userSet}
-     * @param user пользователь
-     */
+    /** {@inheritDoc}*/
     @Override
     public void addUserToUserSet(User user) {
         userSet.add(user);
         allReservedUsernamesAndPasswords.put(user.getUsername(), user.getPassword());
     }
 
-    /**
-     * Метод для обновления логина пользователя в {@link UserDAOImpl#allReservedUsernamesAndPasswords} и
-     * {@link UserDAOImpl#userSet}
-     * @param user пользователь
-     * @param newUsername новый логин
-     */
+    /** {@inheritDoc}*/
     @Override
     public void updateUsername(User user, String newUsername) {
         allReservedUsernamesAndPasswords.remove(user.getUsername());
@@ -92,12 +69,7 @@ public class UserDAOImpl implements UserDAO {
         userSet.add(user);
     }
 
-    /**
-     * Метод для обновления пароля пользователя в {@link UserDAOImpl#allReservedUsernamesAndPasswords} и
-     * {@link UserDAOImpl#userSet}
-     * @param user пользователь
-     * @param newPassword новый пароль
-     */
+    /** {@inheritDoc}*/
     @Override
     public void updateUserPassword(User user, String newPassword) {
         user.setPassword(newPassword);
@@ -105,11 +77,7 @@ public class UserDAOImpl implements UserDAO {
         userSet.add(user);
     }
 
-    /**
-     * Метод для удаления пользователя в {@link UserDAOImpl#allReservedUsernamesAndPasswords} и
-     * {@link UserDAOImpl#userSet}
-     * @param user пользователь
-     */
+    /** {@inheritDoc}*/
     @Override
     public void deleteUser(User user) {
         userSet.remove(user);

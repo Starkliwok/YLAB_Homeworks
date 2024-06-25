@@ -13,7 +13,7 @@ import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -125,14 +125,13 @@ public class UserPanel {
 
     /** Метод выводит все места для бронирования и свободные даты для бронирования этих мест*/
     private void printAllAvailablePlaces() {
-        Map<ReservationPlace, List<Date>> availableReservations = reservationPlaceService.getAllAvailableReservations();
+        Map<ReservationPlace, List<LocalDateTime>> availableReservations = reservationPlaceService.getAllAvailableReservations();
         for(ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlaces()) {
             System.out.println(reservationPlace);
             System.out.println("Свободные даты для бронирования:");
-            for (Date date : availableReservations.get(reservationPlace)) {
+            for (LocalDateTime localDateTime : availableReservations.get(reservationPlace)) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-                LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                System.out.print(localDate.format(dateTimeFormatter) + ", ");
+                System.out.print(localDateTime.format(dateTimeFormatter) + ", ");
             }
             System.out.println();
         }
@@ -141,14 +140,12 @@ public class UserPanel {
     /** Метод выводит все доступные места для бронирования в указанную дату*/
     private void printAllAvailablePlacesForDateReserve() {
         System.out.println("Введите дату");
-        Date date = ConsoleReader.enterDate();
-        Map<ReservationPlace, List<Date>> availableReservationsWithDates = reservationPlaceService.getAllAvailableReservations();
+        LocalDate localDate = ConsoleReader.enterDate();
+        Map<ReservationPlace, List<LocalDateTime>> availableReservationsWithDates = reservationPlaceService.getAllAvailableReservations();
         List<ReservationPlace> availableReservations = new ArrayList<>();
         for(ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlaces()) {
             for(int i = 0; i < availableReservationsWithDates.get(reservationPlace).size(); i++) {
-                LocalDate localDate = LocalDate.ofInstant(availableReservationsWithDates.get(reservationPlace).get(i).toInstant()
-                        , ZoneId.systemDefault()).atStartOfDay().toLocalDate();
-                if (date.equals(Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
+                if (localDate.isEqual(availableReservationsWithDates.get(reservationPlace).get(i).toLocalDate())) {
                     availableReservations.add(reservationPlace);
                 }
             }
@@ -183,7 +180,7 @@ public class UserPanel {
             throw new ReservationDoesNotExistsException("Брони с таким номером не существует");
         }
         Reservation reservation = allUserReservations.get(numberReservation - 1);
-        if(reservation.getEndDate().before(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()))) {
+        if(reservation.getEndDate().isBefore(LocalDateTime.now())) {
             throw new ReservationPeriodException("Эту бронь невозможно отменить");
         }
         System.out.println(reservation);

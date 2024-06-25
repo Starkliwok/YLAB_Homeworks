@@ -10,9 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,10 +50,10 @@ class ReservationTest {
     @Test
     @DisplayName("Получение даты начала брони")
     void getStartDate() {
-        Date expected = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDateTime expected = LocalDateTime.now();
         reservation.setStartDate(expected);
 
-        Date actual = reservation.getStartDate();
+        LocalDateTime actual = reservation.getStartDate();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -63,10 +61,10 @@ class ReservationTest {
     @Test
     @DisplayName("Получение даты конца брони")
     void getEndDate() {
-        Date expected = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDateTime expected = LocalDateTime.now();
         reservation.setEndDate(expected);
 
-        Date actual = reservation.getEndDate();
+        LocalDateTime actual = reservation.getEndDate();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -96,10 +94,10 @@ class ReservationTest {
     @Test
     @DisplayName("Изменение даты начала брони")
     void setStartDate() {
-        Date expected = Date.from(LocalDate.now().plusDays(43).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDateTime expected = LocalDateTime.now().plusDays(43);
 
         reservation.setStartDate(expected);
-        Date actual = reservation.getStartDate();
+        LocalDateTime actual = reservation.getStartDate();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -107,10 +105,10 @@ class ReservationTest {
     @Test
     @DisplayName("Изменение даты конца брони")
     void setEndDate() {
-        Date expected = Date.from(LocalDate.now().plusDays(42).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDateTime expected = LocalDateTime.now().plusDays(42);
 
         reservation.setStartDate(expected);
-        Date actual = reservation.getStartDate();
+        LocalDateTime actual = reservation.getStartDate();
 
         assertThat(actual).isEqualTo(expected);
     }

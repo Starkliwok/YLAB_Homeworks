@@ -2,7 +2,7 @@ package com.Y_LAB.homework.dao;
 
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,16 +28,18 @@ public interface ReservationPlaceDAO {
 
     /**
      * Метод для получения мест и доступных дат для бронирования этого места
+     *
      * @return Коллекция мест и доступных дат для бронирования места
      */
-    Map<ReservationPlace, List<Date>> getAllAvailableReservations();
+    Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations();
 
     /**
      * Метод для получения доступных дат для бронирования места
+     *
      * @param reservationPlace объект места для бронирования
      * @return Коллекция доступных дат для бронирования места
      */
-    List<Date> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace);
+    List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace);
 
     /**
      * Метод для получения объекта места для бронирования

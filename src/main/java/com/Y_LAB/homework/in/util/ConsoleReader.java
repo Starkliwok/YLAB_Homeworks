@@ -6,10 +6,8 @@ import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -45,17 +43,17 @@ public class ConsoleReader {
      * @return пользовательский ввод, в случае ошибок преобразования выводит сообщение об ошибке
      * и рекурсивно вызывает себя
      */
-    public static Date enterDate() {
+    public static LocalDate enterDate() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-        Date date;
+        LocalDate localDate;
         try {
             System.out.print("Введите дату в формате \"ДД-ММ-ГГГГ\": ");
-            date = Date.from(LocalDate.parse(scanner.next(), dateTimeFormatter).atStartOfDay(ZoneId.systemDefault()).toInstant());
+            localDate = LocalDate.parse(scanner.next(), dateTimeFormatter);
         } catch (DateTimeParseException ex) {
             System.out.println("\nДата не соответствует формату");
             return enterDate();
         }
-        return date;
+        return localDate;
     }
 
     /**
@@ -63,15 +61,15 @@ public class ConsoleReader {
      * @return пользовательский ввод, в случае ошибок преобразования выводит сообщение об ошибке
      * и рекурсивно вызывает себя
      */
-    public static LocalDateTime enterTimeToDate(Date date) {
+    public static LocalDateTime enterTimeToDate(LocalDate localDate) {
         LocalDateTime localDateTime;
         try {
             System.out.print("Введите час в формате \"ЧЧ\": ");
             localDateTime = LocalDateTime
-                    .of(LocalDate.ofInstant(date.toInstant(), ZoneId.systemDefault()), LocalTime.of(scanner.nextInt(), 0));
+                    .of(localDate, LocalTime.of(scanner.nextInt(), 0));
         } catch (DateTimeParseException ex) {
             System.out.println("\nЧас не соответствует формату");
-            return enterTimeToDate(date);
+            return enterTimeToDate(localDate);
         }
         return localDateTime;
     }

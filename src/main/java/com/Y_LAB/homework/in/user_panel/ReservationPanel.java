@@ -14,10 +14,8 @@ import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -103,7 +101,7 @@ public class ReservationPanel {
      */
     private void chooseDateForReservation(User user, Reservation reservation, ReservationPlace reservationPlace) throws ReservationPeriodException {
         reservationService.getAllReservations().remove(reservation);
-        List<Date> allAvailableDates = reservationPlaceService.getAllAvailableDatesForReservePlace(reservationPlace);
+        List<LocalDateTime> allAvailableDates = reservationPlaceService.getAllAvailableDatesForReservePlace(reservationPlace);
         try {
             printAllAvailableDatesForReservation(allAvailableDates);
         } catch (DatesForReservationDoesNotExistsException ex) {
@@ -111,41 +109,38 @@ public class ReservationPanel {
             userPanel.printUserPage(user);
         }
         System.out.println("\nВведите дату брони");
-        Date reservationDate = ConsoleReader.enterDate();
-        LocalDate localReservationDate = LocalDate.ofInstant(reservationDate.toInstant(), ZoneId.systemDefault());
-        List<Date> availableTimesInDate = allAvailableDates
+        LocalDate reservationDate = ConsoleReader.enterDate();
+        List<LocalDateTime> availableTimesInDate = allAvailableDates
                 .stream()
-                .filter(x -> LocalDate.ofInstant(x.toInstant(), ZoneId.systemDefault()).equals(localReservationDate))
+                .filter(x -> x.toLocalDate().isEqual(reservationDate))
                 .toList();
         printAllAvailableTimeForReservationInDate(availableTimesInDate, user);
 
         System.out.println("\nВведите час начала брони");
-        LocalDateTime localStartDateTime = ConsoleReader.enterTimeToDate(reservationDate);
+        LocalDateTime startDateTime = ConsoleReader.enterTimeToDate(reservationDate);
         System.out.println("Введите час окончания брони");
-        LocalDateTime localEndDateTime = ConsoleReader.enterTimeToDate(reservationDate);
+        LocalDateTime endDateTime = ConsoleReader.enterTimeToDate(reservationDate);
 
-        Date startDate = Date.from(localStartDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        Date endDate = Date.from(localEndDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        int availableStartTime = LocalDateTime.ofInstant(availableTimesInDate.get(0).toInstant(), ZoneId.systemDefault()).getHour();
-        int availableEndTime = LocalDateTime.ofInstant(availableTimesInDate.get(availableTimesInDate.size() - 1)
-                .toInstant(), ZoneId.systemDefault()).getHour();
-        if(localEndDateTime.getHour() <= localStartDateTime.getHour()
-                || localEndDateTime.getHour() > availableEndTime
-                || localEndDateTime.getHour() < availableStartTime
-                || localStartDateTime.getHour() < availableStartTime) {
+        int availableStartTime = availableTimesInDate.get(0).getHour();
+        int availableEndTime = availableTimesInDate.get(availableTimesInDate.size() - 1).getHour();
+        if(endDateTime.getHour() <= startDateTime.getHour()
+                || endDateTime.getHour() > availableEndTime
+                || endDateTime.getHour() < availableStartTime
+                || startDateTime.getHour() < availableStartTime) {
             throw new ReservationPeriodException("Место невозможно забронировать в данный промежуток времени");
         }
-        List<Date> periodOfReservation = availableTimesInDate.stream()
-                .filter(x -> x.getTime() >= startDate.getTime() && x.getTime() <= endDate.getTime()).toList();
+        List<LocalDateTime> periodOfReservation = availableTimesInDate.stream().filter(
+                x -> (x.isAfter(startDateTime) || x.isEqual(startDateTime)) &&
+                        (x.isBefore(endDateTime) || x.isEqual(endDateTime))).toList();
         int i = 0;
-        for(Date date : periodOfReservation) {
-            int availableHour = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).getHour();
-            if(availableHour != localStartDateTime.getHour() + i++) {
+        for(LocalDateTime localDateTime : periodOfReservation) {
+            int availableHour = localDateTime.getHour();
+            if(availableHour != startDateTime.getHour() + i++) {
                 throw new ReservationPeriodException("Место невозможно забронировать в данный промежуток времени");
             }
         }
-        reservation.setStartDate(startDate);
-        reservation.setEndDate(endDate);
+        reservation.setStartDate(startDateTime);
+        reservation.setEndDate(endDateTime);
     }
 
     /**
@@ -153,15 +148,15 @@ public class ReservationPanel {
      * @param availableTimesInDate пользователь
      * @param user пользователь
      */
-    private void printAllAvailableTimeForReservationInDate(List<Date> availableTimesInDate, User user) {
+    private void printAllAvailableTimeForReservationInDate(List<LocalDateTime> availableTimesInDate, User user) {
         if(availableTimesInDate.isEmpty()) {
             System.out.println("За эту дату невозможно забронировать место");
             userPanel.printUserPage(user);
         }
         System.out.println("Свободное время для бронирования");
-        for (Date date : availableTimesInDate) {
+        for (LocalDateTime localDateTime : availableTimesInDate) {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime localDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).toLocalTime();
+            LocalTime localDate = localDateTime.toLocalTime();
             System.out.print(localDate.format(dateTimeFormatter) + " ");
         }
     }
@@ -171,16 +166,15 @@ public class ReservationPanel {
      * @throws DatesForReservationDoesNotExistsException В случае если нет дат для бронирования места
      * @param allAvailableDates пользователь
      */
-    private void printAllAvailableDatesForReservation(List<Date> allAvailableDates) throws DatesForReservationDoesNotExistsException {
+    private void printAllAvailableDatesForReservation(List<LocalDateTime> allAvailableDates) throws DatesForReservationDoesNotExistsException {
         if(allAvailableDates.isEmpty()) {
             throw new DatesForReservationDoesNotExistsException("Свободных дат для бронирования нет");
         }
         System.out.println("Свободные даты для бронирования");
         List<String> allAvailableDatesInString = new ArrayList<>();
-        for (Date date : allAvailableDates) {
+        for (LocalDateTime localDateTime : allAvailableDates) {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            allAvailableDatesInString.add(localDate.format(dateTimeFormatter));
+            allAvailableDatesInString.add(localDateTime.format(dateTimeFormatter));
         }
         List<String> uniqueDatesWithoutTime = new ArrayList<>(new LinkedHashSet<>(allAvailableDatesInString));
         uniqueDatesWithoutTime.forEach(System.out::println);
