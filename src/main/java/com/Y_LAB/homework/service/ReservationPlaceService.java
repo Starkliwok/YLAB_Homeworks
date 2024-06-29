@@ -2,14 +2,12 @@ package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Интерфейс описывает сервис для взаимодействия с местами для бронирований
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public interface ReservationPlaceService {
 
@@ -27,19 +25,6 @@ public interface ReservationPlaceService {
     List<ReservationPlace> getAllReservationPlacesByTypes(ReservationPlace reservationPlace);
 
     /**
-     * Метод для получения мест и доступных дат для бронирования этого места
-     * @return Коллекция мест и доступных дат для бронирования места
-     */
-    Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations();
-
-    /**
-     * Метод для получения доступных дат для бронирования места
-     * @param reservationPlace объект места для бронирования
-     * @return Коллекция доступных дат для бронирования места
-     */
-    List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace);
-
-    /**
      * Метод для получения объекта места для бронирования
      * @param id уникальный идентификатор места
      * @return Объект места для бронирования
@@ -50,7 +35,7 @@ public interface ReservationPlaceService {
      * Метод для сохранения объекта места для бронирования
      * @param reservationPlace объект места для бронирования
      */
-    void addReservationPlace(ReservationPlace reservationPlace);
+    void saveReservationPlace(ReservationPlace reservationPlace);
 
     /**
      * Метод для обновления места для бронирования

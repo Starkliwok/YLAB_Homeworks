@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="002-create-coworking-user-table" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="user_id_seq" schemaName="coworking"/>
+                <tableExists tableName="user" schemaName="coworking"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="user_id_seq" schemaName="coworking"/>
+
+        <createTable tableName="user" schemaName="coworking">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('coworking.user_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="003-create-coworking-admin-table" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="admin_id_seq" schemaName="coworking"/>
+                <tableExists tableName="admin" schemaName="coworking"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="admin_id_seq" schemaName="coworking"/>
+
+        <createTable tableName="admin" schemaName="coworking">
+            <column name="id" type="INT" defaultValueComputed="nextval('coworking.admin_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user_with_root_id" references="coworking.user(id)"/>
+            </column>
+
+            <column name="admin_level" type="TINYINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

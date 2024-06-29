@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="011-insert-coworking-reservation-data" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="reservation" schemaName="coworking"/>
+        </preConditions>
+        <insert tableName="reservation" schemaName="coworking">
+            <column name="user_id" valueNumeric="6"/>
+            <column name="reservation_place_id" valueNumeric="1"/>
+            <column name="start_date" valueDate="2024-07-01T08:00:00"/>
+            <column name="end_date" valueDate="2024-07-01T22:00:00"/>
+        </insert>
+
+        <insert tableName="reservation" schemaName="coworking">
+            <column name="user_id" valueNumeric="6"/>
+            <column name="reservation_place_id" valueNumeric="2"/>
+            <column name="start_date" valueDate="2024-07-01T09:00:00"/>
+            <column name="end_date" valueDate="2024-07-01T11:00:00"/>
+        </insert>
+
+        <insert tableName="reservation" schemaName="coworking">
+            <column name="user_id" valueNumeric="6"/>
+            <column name="reservation_place_id" valueNumeric="2"/>
+            <column name="start_date" valueDate="2024-07-01T13:00:00"/>
+            <column name="end_date" valueDate="2024-07-01T16:00:00"/>
+        </insert>
+
+        <insert tableName="reservation" schemaName="coworking">
+            <column name="user_id" valueNumeric="5"/>
+            <column name="reservation_place_id" valueNumeric="3"/>
+            <column name="start_date" valueDate="2024-07-01T12:00:00"/>
+            <column name="end_date" valueDate="2024-07-01T17:00:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="007-insert-coworking-user-data" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="user" schemaName="coworking"/>
+        </preConditions>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="Denis"/>
+            <column name="password" value="12345678"/>
+        </insert>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="Stepan"/>
+            <column name="password" value="2233123"/>
+        </insert>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="Starkliw"/>
+            <column name="password" value="q1w2e3r4t5y6"/>
+        </insert>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="Kolyan"/>
+            <column name="password" value="12121212"/>
+        </insert>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="Pavel"/>
+            <column name="password" value="223312345"/>
+        </insert>
+
+        <insert tableName="user" schemaName="coworking">
+            <column name="name" value="root"/>
+            <column name="password" value="root"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

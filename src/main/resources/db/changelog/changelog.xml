@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="001-create-coworking-schema.xml" relativeToChangelogFile="true"/>
+    <include file="002-create-coworking-user-table.xml" relativeToChangelogFile="true"/>
+    <include file="003-create-coworking-admin-table.xml" relativeToChangelogFile="true"/>
+    <include file="004-create-coworking-reservation-type-table.xml" relativeToChangelogFile="true"/>
+    <include file="005-create-coworking-reservation-place-table.xml" relativeToChangelogFile="true"/>
+    <include file="006-create-coworking-reservation-table.xml" relativeToChangelogFile="true"/>
+    <include file="007-insert-coworking-user-data.xml" relativeToChangelogFile="true"/>
+    <include file="008-insert-coworking-admin-data.xml" relativeToChangelogFile="true"/>
+    <include file="009-insert-coworking-reservation-type-data.xml" relativeToChangelogFile="true"/>
+    <include file="010-insert-coworking-reservation-place-data.xml" relativeToChangelogFile="true"/>
+    <include file="011-insert-coworking-reservation-data.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

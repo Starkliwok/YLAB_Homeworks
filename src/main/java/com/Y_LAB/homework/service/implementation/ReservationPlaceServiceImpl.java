@@ -6,15 +6,12 @@ import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Сервис для взаимодействия с бронированиями
+ * Сервис для взаимодействия с местами для бронирований
  * @author Денис Попов
- * @version 1.0
- *
+ * @version 2.0
  */
 @AllArgsConstructor
 public class ReservationPlaceServiceImpl implements ReservationPlaceService {
@@ -40,26 +37,14 @@ public class ReservationPlaceServiceImpl implements ReservationPlaceService {
 
     /** {@inheritDoc}*/
     @Override
-    public Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations() {
-        return reservationPlaceDAO.getAllAvailableReservations();
-    }
-
-    /** {@inheritDoc}*/
-    @Override
-    public List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
-        return reservationPlaceDAO.getAllAvailableDatesForReservePlace(reservationPlace);
-    }
-
-    /** {@inheritDoc}*/
-    @Override
     public ReservationPlace getReservationPlace(int id) {
         return reservationPlaceDAO.getReservationPlace(id);
     }
 
     /** {@inheritDoc}*/
     @Override
-    public void addReservationPlace(ReservationPlace reservationPlace) {
-        reservationPlaceDAO.addReservationPlace(reservationPlace);
+    public void saveReservationPlace(ReservationPlace reservationPlace) {
+        reservationPlaceDAO.saveReservationPlace(reservationPlace);
     }
 
     /** {@inheritDoc}*/

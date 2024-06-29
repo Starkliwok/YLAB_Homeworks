@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="010-insert-coworking-reservation-place-data" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="reservation_place" schemaName="coworking"/>
+        </preConditions>
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="1"/>
+            <column name="name" value="c1"/>
+            <column name="place_area" valueNumeric="100.10"/>
+            <column name="cost_per_hour" valueNumeric="200.1"/>
+            <column name="number_of_seats" valueNumeric="10"/>
+        </insert>
+
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="1"/>
+            <column name="name" value="c2"/>
+            <column name="place_area" valueNumeric="154.50"/>
+            <column name="cost_per_hour" valueNumeric="260.5"/>
+            <column name="number_of_seats" valueNumeric="15"/>
+        </insert>
+
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="1"/>
+            <column name="name" value="c3"/>
+            <column name="place_area" valueNumeric="143.10"/>
+            <column name="cost_per_hour" valueNumeric="250.2"/>
+            <column name="number_of_seats" valueNumeric="20"/>
+        </insert>
+
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="2"/>
+            <column name="name" value="w1"/>
+            <column name="place_area" valueNumeric="15.40"/>
+            <column name="cost_per_hour" valueNumeric="25.3"/>
+            <column name="number_of_seats" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="2"/>
+            <column name="name" value="w2"/>
+            <column name="place_area" valueNumeric="12.60"/>
+            <column name="cost_per_hour" valueNumeric="20.5"/>
+            <column name="number_of_seats" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="reservation_place" schemaName="coworking">
+            <column name="reservation_type_id" valueNumeric="2"/>
+            <column name="name" value="w3"/>
+            <column name="place_area" valueNumeric="13.32"/>
+            <column name="cost_per_hour" valueNumeric="21.0"/>
+            <column name="number_of_seats" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

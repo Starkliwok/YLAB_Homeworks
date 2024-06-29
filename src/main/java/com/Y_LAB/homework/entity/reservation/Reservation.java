@@ -1,9 +1,6 @@
 package com.Y_LAB.homework.entity.reservation;
 
-import com.Y_LAB.homework.entity.roles.User;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,23 +8,18 @@ import java.time.format.DateTimeFormatter;
 /**
  * Класс описывает бронь помещений
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reservation {
 
-    /** Статическое поле количества мест для бронирования, используется для инициализации поля {@link Reservation#id}.*/
-    @EqualsAndHashCode.Exclude
-    private static int reservationsCount;
-
     /** Поле уникального идентификатора, которое задается при создании объекта, это поле невозможно изменить.*/
-    @EqualsAndHashCode.Exclude
-    private final int id;
+    private long id;
 
     /** Поле пользователя, владельца брони.*/
-    private User user;
+    private long userId;
 
     /** Поле даты начала брони.*/
     private LocalDateTime startDate;
@@ -38,15 +30,10 @@ public class Reservation {
     /** Поле места бронирования.*/
     private ReservationPlace reservationPlace;
 
-    /** Конструктор, инициализирует поле {@link Reservation#id}, которое задается по количеству всех броней на данный момент*/
-    public Reservation() {
-        this.id = ++reservationsCount;
-    }
-
     @Override
     public String toString() {
         return "\nБронь" +
-                "\nИдентификатор пользователя = " + user.getId() +
+                "\nИдентификатор пользователя = " + userId +
                 "\nДата начала = " +
                 startDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
                 "\nДата окончания = " +

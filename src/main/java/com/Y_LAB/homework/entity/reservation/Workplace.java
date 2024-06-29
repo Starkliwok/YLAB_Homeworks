@@ -1,18 +1,21 @@
 package com.Y_LAB.homework.entity.reservation;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Класс рабочего места наследуется от {@link ReservationPlace}, используется для бронирования
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
+@NoArgsConstructor
 public class Workplace extends ReservationPlace {
 
-    public Workplace(String name, double placeArea, double costPerDayInDollars) {
-        super(name, placeArea, costPerDayInDollars, 1);
+    public Workplace(int id, String name, double placeArea, double costPerDayInDollars, int numberOfSeats) {
+        super(id, name, placeArea, costPerDayInDollars, numberOfSeats);
     }
 
-    public Workplace() {
-        super();
+    public Workplace(String name, double placeArea, double costPerDayInDollars, int numberOfSeats) {
+        super(name, placeArea, costPerDayInDollars, numberOfSeats);
     }
 
     @Override
@@ -20,7 +23,7 @@ public class Workplace extends ReservationPlace {
         return "\nРабочее место " +
                 "\nНазвание = '" + this.getName() + '\'' +
                 "\nПлощадь в метрах = " + this.getPlaceArea() +
-                "\nСтоимость аренды за сутки = " + this.getCostPerDayInDollars() + "$" +
+                "\nСтоимость аренды за сутки = " + this.getCostPerHour() + "$" +
                 "\nКоличество сидений = " + this.getNumberOfSeats();
     }
 }

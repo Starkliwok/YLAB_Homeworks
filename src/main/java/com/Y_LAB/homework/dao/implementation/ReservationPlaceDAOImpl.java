@@ -1,133 +1,177 @@
 package com.Y_LAB.homework.dao.implementation;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.service.ReservationService;
-import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
+import com.Y_LAB.homework.entity.reservation.Workplace;
+import com.Y_LAB.homework.util.db.ConnectionToDatabase;
+import lombok.AllArgsConstructor;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.Y_LAB.homework.constants.ReservationConstants.*;
 
 /**
  * Класс ДАО слоя для взаимодействия с местами для бронирований
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
+@AllArgsConstructor
 public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
 
-    /** Статическое поле которое содержит в себе все места для бронирований.*/
-    private static final List<ReservationPlace> allReservationPlaces = new ArrayList<>();
+    /** Поле для подключения к базе данных*/
+    private final Connection connection;
 
     public ReservationPlaceDAOImpl() {
+        connection = ConnectionToDatabase.getConnection();
     }
 
     /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlaces() {
-        return allReservationPlaces;
+        List<ReservationPlace> reservationPlaces = new ArrayList<>();
+        ReservationPlace reservationPlace;
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet reservationPlaceResultSet = statement.executeQuery("SELECT * FROM coworking.reservation_place");
+            while (reservationPlaceResultSet.next()) {
+                reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
+                reservationPlaces.add(reservationPlace);
+            }
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
+        }
+        return reservationPlaces;
     }
 
     /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlacesByTypes(ReservationPlace reservationPlace) {
-        return allReservationPlaces.stream().filter(x -> x.getClass() == reservationPlace.getClass()).collect(Collectors.toList());
+        List<ReservationPlace> reservationPlaces = new ArrayList<>();
+        ReservationPlace reservationPlace2;
+        int typeId = reservationPlace instanceof ConferenceRoom ? 1 : 2;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT id, name, place_area, cost_per_hour, number_of_seats FROM coworking.reservation_place " +
+                            "WHERE reservation_type_id = ?");
+            preparedStatement.setInt(1, typeId);
+            preparedStatement.execute();
+            ResultSet reservationPlaceResultSet = preparedStatement.getResultSet();
+            while (reservationPlaceResultSet.next()) {
+                int id = reservationPlaceResultSet.getInt(1);
+                String name = reservationPlaceResultSet.getString(2);
+                double placeArea = reservationPlaceResultSet.getDouble(3);
+                double costPerHour = reservationPlaceResultSet.getDouble(4);
+                int numberOfSeats = reservationPlaceResultSet.getInt(5);
+                if(reservationPlace instanceof ConferenceRoom) {
+                    reservationPlace2 = new ConferenceRoom(id, name, placeArea, costPerHour, numberOfSeats);
+                    reservationPlaces.add(reservationPlace2);
+                } else if(reservationPlace instanceof Workplace) {
+                    reservationPlace2 = new Workplace(id, name, placeArea, costPerHour, numberOfSeats);
+                    reservationPlaces.add(reservationPlace2);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
+        }
+        return reservationPlaces;
     }
 
-    /** {@inheritDoc}*/
+    /**{@inheritDoc}*/
     @Override
-    public Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations() {
-        Map<ReservationPlace, List<LocalDateTime>> availableReservations = new HashMap<>();
-
-        for(ReservationPlace reservationPlace : allReservationPlaces) {
-            List<LocalDateTime> allAvailableDatesForReservePlace = getAllAvailableDatesForReservePlace(reservationPlace);
-            availableReservations.put(reservationPlace, allAvailableDatesForReservePlace);
+    public ReservationPlace getReservationPlace(int id) {
+       ReservationPlace reservationPlace = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM coworking.reservation_place WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.execute();
+            ResultSet reservationPlaceResultSet = preparedStatement.getResultSet();
+            if(reservationPlaceResultSet.next()) {
+                reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
+            }
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
         }
-        return availableReservations;
+        return reservationPlace;
     }
 
     /**
-     * Метод для получения доступных дат для бронирования места.
-     * Метод получает бронирования всех пользователей и заполняет доступные даты на
-     * {@link com.Y_LAB.homework.constants.ReservationConstants#RESERVATION_PERIOD}
-     * дней вперёд, после чего исключает доступные даты для бронирования, в случае если те
-     * уже заняты, а так же исключает даты, если в них нет временных промежутков для бронирования.
-     * Метод исключает временные промежутки которые не имеют пары, то есть не могут быть зарезервированы под бронь
-     *
-     * @param reservationPlace объект места для бронирования
-     * @return Коллекция доступных дат для бронирования места
+     * Метод для получения объекта места для брони из {@link ResultSet}
+     * @param reservationPlaceResultSet объект {@link ResultSet}
+     * @throws SQLException Если есть проблемы при получении значений из колонок объекта {@link ResultSet}
+     * @return объект места для бронирования
      */
-    @Override
-    public List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
-        ReservationService reservationService = new ReservationServiceImpl();
-        List<Reservation> allReservations = reservationService.getAllReservations();
-        List<LocalDateTime> availableDates = new ArrayList<>();
-        for(int i = 0; i <= RESERVATION_PERIOD; i++) {
-            for(int j = START_HOUR_FOR_RESERVATION; j <= END_HOUR_FOR_RESERVATION; j++) {
-                availableDates.add(
-                        LocalDateTime.now()
-                        .withMinute(0)
-                        .withSecond(0)
-                        .withNano(0)
-                        .withHour(j).plusDays(i));
-            }
+    private ReservationPlace getReservationPlaceFromResultSet(ResultSet reservationPlaceResultSet) throws SQLException {
+        int id = reservationPlaceResultSet.getInt(1);
+        int typeId = reservationPlaceResultSet.getInt(2);
+        String name = reservationPlaceResultSet.getString(3);
+        double placeArea = reservationPlaceResultSet.getDouble(4);
+        double costPerHour = reservationPlaceResultSet.getDouble(5);
+        int numberOfSeats = reservationPlaceResultSet.getInt(6);
+        if(typeId == 1) {
+            return new ConferenceRoom(id, name, placeArea, costPerHour, numberOfSeats);
+        } else if(typeId == 2) {
+            return new Workplace(id, name, placeArea, costPerHour, numberOfSeats);
         }
-        for(Reservation reservation : allReservations) {
-            if(reservationPlace.equals(reservation.getReservationPlace())) {
-                long durationInHours = Duration.between(reservation.getStartDate(), reservation.getEndDate()).toHours();
-                for(int i = 0; i < durationInHours; i++) {
-                    availableDates.remove(reservation.getEndDate().minusHours(i + 1));
-                }
-                List<LocalDateTime> datesToRemove = availableDates.stream()
-                        .filter(x -> x.isBefore(reservation.getEndDate().withHour(23)))
-                        .toList();
-                if(datesToRemove.size() > 2) {
-                    for (int i = 1; i < datesToRemove.size(); i++) {
-                        if (datesToRemove.get(i - 1).getHour() != datesToRemove.get(i).getHour() - 1) {
-                            if (i == 1) {
-                                availableDates.remove(datesToRemove.get(0));
-                            } else {
-                                availableDates.remove(datesToRemove.get(i));
-                            }
-                        }
-                    }
-                } else {
-                    availableDates.remove(datesToRemove.get(0));
-                }
-            }
-        }
-        return availableDates;
+        return null;
     }
 
-    /** {@inheritDoc}*/
+    /**{@inheritDoc}*/
     @Override
-    public ReservationPlace getReservationPlace(int id) {
-        List<ReservationPlace> filterReservationPlace = allReservationPlaces.stream().filter(x -> x.getId() == id).toList();
-        return filterReservationPlace.isEmpty() ? null : filterReservationPlace.get(0);
-    }
-
-    /** {@inheritDoc}*/
-    @Override
-    public void addReservationPlace(ReservationPlace reservationPlace) {
-        if(getReservationPlace(reservationPlace.getId()) == null) {
-            allReservationPlaces.add(reservationPlace);
+    public void saveReservationPlace(ReservationPlace reservationPlace) {
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(
+                            "INSERT INTO coworking.reservation_place (reservation_type_id, name, place_area, " +
+                                    "cost_per_hour, number_of_seats) VALUES (?, ?, ?, ?, ?)");
+            setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
         }
     }
 
-    /** {@inheritDoc}*/
+    /**{@inheritDoc}*/
     @Override
     public void updateReservationPlace(ReservationPlace reservationPlace) {
-        deleteReservationPlace(reservationPlace.getId());
-        allReservationPlaces.add(reservationPlace);
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE coworking.reservation_place SET reservation_type_id = ?, " +
+                            "name = ?, place_area = ?, cost_per_hour = ?, number_of_seats = ? WHERE id = ?");
+            setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
+            preparedStatement.setInt(6, reservationPlace.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
+        }
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * Метод для добавления объекта места для бронирования в {@link PreparedStatement}
+     * @param reservationPlace объект места для бронирования
+     * @param preparedStatement объект {@link PreparedStatement}
+     * @throws SQLException Если есть проблемы при установке значений в объект {@link PreparedStatement}
+     */
+    private void setReservationPlaceToPreparedStatement
+            (ReservationPlace reservationPlace, PreparedStatement preparedStatement) throws SQLException {
+        int typeId = reservationPlace instanceof ConferenceRoom ? 1 : 2;
+        preparedStatement.setInt(1, typeId);
+        preparedStatement.setString(2, reservationPlace.getName());
+        preparedStatement.setDouble(3, reservationPlace.getPlaceArea());
+        preparedStatement.setDouble(4, reservationPlace.getCostPerHour());
+        preparedStatement.setInt(5, reservationPlace.getNumberOfSeats());
+    }
+
+    /**{@inheritDoc}*/
     @Override
     public void deleteReservationPlace(int id) {
-        allReservationPlaces.remove(getReservationPlace(id));
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("DELETE FROM coworking.reservation_place WHERE id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
+        }
     }
 }
