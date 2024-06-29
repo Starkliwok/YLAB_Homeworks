@@ -11,6 +11,7 @@ import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
+import com.Y_LAB.homework.util.reservation.FreeReservationSlot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,18 +21,9 @@ import java.util.*;
 /**
  * Класс для вывода панели пользователя
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public class UserPanel {
-
-    /** Поле панели администратора*/
-    private static final AdminPanel adminPanel = new AdminPanel();
-
-    /** Поле домашней панели*/
-    private static final HomePanel homePanel = new HomePanel();
-
-    /** Статическое поле панели бронирований, предназначенное взаимодействия с бронированиями*/
-    private static final ReservationPanel reservationPanel = new ReservationPanel();
 
     /** Поле сервиса мест для бронирования, предназначенное взаимодействия с местами для бронирования*/
     private final ReservationPlaceService reservationPlaceService;
@@ -39,24 +31,37 @@ public class UserPanel {
     /** Поле сервиса бронирований, предназначенное взаимодействия с бронированиями*/
     private final ReservationService reservationService;
 
+    /** Статическое поле панели администратора*/
+    private static final AdminPanel adminPanel = new AdminPanel();
+
+    /** Статическое поле домашней панели, предназначенное для вывода информации новым пользователям*/
+    private static final HomePanel homePanel = new HomePanel();
+
+    /** Статическое поле панели бронирований, предназначенное взаимодействия с бронированиями*/
+    private static final ReservationPanel reservationPanel = new ReservationPanel();
+
+    private final FreeReservationSlot freeReservationSlot;
+
     public UserPanel() {
         reservationPlaceService = new ReservationPlaceServiceImpl();
         reservationService = new ReservationServiceImpl();
+        freeReservationSlot = new FreeReservationSlot();
     }
 
     /**
      * Метод выводит информацию о возможных действиях пользователя, а так же дополнительную информацию для 
      * администратора, который использует панель как обычный пользователь
+     * @param user объект пользователя
      */
     public void printUserPage(User user) {
         System.out.print("""
-                 Выберите действие:\s
-                 1 - Посмотреть список доступных мест\s
-                 2 - Посмотреть список доступных мест за дату\s
-                 3 - Посмотреть ваш список забронированных мест\s
-                 4 - Забронировать место\s
-                 5 - Отменить бронь\s
-                 6 - Редактировать дату бронирования\s
+                 Выберите действие:
+                 1 - Посмотреть список доступных мест
+                 2 - Посмотреть список доступных мест за дату
+                 3 - Посмотреть ваш список забронированных мест
+                 4 - Забронировать место
+                 5 - Отменить бронь
+                 6 - Редактировать дату бронирования
                  0 - Выход из аккаунта""");
         if(user instanceof Admin) {
             System.out.println(" пользователя и переход в панель администратора");
@@ -69,15 +74,16 @@ public class UserPanel {
      * Метод считывает ввод пользователя и на его основе вызывает методы <br>
      * 1 - {@link UserPanel#printAllAvailablePlaces()} - Посмотреть список доступных мест<br>
      * 2 - {@link UserPanel#printAllAvailablePlacesForDateReserve()} - Посмотреть список доступных мест за дату<br>
-     * 3 - {@link UserPanel#printAllUserReservations(User)} - Посмотреть ваш список забронированных мест<br>
+     * 3 - {@link UserPanel#printAllUserReservations(long)} - Посмотреть ваш список забронированных мест<br>
      * 4 - {@link ReservationPanel#createReservation(User)} - Забронировать место<br>
      * 5 - {@link UserPanel#cancelReservation(User)} - Отменить бронь<br>
      * 6 - {@link UserPanel#updateReservation(User)} - Редактировать дату бронирования<br>
      * 0 - Выход из аккаунта / В случае, если это администратор, то переводит его в панель администратора<br>
      * В других случаях выводит информацию о некорректном вводе данных и рекурсивно вызывает метод
+     * @param user объект пользователя
      */
     private void userPageChooseAction(User user) {
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 -> {
                 printAllAvailablePlaces();
                 printUserPage(user);
@@ -87,7 +93,7 @@ public class UserPanel {
                 printUserPage(user);
             }
             case 3 -> {
-                printAllUserReservations(user);
+                printAllUserReservations(user.getId());
                 printUserPage(user);
             }
             case 4 -> {
@@ -99,16 +105,16 @@ public class UserPanel {
                     cancelReservation(user);
                 } catch (ReservationDoesNotExistsException | ReservationPeriodException e) {
                     System.out.println(e.getMessage());
-                    printUserPage(user);
                 }
+                printUserPage(user);
             }
             case 6 -> {
                 try {
                     updateReservation(user);
                 } catch (ReservationDoesNotExistsException e) {
                     System.out.println(e.getMessage());
-                    printUserPage(user);
                 }
+                printUserPage(user);
             }
             case 0 -> {
                 if (user instanceof Admin) {
@@ -125,13 +131,13 @@ public class UserPanel {
 
     /** Метод выводит все места для бронирования и свободные даты для бронирования этих мест*/
     private void printAllAvailablePlaces() {
-        Map<ReservationPlace, List<LocalDateTime>> availableReservations = reservationPlaceService.getAllAvailableReservations();
+        Map<ReservationPlace, List<LocalDate>> availableReservations = freeReservationSlot.getAllAvailablePlaceForReservations();
         for(ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlaces()) {
             System.out.println(reservationPlace);
             System.out.println("Свободные даты для бронирования:");
-            for (LocalDateTime localDateTime : availableReservations.get(reservationPlace)) {
+            for (LocalDate localDate : availableReservations.get(reservationPlace)) {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
-                System.out.print(localDateTime.format(dateTimeFormatter) + ", ");
+                System.out.print(localDate.format(dateTimeFormatter) + ", ");
             }
             System.out.println();
         }
@@ -139,13 +145,14 @@ public class UserPanel {
 
     /** Метод выводит все доступные места для бронирования в указанную дату*/
     private void printAllAvailablePlacesForDateReserve() {
-        System.out.println("Введите дату");
-        LocalDate localDate = ConsoleReader.enterDate();
-        Map<ReservationPlace, List<LocalDateTime>> availableReservationsWithDates = reservationPlaceService.getAllAvailableReservations();
+        System.out.print("Введите дату в формате \"ДД-ММ-ГГГГ\":");
+        LocalDate localDate = ConsoleReader.readDate();
+        System.out.println();
+        Map<ReservationPlace, List<LocalDate>> availableReservationsWithDates = freeReservationSlot.getAllAvailablePlaceForReservations();
         List<ReservationPlace> availableReservations = new ArrayList<>();
         for(ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlaces()) {
             for(int i = 0; i < availableReservationsWithDates.get(reservationPlace).size(); i++) {
-                if (localDate.isEqual(availableReservationsWithDates.get(reservationPlace).get(i).toLocalDate())) {
+                if (localDate.isEqual(availableReservationsWithDates.get(reservationPlace).get(i))) {
                     availableReservations.add(reservationPlace);
                 }
             }
@@ -155,13 +162,13 @@ public class UserPanel {
     }
 
     /** Метод выводит все брони пользователя
-     * @param user Объект пользователя
+     * @param userId Уникальный идентификатор пользователя
      */
-    private void printAllUserReservations(User user) {
-        List<Reservation> allUserReservations = reservationService.getAllUserReservations(user);
+    private void printAllUserReservations(long userId) {
+        List<Reservation> allUserReservations = reservationService.getAllUserReservations(userId);
         System.out.println();
-        for(int i = 0; i < allUserReservations.size(); i++) {
-            System.out.println(i + 1 + "" + allUserReservations.get(i) + "\n");
+        for (Reservation allUserReservation : allUserReservations) {
+            System.out.println(allUserReservation.getId() + "" + allUserReservation + "\n");
         }
     }
 
@@ -172,25 +179,24 @@ public class UserPanel {
      * @param user Объект пользователя
      */
     private void cancelReservation(User user) throws ReservationDoesNotExistsException, ReservationPeriodException {
-        List<Reservation> allUserReservations = reservationService.getAllUserReservations(user);
-        printAllUserReservations(user);
+        printAllUserReservations(user.getId());
         System.out.println("Выберите номер брони для отмены");
-        int numberReservation = ConsoleReader.enterIntValue();
-        if(numberReservation < 1 || numberReservation > allUserReservations.size()) {
+        int numberReservation = ConsoleReader.readIntValue();
+        Reservation reservation = reservationService.getReservation(numberReservation);
+        if(reservation == null) {
             throw new ReservationDoesNotExistsException("Брони с таким номером не существует");
         }
-        Reservation reservation = allUserReservations.get(numberReservation - 1);
         if(reservation.getEndDate().isBefore(LocalDateTime.now())) {
             throw new ReservationPeriodException("Эту бронь невозможно отменить");
         }
         System.out.println(reservation);
         System.out.println("""
-                Вы уверены что хотите отменить эту бронь?\s
-                 Выберите действие:\s
-                 1 - Да\s
-                 2 - Нет\s
+                Вы уверены что хотите отменить эту бронь?
+                 Выберите действие:
+                 1 - Да
+                 2 - Нет
                  Любое другое число - выход в главное меню""");
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 -> {
                 reservationService.deleteReservation(reservation.getId());
                 System.out.println("Вы успешно отменили бронь");
@@ -202,21 +208,20 @@ public class UserPanel {
         }
     }
 
-    /** Метод вызывает {@link UserPanel#printAllUserReservations(User)} для отображения
+    /** Метод вызывает {@link UserPanel#printAllUserReservations(long)} для отображения
      * всех бронирований пользователя, после выбора брони вызывает
      * {@link ReservationPanel#updateReservation(User, Reservation)} для обновления выбранной брони
      * @throws ReservationDoesNotExistsException Если брони с таким номером не существует
      * @param user Объект пользователя
      */
     private void updateReservation(User user) throws ReservationDoesNotExistsException {
-        List<Reservation> allUserReservations = reservationService.getAllUserReservations(user);
-        printAllUserReservations(user);
+        printAllUserReservations(user.getId());
         System.out.println("Выберите номер брони для изменения");
-        int numberReservation = ConsoleReader.enterIntValue();
-        if(numberReservation < 1 || numberReservation > allUserReservations.size()) {
+        int numberReservation = ConsoleReader.readIntValue();
+        Reservation reservation = reservationService.getReservation(numberReservation);
+        if(reservation == null) {
             throw new ReservationDoesNotExistsException("Брони с таким номером не существует");
         }
-        Reservation reservation = allUserReservations.get(numberReservation - 1);
         reservationPanel.updateReservation(user, reservation);
     }
 }

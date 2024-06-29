@@ -1,13 +1,13 @@
 package com.Y_LAB.homework.in.user_panel;
 
-import com.Y_LAB.homework.in.auth_panel.AuthorizationPanel;
-import com.Y_LAB.homework.in.auth_panel.RegistrationPanel;
+import com.Y_LAB.homework.in.user_panel.auth_panel.AuthorizationPanel;
+import com.Y_LAB.homework.in.user_panel.auth_panel.RegistrationPanel;
 import com.Y_LAB.homework.in.util.ConsoleReader;
 
 /**
  * Класс для вывода панели с авторизацией и регистрацией
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public class HomePanel {
 
@@ -26,10 +26,10 @@ public class HomePanel {
      */
     public void printStartPage() {
         System.out.println("""
-                Здравствуйте, вас приветствует приложение по управлению коворкинг-пространством\s
-                 Выберите действие:\s
-                 1 - Авторизация\s
-                 2 - Регистрация\s
+                Здравствуйте, вас приветствует приложение по управлению коворкинг-пространством
+                 Выберите действие:
+                 1 - Авторизация
+                 2 - Регистрация
                  0 - Выход из приложения""");
         startPageChooseAction();
     }
@@ -42,7 +42,7 @@ public class HomePanel {
      * В других случаях выводит информацию о некорректном вводе данных и рекурсивно вызывает метод
      */
     private void startPageChooseAction() {
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 ->
                 authorizationPanel.logOn();
             case 2 ->

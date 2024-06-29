@@ -6,7 +6,12 @@ import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 import com.Y_LAB.homework.entity.reservation.Workplace;
 import com.Y_LAB.homework.entity.roles.Admin;
 import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.exception.admin.NotEnoughAdminRightsException;
 import com.Y_LAB.homework.exception.reservation.ReservationDoesNotExistsException;
+import com.Y_LAB.homework.exception.user.UserDoesNotExistsException;
+import com.Y_LAB.homework.exception.user.auth.PasswordFormatException;
+import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
+import com.Y_LAB.homework.exception.user.auth.UsernameFormatException;
 import com.Y_LAB.homework.in.util.ConsoleReader;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
@@ -20,7 +25,7 @@ import java.util.List;
 /**
  * Класс для вывода панели администратора и взаимодействия с ней
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public class AdminPanel {
 
@@ -33,7 +38,7 @@ public class AdminPanel {
     /** Поле сервиса бронирований, предназначенное взаимодействия с бронированиями*/
     private final ReservationService reservationService;
 
-    /** Статическое поле домашней панели, предназначенное авторизации и регистрации новых пользователей*/
+    /** Статическое поле домашней панели, предназначенное для вывода информации новым пользователям*/
     private static final HomePanel homePanel = new HomePanel();
 
     /** Статическое поле панели пользователя, предназначенное взаимодействия с выбором пользователя*/
@@ -52,11 +57,11 @@ public class AdminPanel {
      */
     public void printAdminPage(Admin admin) {
         System.out.println("""
-                 //Панель администратора//\s
-                 Выберите действие:\s
-                 1 - Посмотреть список пользователей\s
-                 2 - Получить возможности пользователя\s
-                 3 - Отфильтровать бронирования пользователей\s
+                 //Панель администратора//
+                 Выберите действие:
+                 1 - Посмотреть список пользователей
+                 2 - Получить возможности пользователя
+                 3 - Панель вывода пользовательских броней
                  4 - Добавить новое место для бронирования
                  5 - Удалить место для бронирования
                  6 - Редактировать место для бронирования
@@ -77,7 +82,7 @@ public class AdminPanel {
      * @param admin Объект администратора.
      */
     private void adminPageChooseAction(Admin admin) {
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 ->
                     showAllUsers(admin);
             case 2 ->
@@ -107,19 +112,25 @@ public class AdminPanel {
      * @param admin Объект администратора.
      */
     private void showAllUsers(Admin admin) {
-        userService.getUserSet().forEach(System.out::println);
+        userService.getAllUsers().forEach(System.out::println);
         System.out.println("""
-                 \nВыберите действие:\s
-                 1 - Выбрать пользователя для взаимодействия с его аккаунтом\s
+                 \nВыберите действие:
+                 1 - Выбрать пользователя для взаимодействия с его аккаунтом
                  0 - Назад""");
-        switch (ConsoleReader.PageChoose()) {
-            case 1 ->
+        switch (ConsoleReader.readPageChoose()) {
+            case 1 -> {
+                try {
                     chooseUserToInteract(admin);
+                } catch (UserDoesNotExistsException | NotEnoughAdminRightsException e) {
+                    System.out.println(e.getMessage());
+                    printAdminPage(admin);
+                }
+            }
             case 0 ->
-                    userPanel.printUserPage(admin);
+                    printAdminPage(admin);
             default -> {
                 System.out.println("Некорректный ввод данных, повторите попытку");
-                printAdminPage(admin);
+                showAllUsers(admin);
             }
         }
     }
@@ -134,16 +145,17 @@ public class AdminPanel {
      * в случае если администратор выбирает самого себя для взаимодействия. <br>
      * вызывается метод {@link AdminPanel#chooseActionWithUser(User, Admin)}
      * @param admin Объект администратора.
+     * @throws UserDoesNotExistsException Если пользователя с таким id не существует
+     * @throws NotEnoughAdminRightsException Если недостаточно прав администратора для совершения действия
      */
-    private void chooseUserToInteract(Admin admin) {
+    private void chooseUserToInteract(Admin admin) throws UserDoesNotExistsException, NotEnoughAdminRightsException {
         System.out.println("Введите id пользователя для взаимодействия или любое другое число для выхода");
-        int id = ConsoleReader.enterIntValue();
-        User user = userService.getUserSet().stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+        int id = ConsoleReader.readIntValue();
+        User user = userService.getUser(id);
         if(user == null) {
-            showAllUsers(admin);
+            throw new UserDoesNotExistsException("Пользователя с таким id не существует");
         } else if(user instanceof Admin && id != admin.getId()) {
-            System.out.println("Администратор не имеет доступа к изменению данных аккаунта другого администратора");
-            showAllUsers(admin);
+            throw new NotEnoughAdminRightsException("Администратор не имеет доступа к изменению данных аккаунта другого администратора");
         }
         chooseActionWithUser(user, admin);
     }
@@ -152,12 +164,12 @@ public class AdminPanel {
      * Метод для выбора действия администратора с переданным пользователем <br>
      * 1 - используется для изменения логина пользователя, считывается новый логин, проверяется на наличие такого логина
      * у другого пользователя, в случае если логин не зарезервирован, то вызывается метод <br>
-     * {@link UserService#updateUsername(User, String)} для изменения логина, после изменения метод рекурсивно вызывается
+     * {@link UserService#updateUser(User)} для изменения логина, после изменения метод рекурсивно вызывается
      * для дальнейший действий с пользователем со стороны администратора <br>
      * 2 - используется для изменения пароля пользователя, считывается новый пароль вызывается метод <br>
-     * {@link UserService#updateUserPassword(User, String)} для изменения пароля, после изменения метод работает аналогично
+     * {@link UserService#updateUser(User)} для изменения пароля, после изменения метод работает аналогично
      * как и метод по изменению логина <br>
-     * 3 - вызывается метод {@link UserService#deleteUser(User)} в случае если указанный пользователь является
+     * 3 - вызывается метод {@link UserService#deleteUser(long)} в случае если указанный пользователь является
      * администратором, то удаляется его собственный аккаунт, почему так происходит описано в <br>
      * {@link AdminPanel#chooseUserToInteract(Admin)} в случае если пользователь не является администратором,
      * он так же удаляется <br>
@@ -170,39 +182,49 @@ public class AdminPanel {
      */
     private void chooseActionWithUser(User user, Admin admin) {
         System.out.println("""
-                Выберите действие:\s
-                1 - Изменить логин пользователя\s
-                2 - Изменить пароль пользователя\s
-                3 - Удалить пользователя\s
+                Выберите действие:
+                1 - Изменить логин пользователя
+                2 - Изменить пароль пользователя
+                3 - Удалить пользователя
                 4 - Действия с бронированием мест пользователя\s
                 0 - Назад""");
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 -> {
                 System.out.println("Введите новый логин");
-                String newName = ConsoleReader.enterStringValue(3);
-                if (userService.getAllReservedUsernamesAndPasswords().containsKey(newName)) {
-                    System.out.println("Такой логин уже зарезервирован");
-                } else {
-                    userService.updateUsername(user, newName);
-                    System.out.println("Вы успешно изменили логин пользователя");
+                String newName = ConsoleReader.readStringValue();
+                try {
+                    userService.checkUserLogin(newName);
+                } catch (UsernameFormatException | UserAlreadyExistsException e) {
+                    System.out.println(e.getMessage());
+                    chooseActionWithUser(user, admin);
                 }
+                user.setUsername(newName);
+                userService.updateUser(user);
+                System.out.println("Вы успешно изменили логин пользователя");
                 chooseActionWithUser(user, admin);
             }
             case 2 -> {
                 System.out.println("Введите новый пароль");
-                String newPassword = ConsoleReader.enterStringValue(3);
-                userService.updateUserPassword(user, newPassword);
+                String newPassword = ConsoleReader.readStringValue();
+                try {
+                    userService.checkUserPassword(newPassword);
+                } catch (PasswordFormatException e) {
+                    System.out.println(e.getMessage());
+                    chooseActionWithUser(user, admin);
+                }
+                user.setPassword(newPassword);
+                userService.updateUser(user);
                 System.out.println("Вы успешно изменили пароль пользователя");
                 chooseActionWithUser(user, admin);
             }
             case 3 -> {
-                userService.deleteUser(user);
+                userService.deleteUser(user.getId());
                 if (user instanceof Admin) {
                     System.out.println("Вы удалили свой аккаунт");
                     homePanel.printStartPage();
                 }
                 System.out.println("Вы успешно удалили пользователя");
-                chooseUserToInteract(admin);
+                printAdminPage(admin);
             }
             case 4 ->
                 userPanel.printUserPage(user);
@@ -219,18 +241,20 @@ public class AdminPanel {
      * Метод для выбора сортировки и отображения отсортированных данных
      * 1 - Вывод бронирований отсортированных по дате<br>
      * 2 - Вывод бронирований отсортированных по пользователям<br>
-     * 3 - Вывод бронирований отсортированных по типу помещения<br>
+     * 3 - Вывод бронирований всех бронирований без сортировки<br>
+     * 4 - Вывод мест для бронирований отсортированных по типу помещения<br>
      * 0 - {@link AdminPanel#printAdminPage(Admin)} Выход на главную панель администратора<br>
      * @param admin Объект администратора.
      */
     private void chooseSortForReservations(Admin admin) {
         System.out.println("""
-                Выберите способ фильтрации:\s
-                1 - Отфильтровать по дате бронирования\s
-                2 - Отфильтровать по пользователям\s
-                3 - Отфильтровать по типу помещения\s
+                Выберите способ фильтрации:
+                1 - Отсортировать брони по дате бронирования
+                2 - Отсортировать брони по пользователям
+                3 - Вывести все брони без фильтрации
+                4 - Отсортировать места по типу помещения
                 Любое другое число - Назад""");
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 -> {
                 for (Reservation reservation : reservationService.getAllReservationsByDate()) {
                     System.out.println(reservation + "\n");
@@ -244,6 +268,12 @@ public class AdminPanel {
                 printAdminPage(admin);
             }
             case 3 -> {
+                for (Reservation reservation : reservationService.getAllReservations()){
+                    System.out.println(reservation + "\n");
+                }
+                printAdminPage(admin);
+            }
+            case 4 -> {
                 for (ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlacesByTypes(chooseTypeOfReservationPlace())){
                     System.out.println(reservationPlace + "\n");
                 }
@@ -264,7 +294,7 @@ public class AdminPanel {
         ReservationPlace reservationPlace = chooseTypeOfReservationPlace();
         if(reservationPlace != null) {
             enterValuesForReservationPlace(reservationPlace);
-            reservationPlaceService.addReservationPlace(reservationPlace);
+            reservationPlaceService.saveReservationPlace(reservationPlace);
             System.out.println("Вы успешно создали место для аренды");
         }
         printAdminPage(admin);
@@ -276,13 +306,13 @@ public class AdminPanel {
      */
     private void enterValuesForReservationPlace(ReservationPlace reservationPlace) {
         System.out.print("\nВведите площадь места в метрах: ");
-        reservationPlace.setPlaceArea(ConsoleReader.enterDoubleValue());
+        reservationPlace.setPlaceArea(ConsoleReader.readDoubleValue());
         System.out.print("\nВведите название места: ");
-        reservationPlace.setName(ConsoleReader.enterStringValue(0));
+        reservationPlace.setName(ConsoleReader.readStringValue());
         System.out.print("\nВведите стоимость аренды места за сутки в долларах: ");
-        reservationPlace.setCostPerDayInDollars(ConsoleReader.enterDoubleValue());
+        reservationPlace.setCostPerHour(ConsoleReader.readDoubleValue());
         System.out.print("\nВведите количество сидений: ");
-        reservationPlace.setNumberOfSeats(ConsoleReader.enterIntValue());
+        reservationPlace.setNumberOfSeats(ConsoleReader.readIntValue());
     }
 
     /**
@@ -293,11 +323,11 @@ public class AdminPanel {
      */
     private ReservationPlace chooseTypeOfReservationPlace() {
         System.out.println("""
-                Выберите тип помещения для бронирований:\s
-                1 - Рабочее место\s
-                2 - Конференц-зал\s
+                Выберите тип помещения для бронирований:
+                1 - Рабочее место
+                2 - Конференц-зал
                 Любое другое число - Выход в главное меню""");
-        switch (ConsoleReader.PageChoose()) {
+        switch (ConsoleReader.readPageChoose()) {
             case 1 -> {
                 return new Workplace();
             }
@@ -333,15 +363,16 @@ public class AdminPanel {
      */
     private ReservationPlace chooseReservationPlace() throws ReservationDoesNotExistsException {
         List<ReservationPlace> allReservationPlaces = reservationPlaceService.getAllReservationPlaces();
-        for(int i = 0; i < allReservationPlaces.size(); i++) {
-            System.out.println(i + 1 + "" + allReservationPlaces.get(i) + "\n");
+        for (ReservationPlace reservationPlace : allReservationPlaces) {
+            System.out.println(reservationPlace.getId() + "" + reservationPlace + "\n");
         }
         System.out.println("Выберите номер места");
-        int choose = ConsoleReader.PageChoose();
-        if(choose < 1 || choose > allReservationPlaces.size()) {
+        int placeNumber = ConsoleReader.readPageChoose();
+        ReservationPlace reservationPlace = reservationPlaceService.getReservationPlace(placeNumber);
+        if(reservationPlace == null) {
             throw new ReservationDoesNotExistsException("Места с таким номером не существует");
         }
-        return allReservationPlaces.get(choose - 1);
+        return reservationPlace;
     }
 
     /**

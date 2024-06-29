@@ -13,9 +13,12 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.junit.jupiter.version>5.11.0-M2</org.junit.jupiter.version>
-        <org.projectlombok.version>1.18.32</org.projectlombok.version>
         <org.assertj.version>3.26.0</org.assertj.version>
         <org.mockito.version>5.12.0</org.mockito.version>
+        <org.testcontainers.version>1.19.8</org.testcontainers.version>
+        <org.projectlombok.version>1.18.32</org.projectlombok.version>
+        <org.postgresql.version>42.7.3</org.postgresql.version>
+        <org.liquibase.version>4.28.0</org.liquibase.version>
     </properties>
 
     <dependencies>
@@ -48,10 +51,36 @@
         </dependency>
 
         <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${org.projectlombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.postgresql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${org.liquibase.version}</version>
         </dependency>
     </dependencies>
 </project>

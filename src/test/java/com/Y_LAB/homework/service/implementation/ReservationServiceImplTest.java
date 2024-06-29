@@ -2,7 +2,6 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.roles.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,7 @@ class ReservationServiceImplTest {
     private ReservationServiceImpl reservationService;
 
     @Test
-    @DisplayName("Вызов метода получения всех броней")
+    @DisplayName("Проверка на вызов метода получения всех броней")
     void getAllReservations() {
         reservationService.getAllReservations();
 
@@ -31,7 +30,7 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Вызов метода получения всех броней отсортированных по пользователям")
+    @DisplayName("Проверка на вызов метода получения всех броней отсортированных по пользователям")
     void getAllReservationsByUsers() {
         reservationService.getAllReservationsByUsers();
 
@@ -39,7 +38,7 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Вызов метода получения всех броней отсортированных по датам")
+    @DisplayName("Проверка на вызов метода получения всех броней отсортированных по датам")
     void getAllReservationsByDate() {
         reservationService.getAllReservationsByDate();
 
@@ -47,17 +46,27 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Вызов метода получения всех броней пользователя")
-    void getAllUserReservations() {
-        User user = new User("user", "password");
+    @DisplayName("Проверка на вызов метода получения всех броней по id места для бронирования")
+    void getAllReservationsWithReservationPlace() {
+        int reservationPlaceId = 43;
 
-        reservationService.getAllUserReservations(user);
+        reservationService.getAllReservationsWithReservationPlace(reservationPlaceId);
 
-        verify(reservationDAO, times(1)).getAllUserReservations(user);
+        verify(reservationDAO, times(1)).getAllReservationsWithReservationPlace(reservationPlaceId);
     }
 
     @Test
-    @DisplayName("Вызов метода получения брони")
+    @DisplayName("Проверка на вызов метода получения всех броней пользователя")
+    void getAllUserReservations() {
+        int userId = 432;
+
+        reservationService.getAllUserReservations(userId);
+
+        verify(reservationDAO, times(1)).getAllUserReservations(userId);
+    }
+
+    @Test
+    @DisplayName("Проверка на вызов метода получения брони")
     void getReservation() {
         int id = 1;
 
@@ -67,17 +76,17 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Вызов метода добавления брони")
+    @DisplayName("Проверка на вызов метода добавления брони")
     void addReservation() {
         Reservation reservation = new Reservation();
 
-        reservationService.addReservation(reservation);
+        reservationService.saveReservation(reservation);
 
-        verify(reservationDAO, times(1)).addReservation(reservation);
+        verify(reservationDAO, times(1)).saveReservation(reservation);
     }
 
     @Test
-    @DisplayName("Вызов метода обновления брони")
+    @DisplayName("Проверка на вызов метода обновления брони")
     void updateReservation() {
         Reservation reservation = new Reservation();
 
@@ -87,12 +96,12 @@ class ReservationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Вызов метода удаления брони")
+    @DisplayName("Проверка на вызов метода удаления брони")
     void deleteReservation() {
-        Reservation reservation = new Reservation();
+        int reservationId = 432;
 
-        reservationService.deleteReservation(reservation.getId());
+        reservationService.deleteReservation(reservationId);
 
-        verify(reservationDAO, times(1)).deleteReservation(reservation.getId());
+        verify(reservationDAO, times(1)).deleteReservation(reservationId);
     }
 }

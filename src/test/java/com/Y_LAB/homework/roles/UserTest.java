@@ -1,8 +1,6 @@
 package com.Y_LAB.homework.roles;
 
 import com.Y_LAB.homework.entity.roles.User;
-import com.Y_LAB.homework.service.UserService;
-import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,19 +11,16 @@ class UserTest {
 
     private User user;
 
-    private final UserService userService = new UserServiceImpl();
-
     @BeforeEach
     void init() {
-        user = new User("user", "password");
+        user = new User(1, "user", "password");
     }
 
     @Test
     @DisplayName("Получение уникального идентификатора")
     void getId() {
-        userService.addUserToUserSet(user);
-        int expected = userService.getUserFromUserSet(user.getUsername(), user.getPassword()).getId();
-        int actual = user.getId();
+        long expected = 1;
+        long actual = user.getId();
 
         assertThat(actual).isEqualTo(expected);
     }

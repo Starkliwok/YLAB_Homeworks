@@ -3,7 +3,6 @@ package com.Y_LAB.homework.reservation;
 import com.Y_LAB.homework.entity.reservation.Reservation;
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 import com.Y_LAB.homework.entity.reservation.Workplace;
-import com.Y_LAB.homework.entity.roles.User;
 import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,28 +20,28 @@ class ReservationTest {
     private final ReservationService reservationService = new ReservationServiceImpl();
 
     @BeforeEach
-    @DisplayName("")
     void init() {
-        reservation = new Reservation();
-        reservationService.addReservation(reservation);
+        Workplace workplace = new Workplace(1, "name", 2.1, 2, 3);
+        reservation = new Reservation(1, 1, LocalDateTime.now(), LocalDateTime.now(), workplace);
+        reservationService.saveReservation(reservation);
     }
 
     @Test
     @DisplayName("Получение уникального идентификатора брони")
     void getId() {
-        int expected = reservationService.getReservation(reservation.getId()).getId();
-        int actual = reservation.getId();
+        long expected = 1;
+        long actual = reservation.getId();
 
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("Получение пользователя")
+    @DisplayName("Получение уникального идентификатора пользователя")
     void getUser() {
-        User expected = new User("user2", "password2");
-        reservation.setUser(expected);
+        long expected = 3;
+        reservation.setUserId(expected);
 
-        User actual = reservation.getUser();
+        long actual = reservation.getUserId();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -72,7 +71,7 @@ class ReservationTest {
     @Test
     @DisplayName("Получение места для бронирования")
     void getReservationPlace() {
-        ReservationPlace expected = new Workplace("006", 542.2, 65.3);
+        ReservationPlace expected = new Workplace(1, "w2", 3.2, 542.2, 65);
         reservation.setReservationPlace(expected);
 
         ReservationPlace actual = reservation.getReservationPlace();
@@ -81,12 +80,12 @@ class ReservationTest {
     }
 
     @Test
-    @DisplayName("Изменение пользователя")
-    void setUser() {
-        User expected = new User("user20", "password20");
+    @DisplayName("Изменение уникального идентификатора пользователя")
+    void setUserId() {
+        long expected = 65;
 
-        reservation.setUser(expected);
-        User actual = reservation.getUser();
+        reservation.setUserId(expected);
+        long actual = reservation.getUserId();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -116,7 +115,7 @@ class ReservationTest {
     @Test
     @DisplayName("Изменение места для бронирования")
     void setReservationPlace() {
-        ReservationPlace expected = new Workplace("432", 654, 3235.2);
+        ReservationPlace expected = new Workplace(54, "w3", 4.2, 51.2, 35);
 
         reservation.setReservationPlace(expected);
         ReservationPlace actual = reservation.getReservationPlace();

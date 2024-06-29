@@ -1,14 +1,13 @@
 package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.roles.User;
 
 import java.util.List;
 
 /**
  * Интерфейс описывает сервис для взаимодействия с бронированиями
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public interface ReservationService {
 
@@ -31,24 +30,31 @@ public interface ReservationService {
     List<Reservation> getAllReservationsByDate();
 
     /**
+     * Метод для получения коллекции всех броней с определённым местом для бронирования
+     * @param reservationPlaceId уникальный идентификатор типа места для бронирования
+     * @return коллекция всех броней определенного типа места для бронирования
+     */
+    List<Reservation> getAllReservationsWithReservationPlace(int reservationPlaceId);
+
+    /**
      * Метод для получения коллекции всех броней пользователя
-     * @param user объект пользователя
+     * @param userId уникальный идентификатор пользователя
      * @return коллекция всех броней пользователя
      */
-    List<Reservation> getAllUserReservations(User user);
+    List<Reservation> getAllUserReservations(long userId);
 
     /**
      * Метод для получения брони по уникальному идентификатору
      * @param id уникальный идентификатор брони
      * @return объект брони
      */
-    Reservation getReservation(int id);
+    Reservation getReservation(long id);
 
     /**
      * Метод для сохранения объекта брони
      * @param reservation объект брони
      */
-    void addReservation(Reservation reservation);
+    void saveReservation(Reservation reservation);
 
     /**
      * Метод для обновления брони
@@ -60,5 +66,5 @@ public interface ReservationService {
      * Метод для удаления брони
      * @param id уникальный идентификатор брони
      */
-    void deleteReservation(int id);
+    void deleteReservation(long id);
 }

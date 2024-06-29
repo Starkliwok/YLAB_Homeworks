@@ -3,7 +3,6 @@ package com.Y_LAB.homework.service.implementation;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.roles.User;
 import com.Y_LAB.homework.service.ReservationService;
 import lombok.AllArgsConstructor;
 
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * Сервис для взаимодействия с бронированиями
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 @AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
@@ -44,20 +43,26 @@ public class ReservationServiceImpl implements ReservationService {
 
     /** {@inheritDoc}*/
     @Override
-    public List<Reservation> getAllUserReservations(User user) {
-        return reservationDAO.getAllUserReservations(user);
+    public List<Reservation> getAllReservationsWithReservationPlace(int reservationPlaceId) {
+        return reservationDAO.getAllReservationsWithReservationPlace(reservationPlaceId);
     }
 
     /** {@inheritDoc}*/
     @Override
-    public Reservation getReservation(int id) {
+    public List<Reservation> getAllUserReservations(long userId) {
+        return reservationDAO.getAllUserReservations(userId);
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public Reservation getReservation(long id) {
         return reservationDAO.getReservation(id);
     }
 
     /** {@inheritDoc}*/
     @Override
-    public void addReservation(Reservation reservation) {
-        reservationDAO.addReservation(reservation);
+    public void saveReservation(Reservation reservation) {
+        reservationDAO.saveReservation(reservation);
     }
 
     /** {@inheritDoc}*/
@@ -68,7 +73,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     /** {@inheritDoc}*/
     @Override
-    public void deleteReservation(int id) {
+    public void deleteReservation(long id) {
         reservationDAO.deleteReservation(id);
     }
 }

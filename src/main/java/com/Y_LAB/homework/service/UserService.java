@@ -1,66 +1,77 @@
 package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.exception.user.auth.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Интерфейс описывает сервис для взаимодействия с пользователями
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public interface UserService {
 
     /**
-     * Метод для получения коллекции всех пользователей
-     * @return все пользователи в виде множества
+     * Метод для получения всех пользователей
+     * @return Коллекция всех пользователей
      */
-    Set<User> getUserSet();
-
-    /**
-     * Метод для получения коллекции всех логинов
-     * @return все логины в виде множества
-     */
-    Set<String> getUsernameSet();
-
-    /**
-     * Метод для получения коллекции всех логинов и их паролей
-     * @return все логины и пароли пользователей в виде ключа = значение
-     */
-    Map<String, String> getAllReservedUsernamesAndPasswords();
+    List<User> getAllUsers();
 
     /**
      * Метод для получения пользователя
      * @param username логин пользователя
      * @param password пароль пользователя
-     * @return возвращает пользователя,
+     * @return пользователь
      */
-    User getUserFromUserSet(String username, String password);
+    User getUser(String username, String password);
 
     /**
-     * Метод для добавления пользователя
-     * @param user пользователь
+     * Метод для получения пользователя
+     * @param id уникальный идентификатор пользователя
+     * @return пользователь
      */
-    void addUserToUserSet(User user);
+    User getUser(long id);
 
     /**
-     * Метод для обновления логина пользователя
-     * @param user пользователь
-     * @param newUsername новый логин
+     * Метод для сохранения пользователя
+     * @param username логин пользователя
+     * @param password пароль пользователя
+     * @throws RegistrationException Если длина логина или пароля превышает, или не соответствует допустимой длине
      */
-    void updateUsername(User user, String newUsername);
+    void saveUser(String username, String password) throws RegistrationException;
 
     /**
-     * Метод для обновления пароля пользователя
+     * Метод для обновления пользователя
      * @param user пользователь
-     * @param newPassword новый пароль
      */
-    void updateUserPassword(User user, String newPassword);
+    void updateUser(User user);
 
     /**
      * Метод для удаления пользователя
-     * @param user пользователь
+     * @param id идентификационный номер пользователя
      */
-    void deleteUser(User user);
+    void deleteUser(long id);
+
+    /**
+     * Метод для проверки существования пользователя по логину
+     * @param username логин пользователя
+     * @return True - пользователь с таким логином существует. False - пользователя с таким логином не существует
+     */
+    boolean isUserExist(String username);
+
+    /**
+     * Метод для проверки логина пользователя
+     * @param username логин пользователя
+     * @throws UsernameFormatException Если логин больше или меньше допустимой длины логина
+     * @throws UserAlreadyExistsException Если пользователь с таким логином уже существует
+     */
+    void checkUserLogin(String username) throws UsernameFormatException, UserAlreadyExistsException;
+
+    /**
+     * Метод для проверки пароля пользователя
+     * @param password пароль пользователя
+     * @throws PasswordFormatException Если пароль больше или меньше допустимой длины пароля
+     */
+    void checkUserPassword(String password) throws PasswordFormatException;
 }

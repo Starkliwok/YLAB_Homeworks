@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="009-insert-coworking-reservation-type-data" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="reservation_type" schemaName="coworking"/>
+        </preConditions>
+        <insert tableName="reservation_type" schemaName="coworking">
+            <column name="type" value="Conference room"/>
+        </insert>
+
+        <insert tableName="reservation_type" schemaName="coworking">
+            <column name="type" value="Workplace"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

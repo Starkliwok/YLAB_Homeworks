@@ -1,10 +1,6 @@
-package com.Y_LAB.homework.in.auth_panel;
+package com.Y_LAB.homework.in.user_panel.auth_panel;
 
-import com.Y_LAB.homework.entity.roles.User;
-import com.Y_LAB.homework.exception.auth.PasswordFormatException;
-import com.Y_LAB.homework.exception.auth.PasswordsDoNotMatchException;
-import com.Y_LAB.homework.exception.auth.UserAlreadyExistsException;
-import com.Y_LAB.homework.exception.auth.UsernameFormatException;
+import com.Y_LAB.homework.exception.user.auth.*;
 import com.Y_LAB.homework.in.user_panel.HomePanel;
 import com.Y_LAB.homework.in.util.ConsoleReader;
 import com.Y_LAB.homework.service.UserService;
@@ -14,14 +10,14 @@ import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 /**
  * Класс для вывода панели для регистрации пользователя и взаимодействия с ней
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public class RegistrationPanel {
 
     /** Поле сервиса пользователей, предназначенное взаимодействия с пользователями*/
     private final UserService userService;
 
-    /** Статическое поле домашней панели, предназначенное авторизации и регистрации новых пользователей*/
+    /** Статическое поле домашней панели, предназначенное для вывода информации новым пользователям*/
     private static final HomePanel homePanel = new HomePanel();
 
     public RegistrationPanel() {
@@ -37,22 +33,17 @@ public class RegistrationPanel {
      */
     public void signUp() {
         String username;
-        try {
-            System.out.print("Введите логин: ");
-            username = ConsoleReader.enterUsername();
-            createNewUser(username);
-        } catch (UserAlreadyExistsException | UsernameFormatException ex) {
-            System.out.println(ex.getMessage());
-            signUp();
-        }
+        System.out.print("Введите логин: ");
+        username = ConsoleReader.readStringValue();
+        createNewUser(username);
     }
 
     /**
      * Метод для вывода информации по регистрации пользователя,
-     * считывает введённый пароль пользователя с помощью {@link ConsoleReader#enterPassword()}, повторно
+     * считывает введённый пароль пользователя с помощью {@link ConsoleReader#readStringValue()}, повторно
      * считывает введённый пароль пользователя для избежаний опечатки со стороны пользователя,
      * в случае несоответствия 2-х паролей или формата пароля выводится сообщение об ошибке и метод вызывается -
-     * рекурсивно. Вызывает метод {@link UserService#addUserToUserSet(User)} для создания нового пользователя.
+     * рекурсивно. Вызывает метод {@link UserService#saveUser(String, String)} для создания нового пользователя.
      * В случае успешного создания пользователя выводится сообщение, а так же вызывается метод домашней страницы
      * пользователя {@link HomePanel#printStartPage()}
      * @param username логин будущего пользователя
@@ -61,12 +52,14 @@ public class RegistrationPanel {
         String password;
         try {
             System.out.print("Введите пароль: ");
-            password = ConsoleReader.enterPassword();
+            password = ConsoleReader.readStringValue();
             System.out.print("Повторите пароль: ");
-            ConsoleReader.repeatPassword(password);
-            User user = new User(username, password);
-            userService.addUserToUserSet(user);
-        } catch (PasswordsDoNotMatchException | PasswordFormatException ex) {
+            String repeatedPassword = ConsoleReader.readStringValue();
+            if(!password.equals(repeatedPassword)) {
+                throw new PasswordsDoNotMatchException("Пароли не совпадают, повторите попытку\n");
+            }
+            userService.saveUser(username, password);
+        } catch (RegistrationException ex) {
             System.out.println(ex.getMessage());
             createNewUser(username);
         }

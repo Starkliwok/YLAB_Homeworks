@@ -19,13 +19,15 @@ class ReservationPlaceTest {
     @BeforeEach
     void init() {
         reservationPlace = new ConferenceRoom("001", 150.2, 120.2, 14);
-        reservationPlaceService.addReservationPlace(reservationPlace);
+        reservationPlaceService.saveReservationPlace(reservationPlace);
     }
 
     @Test
     @DisplayName("Получение уникального идентификатора места")
     void getId() {
-        int expected = reservationPlaceService.getReservationPlace(reservationPlace.getId()).getId();
+        int expected = 543;
+        reservationPlace.setId(543);
+
         int actual = reservationPlace.getId();
 
         assertThat(actual).isEqualTo(expected);
@@ -57,9 +59,9 @@ class ReservationPlaceTest {
     @DisplayName("Получение стоимости аренды за день в долларах")
     void getCostPerDayInDollars() {
         double expected = 300;
-        reservationPlace.setCostPerDayInDollars(expected);
+        reservationPlace.setCostPerHour(expected);
 
-        double actual = reservationPlace.getCostPerDayInDollars();
+        double actual = reservationPlace.getCostPerHour();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -71,6 +73,17 @@ class ReservationPlaceTest {
         reservationPlace.setNumberOfSeats(expected);
 
         int actual = reservationPlace.getNumberOfSeats();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("Изменение уникального идентификатора")
+    void setId() {
+        int expected = 4;
+
+        reservationPlace.setId(expected);
+        int actual = reservationPlace.getId();
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -100,10 +113,10 @@ class ReservationPlaceTest {
     @Test
     @DisplayName("Изменение стоимости аренды в долларах")
     void setCostPerDayInDollars() {
-        double expected = reservationPlace.getCostPerDayInDollars() + 4.6;
+        double expected = reservationPlace.getCostPerHour() + 4.6;
 
-        reservationPlace.setCostPerDayInDollars(expected);
-        double actual = reservationPlace.getCostPerDayInDollars();
+        reservationPlace.setCostPerHour(expected);
+        double actual = reservationPlace.getCostPerHour();
 
         assertThat(actual).isEqualTo(expected);
     }

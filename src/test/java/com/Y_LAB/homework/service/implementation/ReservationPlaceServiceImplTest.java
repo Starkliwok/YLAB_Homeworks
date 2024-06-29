@@ -41,24 +41,6 @@ class ReservationPlaceServiceImplTest {
     }
 
     @Test
-    @DisplayName("Проверка на вызов метода получения всех доступных мест для бронирования")
-    void getAllAvailableReservations() {
-        reservationPlaceService.getAllAvailableReservations();
-
-        verify(reservationPlaceDAO, times(1)).getAllAvailableReservations();
-    }
-
-    @Test
-    @DisplayName("Проверка на вызов метода получения всех доступных дат для бронирования места")
-    void getAllAvailableDatesForReservePlace() {
-        ReservationPlace reservationPlace = new Workplace();
-
-        reservationPlaceService.getAllAvailableDatesForReservePlace(reservationPlace);
-
-        verify(reservationPlaceDAO, times(1)).getAllAvailableDatesForReservePlace(reservationPlace);
-    }
-
-    @Test
     @DisplayName("Проверка на вызов метода получения места для бронирования")
     void getReservationPlace() {
         int id = 1;
@@ -73,9 +55,9 @@ class ReservationPlaceServiceImplTest {
     void addReservationPlace() {
         ReservationPlace reservationPlace = new Workplace();
 
-        reservationPlaceService.addReservationPlace(reservationPlace);
+        reservationPlaceService.saveReservationPlace(reservationPlace);
 
-        verify(reservationPlaceDAO, times(1)).addReservationPlace(reservationPlace);
+        verify(reservationPlaceDAO, times(1)).saveReservationPlace(reservationPlace);
     }
 
     @Test

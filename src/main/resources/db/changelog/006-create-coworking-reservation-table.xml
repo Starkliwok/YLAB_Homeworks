@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="006-create-coworking-reservation-table" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="reservation_id_seq" schemaName="coworking"/>
+                <tableExists tableName="reservation" schemaName="coworking"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="reservation_id_seq" schemaName="coworking"/>
+
+        <createTable tableName="reservation" schemaName="coworking">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('coworking.reservation_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_user_id" references="coworking.user(id)"/>
+            </column>
+
+            <column name="reservation_place_id" type="INT">
+                <constraints foreignKeyName="fk_reservation_place_id" references="coworking.reservation_place(id)"/>
+            </column>
+
+            <column name="start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="end_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

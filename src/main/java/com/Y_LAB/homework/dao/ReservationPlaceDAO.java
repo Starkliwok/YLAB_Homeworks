@@ -2,66 +2,49 @@ package com.Y_LAB.homework.dao;
 
 import com.Y_LAB.homework.entity.reservation.ReservationPlace;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Интерфейс описывает ДАО слой для взаимодействия с местами для бронирования
  * @author Денис Попов
- * @version 1.0
+ * @version 2.0
  */
 public interface ReservationPlaceDAO {
 
     /**
-     * Метод для получения всех мест для бронирования
+     * Метод для получения всех мест для бронирования из базы данных
      * @return Коллекция всех мест для бронирования
      */
     List<ReservationPlace> getAllReservationPlaces();
 
     /**
-     * Метод для получения мест для бронирования по типу места
+     * Метод для получения мест для бронирования по типу места из базы данных
      * @param reservationPlace объект места для бронирования
      * @return Коллекция мест для бронирования определённого типа
      */
     List<ReservationPlace> getAllReservationPlacesByTypes(ReservationPlace reservationPlace);
 
     /**
-     * Метод для получения мест и доступных дат для бронирования этого места
-     *
-     * @return Коллекция мест и доступных дат для бронирования места
-     */
-    Map<ReservationPlace, List<LocalDateTime>> getAllAvailableReservations();
-
-    /**
-     * Метод для получения доступных дат для бронирования места
-     *
-     * @param reservationPlace объект места для бронирования
-     * @return Коллекция доступных дат для бронирования места
-     */
-    List<LocalDateTime> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace);
-
-    /**
-     * Метод для получения объекта места для бронирования
+     * Метод для получения объекта места для бронирования из базы данных
      * @param id уникальный идентификатор места
      * @return Объект места для бронирования
      */
     ReservationPlace getReservationPlace(int id);
 
     /**
-     * Метод для сохранения объекта места для бронирования
+     * Метод для сохранения объекта места для бронирования в базы данных
      * @param reservationPlace объект места для бронирования
      */
-    void addReservationPlace(ReservationPlace reservationPlace);
+    void saveReservationPlace(ReservationPlace reservationPlace);
 
     /**
-     * Метод для обновления места для бронирования
+     * Метод для обновления объекта места для бронирования в базе данных
      * @param reservationPlace объект места для бронирования
      */
     void updateReservationPlace(ReservationPlace reservationPlace);
 
     /**
-     * Метод для удаления места для бронирования
+     * Метод для удаления объекта места для бронирования из базы данных
      * @param id уникальный идентификатор места для бронирования
      */
     void deleteReservationPlace(int id);

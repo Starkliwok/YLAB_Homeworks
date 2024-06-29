@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="005-create-coworking-reservation-place-table" author="Denis" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="reservation_place_id_seq" schemaName="coworking"/>
+                <tableExists tableName="reservation_place" schemaName="coworking"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="reservation_place_id_seq" schemaName="coworking"/>
+
+        <createTable tableName="reservation_place" schemaName="coworking">
+            <column name="id" type="INT" defaultValueComputed="nextval('coworking.reservation_place_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="reservation_type_id" type="INT">
+                <constraints foreignKeyName="fk_reservation_type_id" references="coworking.reservation_type(id)"/>
+            </column>
+
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="place_area" type="REAL">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="cost_per_hour" type="REAL">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="number_of_seats" type="INT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
