@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_TIME_WITHOUT_SECONDS_PATTERN;
+import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_HOUR_PATTERN;
 
 @Data
 public class ReservationResponseDTO {
@@ -14,10 +14,10 @@ public class ReservationResponseDTO {
 
     private long userId;
 
-    @JsonFormat(pattern = DATE_TIME_WITHOUT_SECONDS_PATTERN)
+    @JsonFormat(pattern = DATE_HOUR_PATTERN)
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern = DATE_TIME_WITHOUT_SECONDS_PATTERN)
+    @JsonFormat(pattern = DATE_HOUR_PATTERN)
     private LocalDateTime endDate;
 
     private int reservationPlaceId;

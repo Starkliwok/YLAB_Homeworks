@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.model.reservation;
 
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**

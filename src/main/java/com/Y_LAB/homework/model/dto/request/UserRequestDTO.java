@@ -3,8 +3,6 @@ package com.Y_LAB.homework.model.dto.request;
 import com.Y_LAB.homework.model.roles.User;
 import lombok.*;
 
-import java.io.Serializable;
-
 /**
  * DTO для {@link User}.
  */

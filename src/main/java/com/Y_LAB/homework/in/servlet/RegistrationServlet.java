@@ -1,7 +1,6 @@
 package com.Y_LAB.homework.in.servlet;
 
 import com.Y_LAB.homework.exception.model.ErrorResponse;
-import com.Y_LAB.homework.exception.user.auth.RegistrationException;
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
