@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.mapper;
 
-import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationResponseDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import org.mapstruct.Mapper;
