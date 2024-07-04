@@ -4,14 +4,13 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="010-insert-coworking-admin-data" author="Denis" runAlways="true">
-        <preConditions onFail="MARK_RAN">
-            <tableIsEmpty tableName="admin" schemaName="coworking"/>
-        </preConditions>
+    <changeSet id="014-insert-coworking-reservation-data" author="Denis" runAlways="true">
+        <insert tableName="user_audit_result" schemaName="coworking">
+            <column name="result" value="SUCCESS"/>
+        </insert>
 
-        <insert tableName="admin" schemaName="coworking">
-            <column name="user_id" valueNumeric="6"/>
-            <column name="admin_level" valueNumeric="1"/>
+        <insert tableName="user_audit_result" schemaName="coworking">
+            <column name="result" value="FAIL"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="010-insert-coworking-reservation-place-data" author="Denis" runAlways="true">
+    <changeSet id="012-insert-coworking-reservation-place-data" author="Denis" runAlways="true">
         <preConditions onFail="MARK_RAN">
             <tableIsEmpty tableName="reservation_place" schemaName="coworking"/>
         </preConditions>
