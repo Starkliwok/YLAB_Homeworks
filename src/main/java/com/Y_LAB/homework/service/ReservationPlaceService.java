@@ -39,8 +39,8 @@ public interface ReservationPlaceService {
     void saveReservationPlace(ReservationPlace reservationPlace);
 
     /**
-     * Метод для сохранения объекта места для бронирования
-     * @param reservationPlace объект места для бронирования
+     * Метод для сохранения объекта DTO места для бронирования
+     * @param reservationPlaceRequestDTO объект места DTO для бронирования
      */
     void saveReservationPlace(ReservationPlaceRequestDTO reservationPlaceRequestDTO);
 

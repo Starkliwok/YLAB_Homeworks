@@ -4,11 +4,8 @@ import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.*;
-import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.PASSWORD_MAX_LENGTH;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.*;
 
 public class ReservationPlaceRequestDTOValidator implements ValidatorDTO<ReservationPlaceRequestDTO> {

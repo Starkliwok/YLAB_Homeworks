@@ -4,13 +4,9 @@ import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_TIME_WITHOUT_SECONDS_PATTERN;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.*;
 
 public class ReservationRequestDTOValidator implements ValidatorDTO<ReservationRequestDTO> {

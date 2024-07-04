@@ -3,16 +3,11 @@ package com.Y_LAB.homework.service.implementation;
 import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.exception.user.auth.RegistrationException;
-import com.Y_LAB.homework.exception.user.auth.PasswordFormatException;
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
-import com.Y_LAB.homework.exception.user.auth.UsernameFormatException;
 import com.Y_LAB.homework.service.UserService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-
-import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.*;
 
 /**
  * Сервис для взаимодействия с пользователями
