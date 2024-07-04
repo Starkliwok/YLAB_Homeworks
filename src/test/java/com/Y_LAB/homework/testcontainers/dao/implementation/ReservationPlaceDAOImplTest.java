@@ -2,9 +2,9 @@ package com.Y_LAB.homework.testcontainers.dao.implementation;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.reservation.Workplace;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
 import finder.ObjectFinderForTests;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import com.Y_LAB.homework.util.init.LiquibaseMigration;

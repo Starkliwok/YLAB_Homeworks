@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.Reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

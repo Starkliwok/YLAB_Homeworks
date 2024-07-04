@@ -1,9 +1,9 @@
 package com.Y_LAB.homework.dao.implementation;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.reservation.Workplace;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
 
@@ -32,7 +32,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         ReservationPlace reservationPlace;
         try {
             Statement statement = connection.createStatement();
-            ResultSet reservationPlaceResultSet = statement.executeQuery("SELECT * FROM coworking.reservation_place");
+            ResultSet reservationPlaceResultSet = statement.executeQuery("SELECT * FROM coworking.reservation_place ORDER BY id");
             while (reservationPlaceResultSet.next()) {
                 reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
                 reservationPlaces.add(reservationPlace);

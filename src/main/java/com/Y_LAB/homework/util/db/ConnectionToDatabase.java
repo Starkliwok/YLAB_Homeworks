@@ -2,6 +2,8 @@ package com.Y_LAB.homework.util.db;
 
 import com.Y_LAB.homework.util.init.PropertiesLoader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -27,16 +29,19 @@ public class ConnectionToDatabase {
      * @return подключение к базе данных
      */
     public static Connection getConnection() {
-        Properties properties = PropertiesLoader.getProperties(PROPERTIES_PATH);
+        InputStream inputStream = ConnectionToDatabase.class.getClassLoader().getResourceAsStream("application.properties");
+        Properties properties = new Properties();
         try {
+            properties.load(inputStream);
+            Class.forName("org.postgresql.Driver");
             if (conn == null || conn.isClosed()) {
                 conn = DriverManager.getConnection
                         (properties.getProperty(PROPERTIES_URL_KEY)
                         , properties.getProperty(PROPERTIES_USERNAME_KEY)
                         , properties.getProperty(PROPERTIES_PASSWORD_KEY));
             }
-        } catch (SQLException e) {
-            System.out.println("Произошла ошибка, " + e.getMessage() + ", приложение завершает работу");
+        } catch (SQLException | ClassNotFoundException | IOException e) {
+            System.out.println("Произошла ошибка " + e.getMessage() + ", приложение завершает работу");
             System.exit(-1);
         }
         return conn;
@@ -51,11 +56,12 @@ public class ConnectionToDatabase {
     public static Connection getConnectionFromProperties(Properties properties) {
         Connection connection = null;
         try {
+            Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(
                     properties.getProperty(PROPERTIES_URL_KEY)
                     , properties.getProperty(PROPERTIES_USERNAME_KEY)
                     , properties.getProperty(PROPERTIES_PASSWORD_KEY));
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println("Произошла ошибка, " + e.getMessage() + ", приложение завершает работу");
             System.exit(-1);
         }

@@ -1,5 +1,4 @@
-package com.Y_LAB.homework.entity.roles;
-
+package com.Y_LAB.homework.model.roles;
 
 /**
  * Класс администратора обладает правами как обычного {@link User}, так и правами по удалению, изменению данных других
@@ -17,13 +16,5 @@ public class Admin extends User {
      */
     public Admin(long id, String username, String password) {
         super(id, username, password);
-    }
-
-    @Override
-    public String toString() {
-        return "\nАдминистратор" +
-                "\nid = " + getId() +
-                "\nИмя = '" + getUsername() + '\'' +
-                "\nПароль = '" + getPassword() + '\'';
     }
 }

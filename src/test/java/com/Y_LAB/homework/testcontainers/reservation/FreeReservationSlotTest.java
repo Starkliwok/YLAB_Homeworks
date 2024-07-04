@@ -4,9 +4,9 @@ import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.reservation.Workplace;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
@@ -122,7 +122,7 @@ class FreeReservationSlotTest {
         expected.put(LocalTime.of(20, 0), LocalTime.of(21, 0));
         expected.put(LocalTime.of(21, 0), LocalTime.of(22, 0));
 
-        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservePlace(
+        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservation(
                 reservationPlace, reservation2.getStartDate().toLocalDate());
 
         assertThat(actual).isEqualTo(expected);
@@ -133,7 +133,7 @@ class FreeReservationSlotTest {
     void shouldReturnMapWithoutDeleteElements() {
         Map<LocalTime, LocalTime> expected = ReservationDateTimeGenerator.generateTimesPeriod();
 
-        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservePlace(
+        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservation(
                 reservationPlace, reservation2.getStartDate().toLocalDate().plusDays(3));
 
         assertThat(actual).isEqualTo(expected);
@@ -142,7 +142,7 @@ class FreeReservationSlotTest {
     @Test
     @DisplayName("Метод должен вернуть пустую коллекцию для бронирования места")
     void shouldReturnEmptyMap() {
-        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservePlace(
+        Map<LocalTime, LocalTime> actual = freeReservationSlot.getAllAvailableTimesForReservation(
                 reservationPlace, reservation.getStartDate().toLocalDate());
 
         assertThat(actual.isEmpty()).isTrue();

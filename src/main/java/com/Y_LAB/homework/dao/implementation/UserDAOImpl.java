@@ -1,8 +1,8 @@
 package com.Y_LAB.homework.dao.implementation;
 
 import com.Y_LAB.homework.dao.UserDAO;
-import com.Y_LAB.homework.entity.roles.Admin;
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.Admin;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
 

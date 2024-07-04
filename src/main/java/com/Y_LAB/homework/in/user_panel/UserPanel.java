@@ -1,9 +1,9 @@
 package com.Y_LAB.homework.in.user_panel;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.roles.Admin;
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.roles.Admin;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.reservation.ReservationDoesNotExistsException;
 import com.Y_LAB.homework.exception.reservation.ReservationPeriodException;
 import com.Y_LAB.homework.in.util.ConsoleReader;

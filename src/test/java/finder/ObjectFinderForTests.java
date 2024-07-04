@@ -1,8 +1,8 @@
 package finder;
 
-import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;

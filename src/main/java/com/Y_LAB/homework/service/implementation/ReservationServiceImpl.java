@@ -2,7 +2,10 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
 import lombok.AllArgsConstructor;
 
@@ -62,6 +65,22 @@ public class ReservationServiceImpl implements ReservationService {
     /** {@inheritDoc}*/
     @Override
     public void saveReservation(Reservation reservation) {
+        reservationDAO.saveReservation(reservation);
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) {
+        ReservationPlaceService reservationPlaceService = new ReservationPlaceServiceImpl();
+        ReservationPlace reservationPlace =
+                reservationPlaceService.getReservationPlace(reservationRequestDTO.getReservationPlaceId());
+
+        Reservation reservation = Reservation.builder()
+                .userId(userId)
+                .startDate(reservationRequestDTO.getStartDate())
+                .endDate(reservationRequestDTO.getEndDate())
+                .reservationPlace(reservationPlace).build();
+
         reservationDAO.saveReservation(reservation);
     }
 

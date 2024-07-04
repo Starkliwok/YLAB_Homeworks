@@ -1,6 +1,6 @@
 package com.Y_LAB.homework.roles;
 
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

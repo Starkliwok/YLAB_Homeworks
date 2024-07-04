@@ -1,4 +1,4 @@
-package com.Y_LAB.homework.entity.reservation;
+package com.Y_LAB.homework.model.reservation;
 
 import lombok.*;
 

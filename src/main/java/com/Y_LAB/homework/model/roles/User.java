@@ -1,4 +1,4 @@
-package com.Y_LAB.homework.entity.roles;
+package com.Y_LAB.homework.model.roles;
 
 import lombok.*;
 
@@ -19,12 +19,4 @@ public class User {
 
     /** Поле пароля пользователя, используется при входе в систему.*/
     private String password;
-
-    @Override
-    public String toString() {
-        return "\nПользователь" +
-                "\nid = " + id +
-                "\nИмя = '" + username + '\'' +
-                "\nПароль = '" + password + '\'';
-    }
 }

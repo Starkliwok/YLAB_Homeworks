@@ -1,6 +1,7 @@
 package com.Y_LAB.homework.service;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
+import com.Y_LAB.homework.model.reservation.Reservation;
 
 import java.util.List;
 
@@ -55,6 +56,8 @@ public interface ReservationService {
      * @param reservation объект брони
      */
     void saveReservation(Reservation reservation);
+
+    void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId);
 
     /**
      * Метод для обновления брони

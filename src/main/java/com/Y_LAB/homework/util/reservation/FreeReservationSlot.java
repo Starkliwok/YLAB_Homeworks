@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.util.reservation;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
@@ -11,9 +11,8 @@ import lombok.AllArgsConstructor;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Класс для получения свободных промежутков времён для бронирования помещения
@@ -58,7 +57,7 @@ public class FreeReservationSlot {
         List<Reservation> allReservations = reservationService.getAllReservationsWithReservationPlace(reservationPlace.getId());
         List<LocalDate> availableDates = ReservationDateTimeGenerator.generateDates();
         for (Reservation reservation : allReservations) {
-            if(getAllAvailableTimesForReservePlace(reservationPlace, reservation.getStartDate().toLocalDate()).isEmpty()) {
+            if(getAllAvailableTimesForReservation(reservationPlace, reservation.getStartDate().toLocalDate()).isEmpty()) {
                 availableDates.remove(reservation.getStartDate().toLocalDate());
             }
         }
@@ -72,7 +71,7 @@ public class FreeReservationSlot {
      * @param localDate день бронирования
      * @return коллекция доступных промежутков времени для бронирования указанного помещения в указанную дату
      */
-    public Map<LocalTime, LocalTime> getAllAvailableTimesForReservePlace(ReservationPlace reservationPlace, LocalDate localDate) {
+    public Map<LocalTime, LocalTime> getAllAvailableTimesForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = ReservationDateTimeGenerator.generateTimesPeriod();
         List<Reservation> allReservations =
                 reservationService.getAllReservationsWithReservationPlace(reservationPlace.getId())
@@ -86,5 +85,31 @@ public class FreeReservationSlot {
             }
         }
         return availableTimes;
+    }
+
+    public List<String> getAllAvailableTimeListForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
+        Map<LocalTime, LocalTime> availableTimes = getAllAvailableTimesForReservation(reservationPlace, localDate);
+        List<String> allAvailableTimes = new ArrayList<>();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        for (LocalTime endTime : availableTimes.values()) {
+            LocalTime startTime = endTime.minusHours(1);
+            if(startTime.getHour() + 1 == endTime.getHour()) {
+               allAvailableTimes.add(startTime.format(dateTimeFormatter) + "-" + endTime.format(dateTimeFormatter));
+            }
+        }
+        return allAvailableTimes;
+    }
+
+    public List<ReservationPlace> getAllAvailablePlacesForReserveDate(LocalDate localDate) {
+        Map<ReservationPlace, List<LocalDate>> availableReservationsWithDates = getAllAvailablePlaceForReservations();
+        List<ReservationPlace> availableReservations = new ArrayList<>();
+        for(ReservationPlace reservationPlace : reservationPlaceService.getAllReservationPlaces()) {
+            for(int i = 0; i < availableReservationsWithDates.get(reservationPlace).size(); i++) {
+                if (localDate.isEqual(availableReservationsWithDates.get(reservationPlace).get(i))) {
+                    availableReservations.add(reservationPlace);
+                }
+            }
+        }
+        return new ArrayList<>(new LinkedHashSet<>(availableReservations));
     }
 }

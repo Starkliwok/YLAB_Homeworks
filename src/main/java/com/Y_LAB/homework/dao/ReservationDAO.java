@@ -1,6 +1,6 @@
 package com.Y_LAB.homework.dao;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.Reservation;
 
 import java.util.List;
 

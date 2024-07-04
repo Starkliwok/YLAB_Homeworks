@@ -1,6 +1,6 @@
 package com.Y_LAB.homework.dao;
 
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.User;
 
 import java.util.List;
 

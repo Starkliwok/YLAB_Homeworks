@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.reservation;
 
-import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;

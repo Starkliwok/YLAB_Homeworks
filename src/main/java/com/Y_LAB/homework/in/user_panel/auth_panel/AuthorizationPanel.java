@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.in.user_panel.auth_panel;
 
-import com.Y_LAB.homework.entity.roles.Admin;
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.Admin;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.user.auth.WrongUsernameAndPasswordException;
 import com.Y_LAB.homework.in.user_panel.AdminPanel;
 import com.Y_LAB.homework.in.user_panel.HomePanel;

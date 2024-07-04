@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.user.auth.RegistrationException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.Y_LAB.homework.entity.reservation;
+package com.Y_LAB.homework.model.reservation;
 
 import lombok.*;
 
@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Reservation {
 
     /** Поле уникального идентификатора, которое задается при создании объекта, это поле невозможно изменить.*/
@@ -29,15 +30,4 @@ public class Reservation {
 
     /** Поле места бронирования.*/
     private ReservationPlace reservationPlace;
-
-    @Override
-    public String toString() {
-        return "\nБронь" +
-                "\nИдентификатор пользователя = " + userId +
-                "\nДата начала = " +
-                startDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
-                "\nДата окончания = " +
-                endDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) +
-                reservationPlace.toString();
-    }
 }

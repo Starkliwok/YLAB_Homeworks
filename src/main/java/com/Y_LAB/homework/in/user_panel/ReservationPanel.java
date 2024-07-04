@@ -1,8 +1,8 @@
 package com.Y_LAB.homework.in.user_panel;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.reservation.DatesForReservationDoesNotExistsException;
 import com.Y_LAB.homework.exception.reservation.ReservationDoesNotExistsException;
 import com.Y_LAB.homework.exception.reservation.ReservationPeriodException;
@@ -111,7 +111,7 @@ public class ReservationPanel {
         System.out.print("\nВведите дату брони в формате \"ДД-ММ-ГГГГ\":");
         LocalDate reservationDate = ConsoleReader.readDate();
         Map<LocalTime, LocalTime> availableTimesInDate =
-                freeReservationSlot.getAllAvailableTimesForReservePlace(reservationPlace, reservationDate);
+                freeReservationSlot.getAllAvailableTimesForReservation(reservationPlace, reservationDate);
         printAllAvailableTimesForReservationInDate(availableTimesInDate, user);
         System.out.print("\nВведите час начала брони в формате \"ЧЧ\":");
         LocalDateTime startDateTime = LocalDateTime.of(reservationDate, ConsoleReader.readHour());

@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import static com.Y_LAB.homework.constants.ApplicationConstants.PROPERTIES_CHANGE_LOG_FILE_KEY;
-import static com.Y_LAB.homework.constants.ApplicationConstants.PROPERTIES_PATH;
+import static com.Y_LAB.homework.constants.ApplicationConstants.*;
 
 /**
  * Класс для выполнения миграций Liquibase
@@ -31,9 +30,9 @@ public class LiquibaseMigration {
      */
     public static void initMigration(Connection connection) {
         try {
-            Properties properties = PropertiesLoader.getProperties(PROPERTIES_PATH);
+            Properties properties = PropertiesLoader.getProperties("application.properties");
             Statement statement = connection.createStatement();
-            statement.execute("CREATE SCHEMA IF NOT EXISTS coworking_service");
+            statement.execute(SQL_CREATE_LIQUIBASE_SERVICE_SCHEMA);
             statement.close();
             Database database =
                     DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
@@ -42,7 +41,7 @@ public class LiquibaseMigration {
             liquibase.update();
             connection.close();
         } catch (LiquibaseException | SQLException e) {
-            System.out.println("Произошла ошибка, приложение завершает работу");
+            System.out.println("Произошла ошибка " + e.getMessage() + ", приложение завершает работу");
             System.exit(-1);
         }
     }
