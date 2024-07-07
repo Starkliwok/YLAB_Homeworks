@@ -6,6 +6,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 
+/**
+ * Аспект для отображения информации о длительности выполнения всех методов
+ * @author Денис Попов
+ * @version 1.0
+ */
 @Aspect
 public class LoggableAspect {
 

@@ -233,6 +233,7 @@ class ReservationAdminServletTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
         when(reservationService.getReservation(1)).thenReturn(reservation);
+        when(response.getWriter()).thenReturn(writer);
 
         reservationAdminServlet.doDelete(request, response);
 

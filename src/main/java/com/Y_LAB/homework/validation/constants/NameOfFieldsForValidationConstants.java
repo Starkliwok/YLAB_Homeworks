@@ -1,5 +1,10 @@
 package com.Y_LAB.homework.validation.constants;
 
+/**
+ * Класс содержит константы для описания названий полей объектов
+ * @author Денис Попов
+ * @version 2.0
+ */
 public class NameOfFieldsForValidationConstants {
     public static final String FIELD_USERNAME = "username";
     public static final String FIELD_PASSWORD = "password";

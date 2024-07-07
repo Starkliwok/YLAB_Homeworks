@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.service;
 
+import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.exception.user.auth.*;
 
 import java.util.List;
 
@@ -33,6 +33,11 @@ public interface UserService {
      */
     User getUser(long id);
 
+    /**
+     * Метод для получения уникального идентификатора пользователя
+     * @param username уникальный логин пользователя
+     * @return идентификатор пользователя, null - если пользователя не существует
+     */
     Long getUserId(String username);
 
     /**

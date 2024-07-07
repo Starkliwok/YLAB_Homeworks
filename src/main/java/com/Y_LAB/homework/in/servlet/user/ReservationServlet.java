@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.ReservationMapper;
@@ -11,6 +10,8 @@ import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationResponseDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.response.ErrorResponse;
+import com.Y_LAB.homework.model.response.MessageResponse;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.service.UserService;
@@ -30,11 +31,17 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_HOUR_PATTERN;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PATH;
 
+/**
+ * Сервлет для взаимодействия с бронированиями пользователей
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_RESERVATION_PATH, CONTROLLER_RESERVATION_PATH + "/*"})
 public class ReservationServlet extends HttpServlet {
     private final ReservationMapper reservationMapper;
@@ -126,11 +133,12 @@ public class ReservationServlet extends HttpServlet {
                 validatorPostDTO.validate(reservationRequestDTO);
                 reservationService.saveReservation(reservationRequestDTO, userId);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
+                resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Вы успешно создали бронь")));
             }
         } catch (JsonMappingException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(objectMapper.writeValueAsString(
-                    new ErrorResponse("Тело запроса не соответствует требованиям")));
+                    new ErrorResponse("Тело запроса не соответствует требованиям формат даты - " + DATE_HOUR_PATTERN)));
         } catch (FieldNotValidException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
@@ -164,6 +172,7 @@ public class ReservationServlet extends HttpServlet {
                             .reservationPlace(reservationPlace).build();
                     reservationService.updateReservation(reservation);
                     resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Вы успешно обновили бронь")));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     resp.getWriter().write(objectMapper.writeValueAsString(
@@ -198,6 +207,7 @@ public class ReservationServlet extends HttpServlet {
                 if(reservation != null && reservation.getUserId() == userId) {
                     reservationService.deleteReservation(reservationId);
                     resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Вы успешно удалили бронь")));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     resp.getWriter().write(objectMapper.writeValueAsString(

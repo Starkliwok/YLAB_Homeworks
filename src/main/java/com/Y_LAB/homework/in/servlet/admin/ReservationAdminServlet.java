@@ -1,12 +1,13 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.ReservationMapper;
 import com.Y_LAB.homework.mapper.ReservationMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationResponseDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.response.ErrorResponse;
+import com.Y_LAB.homework.model.response.MessageResponse;
 import com.Y_LAB.homework.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
@@ -26,6 +27,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_ADMIN_PATH;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PATH;
 
+/**
+ * Сервлет панели администратора для управления бронями
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_ADMIN_PATH + CONTROLLER_RESERVATION_PATH
                 , CONTROLLER_ADMIN_PATH + CONTROLLER_RESERVATION_PATH + "/*"})
 public class ReservationAdminServlet extends HttpServlet {
@@ -105,6 +111,7 @@ public class ReservationAdminServlet extends HttpServlet {
                 if(reservation != null) {
                     reservationService.deleteReservation(reservationId);
                     resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Вы успешно удалили бронь")));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     resp.getWriter().write(objectMapper.writeValueAsString(

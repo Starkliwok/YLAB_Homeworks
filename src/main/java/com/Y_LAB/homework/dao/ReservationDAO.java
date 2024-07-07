@@ -50,6 +50,11 @@ public interface ReservationDAO {
      */
     Reservation getReservation(long id);
 
+    /**
+     * Метод для получения уникального идентификатора брони из базы данных
+     * @param reservation объект брони
+     * @return Уникальный идентификатор брони, если бронь с такими полями существует в базе данных
+     */
     Long getReservationId(Reservation reservation);
 
     /**

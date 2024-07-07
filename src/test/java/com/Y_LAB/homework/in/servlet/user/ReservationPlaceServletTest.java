@@ -170,6 +170,7 @@ class ReservationPlaceServletTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(new AdminRequestDTO());
         when(objectMapper.readValue(request.getReader(), ReservationPlaceRequestDTO.class)).thenReturn(reservationPlaceRequestDTO);
+        when(response.getWriter()).thenReturn(writer);
 
         reservationPlaceServlet.doPost(request, response);
 

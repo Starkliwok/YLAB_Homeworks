@@ -1,12 +1,12 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.mapper.UserMapper;
 import com.Y_LAB.homework.mapper.UserMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.dto.response.UserResponseDTO;
+import com.Y_LAB.homework.model.response.ErrorResponse;
 import com.Y_LAB.homework.model.roles.Admin;
 import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
@@ -29,7 +29,9 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_LOGIN_PATH;
 
 /**
- * Сервлет для обработки запросов аутентификации пользователей.
+ * Сервлет для авторизации пользователей
+ * @author Денис Попов
+ * @version 1.0
  */
 @WebServlet(CONTROLLER_LOGIN_PATH)
 public class AuthorizationServlet extends HttpServlet {

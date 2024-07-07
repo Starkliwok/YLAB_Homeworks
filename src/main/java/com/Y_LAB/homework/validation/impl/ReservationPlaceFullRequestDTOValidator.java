@@ -9,6 +9,11 @@ import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.N
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MIN_LENGTH;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.*;
 
+/**
+ * Класс для валидации объектов {@link ReservationPlaceFullRequestDTOValidator}
+ * @author Денис Попов
+ * @version 2.0
+ */
 public class ReservationPlaceFullRequestDTOValidator implements ValidatorDTO<ReservationPlaceFullRequestDTO> {
 
     private static ReservationPlaceFullRequestDTOValidator instance;
@@ -25,6 +30,7 @@ public class ReservationPlaceFullRequestDTOValidator implements ValidatorDTO<Res
         return instance;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationPlaceFullRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getId(), FIELD_ID);

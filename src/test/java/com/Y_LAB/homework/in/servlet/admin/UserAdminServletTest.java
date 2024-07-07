@@ -232,6 +232,7 @@ class UserAdminServletTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
         when(userService.getUser(1)).thenReturn(new User(4, "lpp", "dkk"));
+        when(response.getWriter()).thenReturn(writer);
 
         userAdminServlet.doDelete(request, response);
 

@@ -1,12 +1,12 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.mapper.ReservationMapper;
 import com.Y_LAB.homework.mapper.ReservationMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationResponseDTO;
 import com.Y_LAB.homework.model.request.SortRequest;
 import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.response.ErrorResponse;
 import com.Y_LAB.homework.service.ReservationService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +26,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODI
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.*;
 
+/**
+ * Сервлет панели администратора для получения отсортированных броней пользователей
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(CONTROLLER_ADMIN_PATH + CONTROLLER_RESERVATION_PATH + CONTROLLER_SORT_PATH)
 public class ReservationSortAdminServlet extends HttpServlet {
 

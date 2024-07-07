@@ -1,12 +1,12 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.AuditMapper;
 import com.Y_LAB.homework.mapper.AuditMapperImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.response.AuditResponseDTO;
+import com.Y_LAB.homework.model.response.ErrorResponse;
 import com.Y_LAB.homework.service.AuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
@@ -26,6 +26,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_ADMIN_PATH;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_AUDIT_PATH;
 
+/**
+ * Сервлет панели администратора для управления аудитами
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_ADMIN_PATH + CONTROLLER_AUDIT_PATH
         , CONTROLLER_ADMIN_PATH + CONTROLLER_AUDIT_PATH + "/*"})
 public class AuditAdminServlet extends HttpServlet {

@@ -1,5 +1,10 @@
 package com.Y_LAB.homework.dao.constants;
 
+/**
+ * Класс содержит константы SQL запросов для DAO слоя
+ * @author Денис Попов
+ * @version 1.0
+ */
 public class SQLConstants {
     public static final String AUDIT_GET_ALL_ORDER_BY_ID = "SELECT id, user_id, date, action FROM coworking.user_audit ORDER BY id";
     public static final String AUDIT_FIND_BY_ID = "SELECT user_id, date, action FROM coworking.user_audit WHERE id = ?";

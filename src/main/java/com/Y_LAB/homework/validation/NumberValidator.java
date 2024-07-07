@@ -5,6 +5,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 
+/**
+ * Интерфейс описывает валидацию чисел
+ * @author Денис Попов
+ * @version 2.0
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NumberValidator {
     private static NumberValidator instance;
@@ -15,6 +20,12 @@ public class NumberValidator {
         return instance;
     }
 
+    /**
+     * Проверяет переданное число на валидность
+     * @param number число подлежащий валидации
+     * @param name название поля, которое содержит переданное число
+     * @throws FieldNotValidException если число не валидно
+     */
     public void validate(Object number, String name) throws FieldNotValidException {
         if (!NumberUtils.isCreatable(String.valueOf(number))) {
             throw new FieldNotValidException(name, "должен быть числом");

@@ -8,8 +8,12 @@ import com.Y_LAB.homework.validation.ValidatorDTO;
 import java.time.LocalDateTime;
 
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.*;
-import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.FIELD_END_DATE;
 
+/**
+ * Класс для валидации объектов {@link ReservationPutRequestDTOValidator}
+ * @author Денис Попов
+ * @version 2.0
+ */
 public class ReservationPutRequestDTOValidator implements ValidatorDTO<ReservationPutRequestDTO> {
 
     private static ReservationPutRequestDTOValidator instance;
@@ -26,6 +30,7 @@ public class ReservationPutRequestDTOValidator implements ValidatorDTO<Reservati
         return instance;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationPutRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getId(), FIELD_ID);

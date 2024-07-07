@@ -5,9 +5,15 @@ import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
 
-import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.*;
+import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MAX_LENGTH;
+import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MIN_LENGTH;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.*;
 
+/**
+ * Класс для валидации объектов {@link ReservationPlaceRequestDTOValidator}
+ * @author Денис Попов
+ * @version 2.0
+ */
 public class ReservationPlaceRequestDTOValidator implements ValidatorDTO<ReservationPlaceRequestDTO> {
 
     private static ReservationPlaceRequestDTOValidator instance;
@@ -24,6 +30,7 @@ public class ReservationPlaceRequestDTOValidator implements ValidatorDTO<Reserva
         return instance;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationPlaceRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getTypeId(), FIELD_TYPE_ID);

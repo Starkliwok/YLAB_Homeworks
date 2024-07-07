@@ -169,6 +169,7 @@ class ReservationPlaceDateSlotServletTest {
         when(objectMapper.readValue(request.getReader(), LocalDateRequest.class)).thenReturn(localDateRequest);
         when(freeReservationSlotService.getAllAvailablePlacesForReserveDate(localDateRequest.getLocalDate())).thenReturn(new ArrayList<>());
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
+        when(response.getWriter()).thenReturn(writer);
 
         reservationPlaceDateSlotServlet.doPost(request, response);
 

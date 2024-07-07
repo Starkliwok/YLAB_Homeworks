@@ -1,5 +1,10 @@
 package com.Y_LAB.homework.in.servlet.constants;
 
+/**
+ * Класс содержит константы именований эндпоинтов
+ * @author Денис Попов
+ * @version 1.0
+ */
 public class ControllerPathConstants {
 
     public static final String CONTROLLER_ADMIN_PATH = "/admin";

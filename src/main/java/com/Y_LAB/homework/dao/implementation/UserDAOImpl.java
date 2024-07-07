@@ -7,7 +7,8 @@ import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
 
@@ -37,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
                 long id = userResultSet.getLong(1);
                 String username = userResultSet.getString(2);
                 String password = userResultSet.getString(3);
-                if(isUserHasRoot(id))
+                if(isAdmin(id))
                     users.add(new Admin(id, username, password));
                 else
                     users.add(new User(id, username, password));
@@ -60,7 +61,7 @@ public class UserDAOImpl implements UserDAO {
             ResultSet userResultSet = statement.getResultSet();
             if(userResultSet.next()) {
                 long id = userResultSet.getLong(1);
-                if(isUserHasRoot(id))
+                if(isAdmin(id))
                     user = new Admin(id, username, password);
                 else
                     user = new User(id, username, password);
@@ -71,6 +72,7 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+    /** {@inheritDoc}*/
     @Override
     public Long getUserId(String username) {
         Long userId = null;
@@ -100,7 +102,7 @@ public class UserDAOImpl implements UserDAO {
             if(userResultSet.next()) {
                 String username = userResultSet.getString(1);
                 String password = userResultSet.getString(2);
-                if(isUserHasRoot(id))
+                if(isAdmin(id))
                     user = new Admin(id, username, password);
                 else
                     user = new User(id, username, password);
@@ -175,7 +177,7 @@ public class UserDAOImpl implements UserDAO {
      * @param id идентификационный номер аккаунта
      * @return true - если передан id администратора, false - если переданный id пользователя не является администратором
      */
-    private boolean isUserHasRoot(long id) {
+    private boolean isAdmin(long id) {
         try {
             PreparedStatement statement = connection.prepareStatement(USER_FIND_IN_ADMIN_TABLE_WHERE_ID);
             statement.setLong(1, id);

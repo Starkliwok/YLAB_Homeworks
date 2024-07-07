@@ -3,12 +3,10 @@ package com.Y_LAB.homework.dao.implementation;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.model.reservation.Reservation;
-import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,10 @@ public class ReservationDAOImpl implements ReservationDAO {
         return getReservationsFromQuery(RESERVATION_GET_ALL);
     }
 
+    /** Возвращает коллекцию броней из переданного SQL запроса
+     * @param reservationGetAll SQL запрос
+     * @return Коллекция броней найденная по переданному запросу
+     */
     private List<Reservation> getReservationsFromQuery(String reservationGetAll) {
         List<Reservation> reservations = new ArrayList<>();
         Reservation reservation;
@@ -114,14 +116,13 @@ public class ReservationDAOImpl implements ReservationDAO {
      * @return объект брони
      */
     private Reservation getReservationFromResultSet(ResultSet reservationResultSet) throws SQLException {
-        long id = reservationResultSet.getLong(1);
-        long userID = reservationResultSet.getLong(2);
-        int reservationPlaceId = reservationResultSet.getInt(3);
-        LocalDateTime startDate = reservationResultSet.getTimestamp(4).toLocalDateTime();
-        LocalDateTime endDate = reservationResultSet.getTimestamp(5).toLocalDateTime();
-        ReservationPlace reservationPlace = reservationPlaceDAO.getReservationPlace(reservationPlaceId);
-
-        return new Reservation(id, userID, startDate, endDate, reservationPlace);
+        return Reservation.builder()
+                .id(reservationResultSet.getLong(1))
+                .userId(reservationResultSet.getLong(2))
+                .startDate(reservationResultSet.getTimestamp(4).toLocalDateTime())
+                .endDate(reservationResultSet.getTimestamp(5).toLocalDateTime())
+                .reservationPlace(reservationPlaceDAO.getReservationPlace(reservationResultSet.getInt(3)))
+                .build();
     }
 
     /** {@inheritDoc}*/
@@ -142,6 +143,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         return reservation;
     }
 
+    /** {@inheritDoc}*/
     @Override
     public Long getReservationId(Reservation reservation) {
         Long id = null;

@@ -35,11 +35,7 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         reservationDAO = new ReservationDAOImpl();
     }
 
-    /**
-     * Метод для получения всех свободных мест для бронирования
-     * @return коллекция всех мест доступных мест для бронирования в качестве ключа и коллекция свободных дат для
-     * бронирования этого помещения в качестве значения
-     */
+    /**{@inheritDoc}*/
     @Override
     public Map<ReservationPlace, List<LocalDate>> getAllAvailablePlaceForReservations() {
         List<ReservationPlace> reservationPlaces = reservationPlaceDAO.getAllReservationPlaces();
@@ -51,11 +47,7 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableReservations;
     }
 
-    /**
-     * Метод для получения всех свободных дат для бронирования места
-     * @param reservationPlace место для бронирования
-     * @return коллекция доступных дат для бронирования указанного помещения
-     */
+    /**{@inheritDoc}*/
     @Override
     public List<LocalDate> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
         List<Reservation> allReservations = reservationDAO.getAllReservationsWithReservationPlace(reservationPlace.getId());
@@ -68,13 +60,7 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableDates;
     }
 
-    /**
-     * Метод для получения всех свободных временных промежутков для бронирования места
-     * в виде ключа=значение в качестве одиночных слотов длительностью в 1 час, например (08:00=09:00, 09:00-10:00)
-     * @param reservationPlace место для бронирования
-     * @param localDate день бронирования
-     * @return коллекция доступных промежутков времени для бронирования указанного помещения в указанную дату
-     */
+    /**{@inheritDoc}*/
     @Override
     public Map<LocalTime, LocalTime> getAllAvailableTimesForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = ReservationDateTimeGenerator.generateTimesPeriod();
@@ -92,6 +78,7 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableTimes;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public List<String> getAllAvailableTimeListForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = getAllAvailableTimesForReservation(reservationPlace, localDate);
@@ -106,6 +93,7 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return allAvailableTimes;
     }
 
+    /**{@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllAvailablePlacesForReserveDate(LocalDate localDate) {
         Map<ReservationPlace, List<LocalDate>> availableReservationsWithDates = getAllAvailablePlaceForReservations();

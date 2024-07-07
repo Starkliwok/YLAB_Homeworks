@@ -1,11 +1,12 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.UserMapper;
 import com.Y_LAB.homework.mapper.UserMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.response.UserResponseDTO;
+import com.Y_LAB.homework.model.response.ErrorResponse;
+import com.Y_LAB.homework.model.response.MessageResponse;
 import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_ADMIN_PATH;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_USER_PATH;
 
+/**
+ * Сервлет панели администратора для взаимодействия с аккаунтами пользователей
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_ADMIN_PATH + CONTROLLER_USER_PATH
         , CONTROLLER_ADMIN_PATH + CONTROLLER_USER_PATH + "/*"})
 public class UserAdminServlet extends HttpServlet {
@@ -105,6 +111,7 @@ public class UserAdminServlet extends HttpServlet {
                 if(user != null) {
                     userService.deleteUser(user.getId());
                     resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Вы успешно удалили пользователя")));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     resp.getWriter().write(objectMapper.writeValueAsString(

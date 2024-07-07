@@ -59,6 +59,7 @@ class LogoutServletTest {
     void logoutTest_should_Logout() throws IOException {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
+        when(response.getWriter()).thenReturn(writer);
 
         logoutServlet.doGet(request, response);
 

@@ -8,6 +8,11 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Класс для получения аудитов
+ * @author Денис Попов
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
@@ -18,16 +23,19 @@ public class AuditServiceImpl implements AuditService {
         auditDAO = new AuditDAOImpl();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public List<Audit> getAllAudits() {
         return auditDAO.getAllAudits();
     }
 
+    /**{@inheritDoc}*/
     @Override
     public Audit getAudit(long id) {
         return auditDAO.getAudit(id);
     }
 
+    /**{@inheritDoc}*/
     @Override
     public void saveAudit(Audit audit) {
         auditDAO.saveAudit(audit);

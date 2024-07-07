@@ -16,6 +16,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
+/**
+ * Аспект для обработки действий пользователя
+ * @author Денис Попов
+ * @version 1.0
+ */
 @Aspect
 public class AuditableAspect {
 

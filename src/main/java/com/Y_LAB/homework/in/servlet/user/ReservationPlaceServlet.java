@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.ReservationPlaceMapper;
@@ -11,6 +10,8 @@ import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationPlaceResponseDTO;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.response.ErrorResponse;
+import com.Y_LAB.homework.model.response.MessageResponse;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.validation.ValidatorDTO;
 import com.Y_LAB.homework.validation.impl.ReservationPlaceFullRequestDTOValidator;
@@ -33,6 +34,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODI
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PLACE_PATH;
 
+/**
+ * Сервлет для взаимодействия с местами для бронирования
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_RESERVATION_PLACE_PATH, CONTROLLER_RESERVATION_PLACE_PATH + "/*"})
 public class ReservationPlaceServlet extends HttpServlet {
     private final ReservationPlaceMapper reservationPlaceMapper;
@@ -117,6 +123,8 @@ public class ReservationPlaceServlet extends HttpServlet {
                 validatorPostDTO.validate(reservationPlaceRequestDTO);
                 reservationPlaceService.saveReservationPlace(reservationPlaceRequestDTO);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
+                resp.getWriter().write(objectMapper.writeValueAsString(
+                        new MessageResponse("Вы успешно создали место для бронирования")));
             }
         } catch (ClassCastException e) {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -188,6 +196,8 @@ public class ReservationPlaceServlet extends HttpServlet {
                 } else {
                     reservationPlaceService.deleteReservationPlace(reservationPlaceId);
                     resp.setStatus(HttpServletResponse.SC_OK);
+                    resp.getWriter().write(objectMapper.writeValueAsString(
+                            new MessageResponse("Вы успешно удалили место для бронирования")));
                 }
             }
         } catch (ClassCastException e) {

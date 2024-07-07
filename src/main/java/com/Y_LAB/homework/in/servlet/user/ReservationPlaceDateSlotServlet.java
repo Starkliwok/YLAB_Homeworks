@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
 import com.Y_LAB.homework.mapper.ReservationPlaceMapper;
 import com.Y_LAB.homework.mapper.ReservationPlaceMapperImpl;
@@ -8,6 +7,8 @@ import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.dto.response.ReservationPlaceDateSlotResponseDTO;
 import com.Y_LAB.homework.model.request.LocalDateRequest;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.response.ErrorResponse;
+import com.Y_LAB.homework.model.response.MessageResponse;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -31,6 +32,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_DATE_SLOT_PATH;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PATH;
 
+/**
+ * Сервлет для отображения свободных дат для бронирования помещений
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(urlPatterns = {CONTROLLER_RESERVATION_PATH + CONTROLLER_DATE_SLOT_PATH
         , CONTROLLER_RESERVATION_PATH + CONTROLLER_DATE_SLOT_PATH + "/*"})
 public class ReservationPlaceDateSlotServlet extends HttpServlet {
@@ -123,6 +129,7 @@ public class ReservationPlaceDateSlotServlet extends HttpServlet {
                         freeReservationSlotService.getAllAvailablePlacesForReserveDate(localDateRequest.getLocalDate());
                 if(availableReservationPlaces.isEmpty()) {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    resp.getWriter().write(objectMapper.writeValueAsString(new MessageResponse("Нет доступных мест для бронирования за указанную дату")));
                 } else {
                     resp.setStatus(HttpServletResponse.SC_OK);
                     resp.getWriter().write(objectMapper.writeValueAsString(availableReservationPlaces));

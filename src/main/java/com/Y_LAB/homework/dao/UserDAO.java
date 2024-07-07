@@ -25,6 +25,11 @@ public interface UserDAO {
      */
     User getUser(String username, String password);
 
+    /**
+     * Метод для получения уникального идентификатора пользователя из базы данных
+     * @param username логин пользователя
+     * @return Уникальный идентификатор пользователя, если пользователь с таким логином существует в базе данных
+     */
     Long getUserId(String username);
 
     /**

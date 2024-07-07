@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.mapper.ReservationPlaceMapper;
 import com.Y_LAB.homework.mapper.ReservationPlaceMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
@@ -9,6 +8,7 @@ import com.Y_LAB.homework.model.request.SortPlaceTypeRequest;
 import com.Y_LAB.homework.model.reservation.ConferenceRoom;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
+import com.Y_LAB.homework.model.response.ErrorResponse;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +30,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODI
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.*;
 
+/**
+ * Сервлет панели администратора для получения отсортированных мест для бронирований
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(CONTROLLER_ADMIN_PATH + CONTROLLER_RESERVATION_PLACE_PATH + CONTROLLER_SORT_PATH)
 public class ReservationPlaceSortAdminServlet extends HttpServlet {
 

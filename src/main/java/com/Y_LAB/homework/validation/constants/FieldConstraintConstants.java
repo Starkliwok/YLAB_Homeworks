@@ -1,5 +1,10 @@
 package com.Y_LAB.homework.validation.constants;
 
+/**
+ * Класс содержит константы для описания границ полей объектов
+ * @author Денис Попов
+ * @version 2.0
+ */
 public class FieldConstraintConstants {
     /** Константа минимальной длины логина пользователя*/
     public static final int LOGIN_MIN_LENGTH = 2;

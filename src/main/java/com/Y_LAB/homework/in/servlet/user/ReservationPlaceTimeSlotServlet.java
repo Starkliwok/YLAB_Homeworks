@@ -1,10 +1,10 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.request.IdWithLocalDateRequest;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.response.ErrorResponse;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.validation.NumberValidator;
@@ -27,6 +27,11 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CO
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_TIME_SLOT_PATH;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.FIELD_ID;
 
+/**
+ * Сервлет для отображения свободных промежутков времени по указанному месту для бронирования
+ * @author Денис Попов
+ * @version 1.0
+ */
 @WebServlet(CONTROLLER_RESERVATION_PATH + CONTROLLER_TIME_SLOT_PATH)
 public class ReservationPlaceTimeSlotServlet extends HttpServlet {
 
@@ -67,10 +72,10 @@ public class ReservationPlaceTimeSlotServlet extends HttpServlet {
                 ReservationPlace reservationPlace = reservationPlaceService
                         .getReservationPlace(idWithLocalDateRequest.getId());
                 if(reservationPlace != null) {
+                    resp.setStatus(HttpServletResponse.SC_OK);
                     resp.getWriter().write(objectMapper.writeValueAsString(freeReservationSlotService
                             .getAllAvailableTimeListForReservation(reservationPlace
                                     , idWithLocalDateRequest.getLocalDate())));
-                    resp.setStatus(HttpServletResponse.SC_OK);
                 } else {
                     resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     resp.getWriter().write(objectMapper.writeValueAsString(

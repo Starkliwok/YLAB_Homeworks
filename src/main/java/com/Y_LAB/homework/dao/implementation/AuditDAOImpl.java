@@ -12,6 +12,11 @@ import java.util.List;
 
 import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
 
+/**
+ * Класс ДАО слоя для взаимодействия с аудитами
+ * @author Денис Попов
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class AuditDAOImpl implements AuditDAO {
 
@@ -21,6 +26,7 @@ public class AuditDAOImpl implements AuditDAO {
         connection = ConnectionToDatabase.getConnection();
     }
 
+    /** {@inheritDoc}*/
     @Override
     public List<Audit> getAllAudits() {
         List<Audit> audits = new ArrayList<>();
@@ -43,6 +49,7 @@ public class AuditDAOImpl implements AuditDAO {
         return audits;
     }
 
+    /** {@inheritDoc}*/
     @Override
     public Audit getAudit(long id) {
         Audit audit = null;
@@ -63,6 +70,7 @@ public class AuditDAOImpl implements AuditDAO {
         return audit;
     }
 
+    /** {@inheritDoc}*/
     @Override
     public void saveAudit(Audit audit) {
         try {

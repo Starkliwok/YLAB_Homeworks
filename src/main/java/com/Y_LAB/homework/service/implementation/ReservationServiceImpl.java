@@ -67,19 +67,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDAO.getReservation(id);
     }
 
-    @Override
-    public Long getReservationId(ReservationRequestDTO reservationRequestDTO, long userId) {
-        ReservationPlace reservationPlace =
-                reservationPlaceService.getReservationPlace(reservationRequestDTO.getReservationPlaceId());
-
-        Reservation reservation = Reservation.builder()
-                .userId(userId)
-                .startDate(reservationRequestDTO.getStartDate())
-                .endDate(reservationRequestDTO.getEndDate())
-                .reservationPlace(reservationPlace).build();
-        return reservationDAO.getReservationId(reservation);
-    }
-
     /** {@inheritDoc}*/
     @Override
     public void saveReservation(Reservation reservation) {

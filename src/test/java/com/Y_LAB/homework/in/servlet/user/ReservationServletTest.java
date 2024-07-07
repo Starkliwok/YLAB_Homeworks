@@ -198,13 +198,14 @@ class ReservationServletTest {
     void reservationTest_should_Return_Code_201_POST() throws IOException {
         ReservationRequestDTO reservationRequestDTO = ReservationRequestDTO.builder()
                 .reservationPlaceId(1)
-                .startDate(LocalDateTime.of(2024, 10, 1, 1, 0))
-                .endDate(LocalDateTime.of(2024, 10, 1, 2, 0))
+                .startDate(LocalDateTime.now().plusDays(1).withHour(9).withSecond(0).withMinute(0).withNano(0))
+                .endDate(LocalDateTime.now().plusDays(1).withHour(10).withSecond(0).withMinute(0).withNano(0))
                 .build();
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
         when(objectMapper.readValue(request.getReader(), ReservationRequestDTO.class)).thenReturn(reservationRequestDTO);
         when(userService.getUser(realUser.getUsername(), realUser.getPassword())).thenReturn(user);
+        when(response.getWriter()).thenReturn(writer);
 
         reservationServlet.doPost(request, response);
 
@@ -270,7 +271,7 @@ class ReservationServletTest {
         ReservationPutRequestDTO reservationPutRequestDTO = ReservationPutRequestDTO.builder()
                 .id(1)
                 .reservationPlaceId(2)
-                .startDate(LocalDateTime.now())
+                .startDate(LocalDateTime.now().plusHours(2))
                 .endDate(LocalDateTime.now())
                 .build();
         when(response.getWriter()).thenReturn(writer);
@@ -308,8 +309,8 @@ class ReservationServletTest {
         ReservationPutRequestDTO reservationPutRequestDTO = ReservationPutRequestDTO.builder()
                 .id(1L)
                 .reservationPlaceId(2)
-                .startDate(LocalDateTime.of(2024, 10, 1, 1, 0))
-                .endDate(LocalDateTime.of(2024, 10, 1, 2, 0))
+                .startDate(LocalDateTime.now().plusDays(1).withHour(11).withSecond(0).withMinute(0).withNano(0))
+                .endDate(LocalDateTime.now().plusDays(1).withHour(12).withSecond(0).withMinute(0).withNano(0))
                 .build();
         Reservation reservation = new Reservation();
         reservation.setUserId(user.getId());
@@ -318,6 +319,7 @@ class ReservationServletTest {
         when(objectMapper.readValue(request.getReader(), ReservationPutRequestDTO.class)).thenReturn(reservationPutRequestDTO);
         when(userService.getUser(realUser.getUsername(), realUser.getPassword())).thenReturn(user);
         when(reservationService.getReservation(reservationPutRequestDTO.getId())).thenReturn(reservation);
+        when(response.getWriter()).thenReturn(writer);
 
         reservationServlet.doPut(request, response);
 
@@ -332,8 +334,8 @@ class ReservationServletTest {
         ReservationPutRequestDTO reservationPutRequestDTO = ReservationPutRequestDTO.builder()
                 .id(1L)
                 .reservationPlaceId(2)
-                .startDate(LocalDateTime.of(2024, 10, 1, 1, 0))
-                .endDate(LocalDateTime.of(2024, 10, 1, 2, 0))
+                .startDate(LocalDateTime.now().plusDays(1).withHour(12).withSecond(0).withMinute(0).withNano(0))
+                .endDate(LocalDateTime.now().plusDays(1).withHour(13).withSecond(0).withMinute(0).withNano(0))
                 .build();
         Reservation reservation = new Reservation();
         reservation.setUserId(765763L);
@@ -357,8 +359,8 @@ class ReservationServletTest {
         ReservationPutRequestDTO reservationPutRequestDTO = ReservationPutRequestDTO.builder()
                 .id(1L)
                 .reservationPlaceId(2)
-                .startDate(LocalDateTime.of(2024, 10, 1, 1, 0))
-                .endDate(LocalDateTime.of(2024, 10, 1, 2, 0))
+                .startDate(LocalDateTime.now().plusDays(1).withHour(14).withSecond(0).withMinute(0).withNano(0))
+                .endDate(LocalDateTime.now().plusDays(1).withHour(15).withSecond(0).withMinute(0).withNano(0))
                 .build();
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
@@ -463,6 +465,7 @@ class ReservationServletTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(SESSION_USER)).thenReturn(realUser);
         when(reservationService.getReservation(1)).thenReturn(reservation);
+        when(response.getWriter()).thenReturn(writer);
         when(userService.getUser(realUser.getUsername(), realUser.getPassword())).thenReturn(user);
 
         reservationServlet.doDelete(request, response);
