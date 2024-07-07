@@ -7,9 +7,6 @@ package com.Y_LAB.homework.constants;
  */
 public class ApplicationConstants {
 
-    /** Константа пути до файла properties*/
-    public static final String PROPERTIES_PATH = "src/main/resources/application.properties";
-
     /** Константа значения ключа url в файле properties*/
     public static final String PROPERTIES_URL_KEY = "url";
 

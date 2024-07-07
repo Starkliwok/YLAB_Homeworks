@@ -8,6 +8,6 @@ services:
       POSTGRES_PASSWORD: ylab
       POSTGRES_DB: homework
     volumes:
-      - .pgdata:/var/lib/postgresql/data
+      - .pg:/var/lib/postgresql/data
     ports:
       - "5433:5432"

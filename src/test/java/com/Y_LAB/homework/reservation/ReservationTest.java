@@ -17,13 +17,10 @@ class ReservationTest {
 
     private Reservation reservation;
 
-    private final ReservationService reservationService = new ReservationServiceImpl();
-
     @BeforeEach
     void init() {
         Workplace workplace = new Workplace(1, "name", 2.1, 2, 3);
         reservation = new Reservation(1, 1, LocalDateTime.now(), LocalDateTime.now(), workplace);
-        reservationService.saveReservation(reservation);
     }
 
     @Test

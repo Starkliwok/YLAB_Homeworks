@@ -1,5 +1,6 @@
 package com.Y_LAB.homework.service.implementation;
 
+import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.model.roles.User;
@@ -42,7 +43,13 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUser(id);
     }
 
+    @Override
+    public Long getUserId(String username) {
+        return userDAO.getUserId(username);
+    }
+
     /**{@inheritDoc}*/
+    @Auditable
     @Override
     public void saveUser(String username, String password) throws UserAlreadyExistsException {
         checkUserLogin(username);

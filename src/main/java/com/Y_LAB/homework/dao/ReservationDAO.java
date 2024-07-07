@@ -50,6 +50,8 @@ public interface ReservationDAO {
      */
     Reservation getReservation(long id);
 
+    Long getReservationId(Reservation reservation);
+
     /**
      * Метод для сохранения объекта брони в базу данных
      * @param reservation объект брони

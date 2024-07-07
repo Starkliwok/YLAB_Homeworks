@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import java.sql.*;
 import java.util.*;
 
+import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
+
 /**
  * Класс ДАО слоя для взаимодействия с местами для бронирований
  * @author Денис Попов
@@ -32,7 +34,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         ReservationPlace reservationPlace;
         try {
             Statement statement = connection.createStatement();
-            ResultSet reservationPlaceResultSet = statement.executeQuery("SELECT * FROM coworking.reservation_place ORDER BY id");
+            ResultSet reservationPlaceResultSet = statement.executeQuery(RESERVATION_PLACE_GET_ALL_ORDER_BY_ID);
             while (reservationPlaceResultSet.next()) {
                 reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
                 reservationPlaces.add(reservationPlace);
@@ -50,9 +52,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         ReservationPlace reservationPlace2;
         int typeId = reservationPlace instanceof ConferenceRoom ? 1 : 2;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT id, name, place_area, cost_per_hour, number_of_seats FROM coworking.reservation_place " +
-                            "WHERE reservation_type_id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_FIND_BY_RESERVATION_TYPE_ID);
             preparedStatement.setInt(1, typeId);
             preparedStatement.execute();
             ResultSet reservationPlaceResultSet = preparedStatement.getResultSet();
@@ -81,8 +81,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
     public ReservationPlace getReservationPlace(int id) {
        ReservationPlace reservationPlace = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM coworking.reservation_place WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_FIND_BY_ID);
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
             ResultSet reservationPlaceResultSet = preparedStatement.getResultSet();
@@ -120,10 +119,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
     @Override
     public void saveReservationPlace(ReservationPlace reservationPlace) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(
-                            "INSERT INTO coworking.reservation_place (reservation_type_id, name, place_area, " +
-                                    "cost_per_hour, number_of_seats) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_FULL_INSERT);
             setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -135,9 +131,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
     @Override
     public void updateReservationPlace(ReservationPlace reservationPlace) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE coworking.reservation_place SET reservation_type_id = ?, " +
-                            "name = ?, place_area = ?, cost_per_hour = ?, number_of_seats = ? WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_FULL_UPDATE_WHERE_ID);
             setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
             preparedStatement.setInt(6, reservationPlace.getId());
             preparedStatement.executeUpdate();
@@ -166,8 +160,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
     @Override
     public void deleteReservationPlace(int id) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("DELETE FROM coworking.reservation_place WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

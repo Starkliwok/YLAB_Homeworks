@@ -1,5 +1,6 @@
 package com.Y_LAB.homework.service.implementation;
 
+import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
@@ -16,14 +17,18 @@ import java.util.List;
  * @author Денис Попов
  * @version 2.0
  */
+@Auditable
 @AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     /**Поле ДАО слоя для взаимодействия с бронированиями*/
     private final ReservationDAO reservationDAO;
 
+    private final ReservationPlaceService reservationPlaceService;
+
     public ReservationServiceImpl() {
         reservationDAO = new ReservationDAOImpl();
+        reservationPlaceService = new ReservationPlaceServiceImpl();
     }
 
     /** {@inheritDoc}*/
@@ -62,6 +67,19 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDAO.getReservation(id);
     }
 
+    @Override
+    public Long getReservationId(ReservationRequestDTO reservationRequestDTO, long userId) {
+        ReservationPlace reservationPlace =
+                reservationPlaceService.getReservationPlace(reservationRequestDTO.getReservationPlaceId());
+
+        Reservation reservation = Reservation.builder()
+                .userId(userId)
+                .startDate(reservationRequestDTO.getStartDate())
+                .endDate(reservationRequestDTO.getEndDate())
+                .reservationPlace(reservationPlace).build();
+        return reservationDAO.getReservationId(reservation);
+    }
+
     /** {@inheritDoc}*/
     @Override
     public void saveReservation(Reservation reservation) {
@@ -71,7 +89,6 @@ public class ReservationServiceImpl implements ReservationService {
     /** {@inheritDoc}*/
     @Override
     public void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) {
-        ReservationPlaceService reservationPlaceService = new ReservationPlaceServiceImpl();
         ReservationPlace reservationPlace =
                 reservationPlaceService.getReservationPlace(reservationRequestDTO.getReservationPlaceId());
 

@@ -51,6 +51,8 @@ public interface ReservationService {
      */
     Reservation getReservation(long id);
 
+    Long getReservationId(ReservationRequestDTO reservationRequestDTO, long userId);
+
     /**
      * Метод для сохранения объекта брони
      * @param reservation объект брони

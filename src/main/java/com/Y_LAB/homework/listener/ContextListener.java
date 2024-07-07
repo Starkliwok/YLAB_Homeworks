@@ -1,13 +1,12 @@
 package com.Y_LAB.homework.listener;
 
-import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.ReservationService;
-import com.Y_LAB.homework.service.UserService;
-import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
-import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
-import com.Y_LAB.homework.service.implementation.UserServiceImpl;
+import com.Y_LAB.homework.service.*;
+import com.Y_LAB.homework.service.implementation.*;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import com.Y_LAB.homework.util.init.LiquibaseMigration;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -28,7 +27,18 @@ public class ContextListener implements ServletContextListener {
         ReservationPlaceService reservationPlaceService = new ReservationPlaceServiceImpl();
         servletContext.setAttribute(RESERVATION_PLACE_SERVICE, reservationPlaceService);
 
+        FreeReservationSlotService freeReservationSlotService = new FreeReservationSlotServiceImpl();
+        servletContext.setAttribute(FREE_RESERVATION_SLOT_SERVICE, freeReservationSlotService);
+
         ReservationService reservationService = new ReservationServiceImpl();
         servletContext.setAttribute(RESERVATION_SERVICE, reservationService);
+
+        AuditService auditService = new AuditServiceImpl();
+        servletContext.setAttribute(AUDIT_SERVICE, auditService);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.registerModule(new JavaTimeModule());
+        servletContext.setAttribute(OBJECT_MAPPER, objectMapper);
     }
 }

@@ -4,6 +4,10 @@ public class ControllerPathConstants {
 
     public static final String CONTROLLER_ADMIN_PATH = "/admin";
 
+    public static final String CONTROLLER_USER_PATH = "/user";
+
+    public static final String CONTROLLER_AUDIT_PATH = "/audit";
+
     public static final String CONTROLLER_SORT_PATH = "/sort";
 
     public static final String CONTROLLER_LOGIN_PATH = "/login";

@@ -14,23 +14,17 @@ class ReservationPlaceTest {
 
     private ReservationPlace reservationPlace;
 
-    private final ReservationPlaceService reservationPlaceService = new ReservationPlaceServiceImpl();
-
     @BeforeEach
     void init() {
-        reservationPlace = new ConferenceRoom("001", 150.2, 120.2, 14);
-        reservationPlaceService.saveReservationPlace(reservationPlace);
+        reservationPlace = new ConferenceRoom(1,"001", 150.2, 120.2, 14);
     }
 
     @Test
     @DisplayName("Получение уникального идентификатора места")
     void getId() {
-        int expected = 543;
-        reservationPlace.setId(543);
-
         int actual = reservationPlace.getId();
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test

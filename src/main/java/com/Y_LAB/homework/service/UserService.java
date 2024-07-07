@@ -33,6 +33,8 @@ public interface UserService {
      */
     User getUser(long id);
 
+    Long getUserId(String username);
+
     /**
      * Метод для сохранения пользователя
      * @param username логин пользователя
