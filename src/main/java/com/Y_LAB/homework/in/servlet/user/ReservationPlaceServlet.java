@@ -199,14 +199,14 @@ public class ReservationPlaceServlet extends HttpServlet {
                     resp.getWriter().write(objectMapper.writeValueAsString(
                             new MessageResponse("Вы успешно удалили место для бронирования")));
                 }
+            } else {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write(objectMapper.writeValueAsString(
+                        new ErrorResponse("Не указан id места для бронирования")));
             }
         } catch (ClassCastException e) {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             resp.getWriter().write(objectMapper.writeValueAsString(new ErrorResponse("Нет прав")));
-        } catch (JsonMappingException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(objectMapper.writeValueAsString(
-                    new ErrorResponse("Тело запроса не соответствует требованиям")));
         } catch (NumberFormatException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write(objectMapper.writeValueAsString(

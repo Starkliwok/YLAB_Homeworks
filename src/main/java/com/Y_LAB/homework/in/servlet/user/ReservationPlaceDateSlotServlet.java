@@ -30,15 +30,15 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTEN
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_DATE_SLOT_PATH;
-import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PATH;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PLACE_PATH;
 
 /**
  * Сервлет для отображения свободных дат для бронирования помещений
  * @author Денис Попов
  * @version 1.0
  */
-@WebServlet(urlPatterns = {CONTROLLER_RESERVATION_PATH + CONTROLLER_DATE_SLOT_PATH
-        , CONTROLLER_RESERVATION_PATH + CONTROLLER_DATE_SLOT_PATH + "/*"})
+@WebServlet(urlPatterns = {CONTROLLER_RESERVATION_PLACE_PATH + CONTROLLER_DATE_SLOT_PATH
+        , CONTROLLER_RESERVATION_PLACE_PATH + CONTROLLER_DATE_SLOT_PATH + "/*"})
 public class ReservationPlaceDateSlotServlet extends HttpServlet {
     private ObjectMapper objectMapper;
 
