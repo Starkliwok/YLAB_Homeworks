@@ -2,17 +2,14 @@ package com.Y_LAB.homework.in.servlet.user;
 
 import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
-import com.Y_LAB.homework.model.request.IdWithLocalDateRequest;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
+import com.Y_LAB.homework.model.request.IdWithLocalDateRequest;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.implementation.FreeReservationSlotServiceImpl;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,7 +23,8 @@ import java.io.IOException;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
-import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.*;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_RESERVATION_PATH;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_TIME_SLOT_PATH;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.FIELD_ID;
 
 @WebServlet(CONTROLLER_RESERVATION_PATH + CONTROLLER_TIME_SLOT_PATH)

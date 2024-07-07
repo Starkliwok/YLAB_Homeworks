@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.util.reservation;
 
-import com.Y_LAB.homework.util.reservation.ReservationDateTimeGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -7,8 +7,6 @@ import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
-import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.ReservationService;
 import com.Y_LAB.homework.util.reservation.ReservationDateTimeGenerator;
 import lombok.AllArgsConstructor;
 

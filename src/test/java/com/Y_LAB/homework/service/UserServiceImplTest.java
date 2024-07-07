@@ -2,7 +2,6 @@ package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.exception.user.auth.RegistrationException;
 import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

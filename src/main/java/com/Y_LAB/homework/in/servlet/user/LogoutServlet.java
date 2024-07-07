@@ -1,10 +1,7 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.exception.model.ErrorResponse;
-import com.Y_LAB.homework.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +12,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.OBJECT_MAPPER;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.SESSION_USER;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_LOGOUT_PATH;
 
 @WebServlet(CONTROLLER_LOGOUT_PATH)

@@ -1,11 +1,8 @@
 package com.Y_LAB.homework.service;
 
-import com.Y_LAB.homework.dao.AuditDAO;
 import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.service.implementation.AuditServiceImpl;
-import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

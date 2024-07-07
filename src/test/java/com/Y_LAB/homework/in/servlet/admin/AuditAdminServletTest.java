@@ -1,17 +1,10 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
-import com.Y_LAB.homework.in.servlet.user.ReservationServlet;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
-import com.Y_LAB.homework.mapper.UserMapperImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
-import com.Y_LAB.homework.model.dto.response.AuditResponseDTO;
-import com.Y_LAB.homework.model.reservation.Reservation;
-import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.AuditService;
-import com.Y_LAB.homework.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
@@ -26,16 +19,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
-import java.util.List;
 
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

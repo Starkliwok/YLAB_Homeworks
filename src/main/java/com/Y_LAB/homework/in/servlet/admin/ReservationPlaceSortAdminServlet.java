@@ -12,7 +12,6 @@ import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,13 +23,12 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_CONFERENCE_ROOM_TYPE;
+import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_WORKPLACE_TYPE;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.*;
-import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_SORT_PATH;
-import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_CONFERENCE_ROOM_TYPE;
-import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_WORKPLACE_TYPE;
 
 @WebServlet(CONTROLLER_ADMIN_PATH + CONTROLLER_RESERVATION_PLACE_PATH + CONTROLLER_SORT_PATH)
 public class ReservationPlaceSortAdminServlet extends HttpServlet {

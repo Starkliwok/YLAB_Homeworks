@@ -1,22 +1,11 @@
 package com.Y_LAB.homework.testcontainers;
 
 import com.Y_LAB.homework.dao.AuditDAO;
-import com.Y_LAB.homework.dao.ReservationDAO;
-import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.finder.ObjectFinderForTests;
 import com.Y_LAB.homework.model.audit.Audit;
-import com.Y_LAB.homework.model.reservation.Reservation;
-import com.Y_LAB.homework.model.reservation.ReservationPlace;
-import com.Y_LAB.homework.model.reservation.Workplace;
-import com.Y_LAB.homework.service.FreeReservationSlotService;
-import com.Y_LAB.homework.service.implementation.FreeReservationSlotServiceImpl;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import com.Y_LAB.homework.util.init.LiquibaseMigration;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -29,14 +18,11 @@ import java.util.Properties;
 
 import static com.Y_LAB.homework.constants.ApplicationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 class AuditDAOImplTest {
     @Container
     private static final PostgreSQLContainer<?> postgresContainer = TestcontrainerManager.getPostgreSQLContainer();
-
-    private static Connection connection;
 
     private static AuditDAO auditDAO;
 
@@ -49,7 +35,7 @@ class AuditDAOImplTest {
         properties.setProperty(PROPERTIES_USERNAME_KEY, postgresContainer.getUsername());
         properties.setProperty(PROPERTIES_PASSWORD_KEY, postgresContainer.getPassword());
         LiquibaseMigration.initMigration(ConnectionToDatabase.getConnectionFromProperties(properties));
-        connection = ConnectionToDatabase.getConnectionFromProperties(properties);
+        Connection connection = ConnectionToDatabase.getConnectionFromProperties(properties);
 
         auditDAO = new AuditDAOImpl(connection);
     }

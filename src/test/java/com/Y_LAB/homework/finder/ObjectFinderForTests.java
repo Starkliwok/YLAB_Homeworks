@@ -11,10 +11,14 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 
 public class ObjectFinderForTests {
+
+    private static final String SQL_GET_RESERVATION_ID_BY_FIELDS = "SELECT id FROM coworking.reservation WHERE user_id = ? AND reservation_place_id = ? AND start_date = ? AND end_date = ?";
+
+    private static final String SQL_GET_RESERVATION_PLACE_ID_BY_FIELDS = "SELECT id FROM coworking.reservation_place WHERE reservation_type_id = ? AND name = ? AND place_area = ? AND cost_per_hour = ? AND number_of_seats = ?";
+
     @SneakyThrows
     public static void setReservationIdFromDB(Reservation reservation, Connection connection) {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT id FROM coworking.reservation " +
-                "WHERE user_id = ? AND reservation_place_id = ? AND start_date = ? AND end_date = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_RESERVATION_ID_BY_FIELDS);
         preparedStatement.setLong(1, reservation.getUserId());
         preparedStatement.setInt(2, reservation.getReservationPlace().getId());
         preparedStatement.setTimestamp(3, Timestamp.valueOf(reservation.getStartDate()));
@@ -30,10 +34,7 @@ public class ObjectFinderForTests {
     @SneakyThrows
     public static void setReservationPlaceIdFromDB(ReservationPlace reservationPlace, Connection connection) {
         int typeId = reservationPlace instanceof ConferenceRoom ? 1 : 2;
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT id FROM coworking.reservation_place " +
-                        "WHERE reservation_type_id = ? AND name = ? AND place_area = ? AND cost_per_hour = ? " +
-                        "AND number_of_seats = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL_GET_RESERVATION_PLACE_ID_BY_FIELDS);
         preparedStatement.setInt(1, typeId);
         preparedStatement.setString(2, reservationPlace.getName());
         preparedStatement.setDouble(3, reservationPlace.getPlaceArea());

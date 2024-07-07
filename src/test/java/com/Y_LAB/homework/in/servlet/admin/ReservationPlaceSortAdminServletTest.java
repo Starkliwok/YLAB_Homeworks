@@ -1,18 +1,11 @@
 package com.Y_LAB.homework.in.servlet.admin;
 
-import com.Y_LAB.homework.exception.model.ErrorResponse;
-import com.Y_LAB.homework.mapper.UserMapperImpl;
 import com.Y_LAB.homework.model.dto.request.AdminRequestDTO;
-import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
-import com.Y_LAB.homework.model.dto.response.ReservationPlaceResponseDTO;
 import com.Y_LAB.homework.model.request.SortPlaceTypeRequest;
 import com.Y_LAB.homework.model.reservation.ConferenceRoom;
-import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
-import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.UserService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
@@ -28,18 +21,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
-import java.util.List;
 
-import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_CONFERENCE_ROOM_TYPE;
-import static com.Y_LAB.homework.constants.ReservationPlaceConstants.RESERVATION_PLACE_WORKPLACE_TYPE;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

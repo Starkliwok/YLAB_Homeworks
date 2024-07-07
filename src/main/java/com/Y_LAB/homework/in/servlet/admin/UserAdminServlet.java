@@ -9,8 +9,6 @@ import com.Y_LAB.homework.model.dto.response.UserResponseDTO;
 import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +23,8 @@ import java.util.List;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTENT_JSON;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
-import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.*;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_ADMIN_PATH;
+import static com.Y_LAB.homework.in.servlet.constants.ControllerPathConstants.CONTROLLER_USER_PATH;
 
 @WebServlet(urlPatterns = {CONTROLLER_ADMIN_PATH + CONTROLLER_USER_PATH
         , CONTROLLER_ADMIN_PATH + CONTROLLER_USER_PATH + "/*"})

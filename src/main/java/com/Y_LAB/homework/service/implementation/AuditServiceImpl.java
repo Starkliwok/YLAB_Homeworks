@@ -1,9 +1,7 @@
 package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.AuditDAO;
-import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.service.AuditService;
 import lombok.AllArgsConstructor;

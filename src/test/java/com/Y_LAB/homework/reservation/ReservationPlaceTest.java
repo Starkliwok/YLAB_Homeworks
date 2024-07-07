@@ -2,8 +2,6 @@ package com.Y_LAB.homework.reservation;
 
 import com.Y_LAB.homework.model.reservation.ConferenceRoom;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
-import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

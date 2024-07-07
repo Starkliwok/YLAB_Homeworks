@@ -1,11 +1,8 @@
 package com.Y_LAB.homework.in.servlet.user;
 
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
-import com.Y_LAB.homework.mapper.UserMapperImpl;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
-import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
-import com.Y_LAB.homework.service.implementation.UserServiceImpl;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
@@ -13,13 +10,11 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.BufferedReader;
@@ -31,7 +26,6 @@ import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.CONTEN
 import static com.Y_LAB.homework.in.servlet.constants.ControllerConstants.ENCODING;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.OBJECT_MAPPER;
 import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.USER_SERVICE;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

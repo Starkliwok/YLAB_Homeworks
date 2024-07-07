@@ -6,27 +6,15 @@ import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
-import com.Y_LAB.homework.mapper.ReservationMapper;
-import com.Y_LAB.homework.mapper.ReservationMapperImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
-import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
-import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.AuditService;
-import com.Y_LAB.homework.service.ReservationService;
-import com.Y_LAB.homework.service.UserService;
 import com.Y_LAB.homework.service.implementation.AuditServiceImpl;
-import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
-import com.Y_LAB.homework.service.implementation.UserServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
-
-import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.SESSION_USER;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 public class AuditableAspect {

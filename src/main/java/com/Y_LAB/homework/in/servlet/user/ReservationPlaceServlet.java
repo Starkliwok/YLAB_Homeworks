@@ -1,6 +1,5 @@
 package com.Y_LAB.homework.in.servlet.user;
 
-import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.exception.model.ErrorResponse;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.in.util.ServletPathUtil;
@@ -18,7 +17,6 @@ import com.Y_LAB.homework.validation.impl.ReservationPlaceFullRequestDTOValidato
 import com.Y_LAB.homework.validation.impl.ReservationPlaceRequestDTOValidator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
