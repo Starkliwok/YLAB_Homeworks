@@ -2,15 +2,16 @@ package com.Y_LAB.homework.dao.implementation;
 
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
+
 /**
  * Класс ДАО слоя для взаимодействия с бронированиями
  * @author Денис Попов
@@ -33,12 +34,19 @@ public class ReservationDAOImpl implements ReservationDAO {
     /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservations() {
+        return getReservationsFromQuery(RESERVATION_GET_ALL);
+    }
+
+    /** Возвращает коллекцию броней из переданного SQL запроса
+     * @param reservationGetAll SQL запрос
+     * @return Коллекция броней найденная по переданному запросу
+     */
+    private List<Reservation> getReservationsFromQuery(String reservationGetAll) {
         List<Reservation> reservations = new ArrayList<>();
         Reservation reservation;
         try {
             Statement statement = connection.createStatement();
-            ResultSet reservationResultSet = statement.executeQuery(
-                    "SELECT * FROM coworking.reservation");
+            ResultSet reservationResultSet = statement.executeQuery(reservationGetAll);
             while (reservationResultSet.next()) {
                 reservation = getReservationFromResultSet(reservationResultSet);
                 reservations.add(reservation);
@@ -52,39 +60,13 @@ public class ReservationDAOImpl implements ReservationDAO {
     /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByUsers() {
-        List<Reservation> reservations = new ArrayList<>();
-        Reservation reservation;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet reservationResultSet = statement.executeQuery(
-                    "SELECT * FROM coworking.reservation ORDER BY user_id");
-            while (reservationResultSet.next()) {
-                reservation = getReservationFromResultSet(reservationResultSet);
-                reservations.add(reservation);
-            }
-        } catch (SQLException e) {
-            System.out.println("Произошла ошибка " + e.getMessage());
-        }
-        return reservations;
+        return getReservationsFromQuery(RESERVATION_GET_ALL_ORDER_BY_USER_ID);
     }
 
     /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByDate() {
-        List<Reservation> reservations = new ArrayList<>();
-        Reservation reservation;
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet reservationResultSet = statement.executeQuery(
-                    "SELECT * FROM coworking.reservation ORDER BY start_date");
-            while (reservationResultSet.next()) {
-                reservation = getReservationFromResultSet(reservationResultSet);
-                reservations.add(reservation);
-            }
-        } catch (SQLException e) {
-            System.out.println("Произошла ошибка " + e.getMessage());
-        }
-        return reservations;
+        return getReservationsFromQuery(RESERVATION_GET_ALL_ORDER_BY_START_DATE);
     }
 
     /** {@inheritDoc}*/
@@ -93,9 +75,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         List<Reservation> reservations = new ArrayList<>();
         Reservation reservation;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT id, user_id, reservation_place_id, start_date, end_date " +
-                            "FROM coworking.reservation WHERE reservation_place_id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FIND_BY_RESERVATION_PLACE_ID);
             preparedStatement.setInt(1, reservationPlaceId);
             preparedStatement.execute();
             ResultSet reservationResultSet = preparedStatement.getResultSet();
@@ -115,9 +95,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         List<Reservation> reservations = new ArrayList<>();
         Reservation reservation;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT id, user_id, reservation_place_id, start_date, end_date " +
-                            "FROM coworking.reservation WHERE user_id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FIND_BY_USER_ID);
             preparedStatement.setLong(1, userId);
             preparedStatement.execute();
             ResultSet reservationResultSet = preparedStatement.getResultSet();
@@ -138,14 +116,13 @@ public class ReservationDAOImpl implements ReservationDAO {
      * @return объект брони
      */
     private Reservation getReservationFromResultSet(ResultSet reservationResultSet) throws SQLException {
-        long id = reservationResultSet.getLong(1);
-        long userID = reservationResultSet.getLong(2);
-        int reservationPlaceId = reservationResultSet.getInt(3);
-        LocalDateTime startDate = reservationResultSet.getTimestamp(4).toLocalDateTime();
-        LocalDateTime endDate = reservationResultSet.getTimestamp(5).toLocalDateTime();
-        ReservationPlace reservationPlace = reservationPlaceDAO.getReservationPlace(reservationPlaceId);
-
-        return new Reservation(id, userID, startDate, endDate, reservationPlace);
+        return Reservation.builder()
+                .id(reservationResultSet.getLong(1))
+                .userId(reservationResultSet.getLong(2))
+                .startDate(reservationResultSet.getTimestamp(4).toLocalDateTime())
+                .endDate(reservationResultSet.getTimestamp(5).toLocalDateTime())
+                .reservationPlace(reservationPlaceDAO.getReservationPlace(reservationResultSet.getInt(3)))
+                .build();
     }
 
     /** {@inheritDoc}*/
@@ -153,9 +130,7 @@ public class ReservationDAOImpl implements ReservationDAO {
     public Reservation getReservation(long id) {
         Reservation reservation = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT id, user_id, reservation_place_id, start_date, end_date " +
-                            "FROM coworking.reservation WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FIND_BY_ID);
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             ResultSet reservationResultSet = preparedStatement.getResultSet();
@@ -170,12 +145,30 @@ public class ReservationDAOImpl implements ReservationDAO {
 
     /** {@inheritDoc}*/
     @Override
+    public Long getReservationId(Reservation reservation) {
+        Long id = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FIND_BY_FIELDS_WITHOUT_ID);
+            preparedStatement.setLong(1, reservation.getUserId());
+            preparedStatement.setInt(2, reservation.getReservationPlace().getId());
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(reservation.getStartDate()));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(reservation.getEndDate()));
+            preparedStatement.execute();
+            ResultSet reservationResultSet = preparedStatement.getResultSet();
+            if(reservationResultSet.next()) {
+                id = reservationResultSet.getLong(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка " + e.getMessage());
+        }
+        return id;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
     public void saveReservation(Reservation reservation) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(
-                            "INSERT INTO coworking.reservation (user_id, start_date, end_date, reservation_place_id) " +
-                                    " VALUES (?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FULL_INSERT);
             preparedStatement.setLong(1, reservation.getUserId());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(reservation.getStartDate()));
             preparedStatement.setTimestamp(3, Timestamp.valueOf(reservation.getEndDate()));
@@ -190,9 +183,7 @@ public class ReservationDAOImpl implements ReservationDAO {
     @Override
     public void updateReservation(Reservation reservation) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE coworking.reservation SET user_id = ?, start_date = ?, " +
-                            "end_date = ?, reservation_place_id = ? WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_FULL_UPDATE);
             preparedStatement.setLong(1, reservation.getUserId());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(reservation.getStartDate()));
             preparedStatement.setTimestamp(3, Timestamp.valueOf(reservation.getEndDate()));
@@ -208,8 +199,7 @@ public class ReservationDAOImpl implements ReservationDAO {
     @Override
     public void deleteReservation(long id) {
         try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("DELETE FROM coworking.reservation WHERE id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_DELETE_BY_ID);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

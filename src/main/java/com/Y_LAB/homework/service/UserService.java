@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.service;
 
-import com.Y_LAB.homework.entity.roles.User;
-import com.Y_LAB.homework.exception.user.auth.*;
+import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
+import com.Y_LAB.homework.model.roles.User;
 
 import java.util.List;
 
@@ -34,12 +34,19 @@ public interface UserService {
     User getUser(long id);
 
     /**
+     * Метод для получения уникального идентификатора пользователя
+     * @param username уникальный логин пользователя
+     * @return идентификатор пользователя, null - если пользователя не существует
+     */
+    Long getUserId(String username);
+
+    /**
      * Метод для сохранения пользователя
      * @param username логин пользователя
      * @param password пароль пользователя
-     * @throws RegistrationException Если длина логина или пароля превышает, или не соответствует допустимой длине
+     * @throws UserAlreadyExistsException Если пользователь с таким логином уже существует
      */
-    void saveUser(String username, String password) throws RegistrationException;
+    void saveUser(String username, String password) throws UserAlreadyExistsException;
 
     /**
      * Метод для обновления пользователя
@@ -63,15 +70,7 @@ public interface UserService {
     /**
      * Метод для проверки логина пользователя
      * @param username логин пользователя
-     * @throws UsernameFormatException Если логин больше или меньше допустимой длины логина
      * @throws UserAlreadyExistsException Если пользователь с таким логином уже существует
      */
-    void checkUserLogin(String username) throws UsernameFormatException, UserAlreadyExistsException;
-
-    /**
-     * Метод для проверки пароля пользователя
-     * @param password пароль пользователя
-     * @throws PasswordFormatException Если пароль больше или меньше допустимой длины пароля
-     */
-    void checkUserPassword(String password) throws PasswordFormatException;
+    void checkUserLogin(String username) throws UserAlreadyExistsException;
 }

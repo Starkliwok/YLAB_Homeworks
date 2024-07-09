@@ -1,10 +1,8 @@
 package com.Y_LAB.homework.reservation;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.entity.reservation.Workplace;
-import com.Y_LAB.homework.service.ReservationService;
-import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
+import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +15,10 @@ class ReservationTest {
 
     private Reservation reservation;
 
-    private final ReservationService reservationService = new ReservationServiceImpl();
-
     @BeforeEach
     void init() {
         Workplace workplace = new Workplace(1, "name", 2.1, 2, 3);
         reservation = new Reservation(1, 1, LocalDateTime.now(), LocalDateTime.now(), workplace);
-        reservationService.saveReservation(reservation);
     }
 
     @Test

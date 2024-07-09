@@ -1,6 +1,6 @@
 package com.Y_LAB.homework.dao;
 
-import com.Y_LAB.homework.entity.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.Reservation;
 
 import java.util.List;
 
@@ -49,6 +49,13 @@ public interface ReservationDAO {
      * @return объект брони
      */
     Reservation getReservation(long id);
+
+    /**
+     * Метод для получения уникального идентификатора брони из базы данных
+     * @param reservation объект брони
+     * @return Уникальный идентификатор брони, если бронь с такими полями существует в базе данных
+     */
+    Long getReservationId(Reservation reservation);
 
     /**
      * Метод для сохранения объекта брони в базу данных

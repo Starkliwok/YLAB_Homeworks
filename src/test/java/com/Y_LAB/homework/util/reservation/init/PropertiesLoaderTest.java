@@ -18,9 +18,9 @@ class PropertiesLoaderTest {
     @SneakyThrows
     void getProperties() {
         Properties expected = new Properties();
-        expected.load(new FileInputStream(PROPERTIES_PATH));
+        expected.load(new FileInputStream("src/main/resources/application.properties"));
 
-        Properties actual = PropertiesLoader.getProperties(PROPERTIES_PATH);
+        Properties actual = PropertiesLoader.getProperties("application.properties");
 
         assertThat(actual.isEmpty()).isEqualTo(false);
         assertThat(actual.get(PROPERTIES_URL_KEY)).isEqualTo(expected.get(PROPERTIES_URL_KEY));

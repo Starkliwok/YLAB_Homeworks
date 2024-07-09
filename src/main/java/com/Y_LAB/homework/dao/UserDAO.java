@@ -1,6 +1,6 @@
 package com.Y_LAB.homework.dao;
 
-import com.Y_LAB.homework.entity.roles.User;
+import com.Y_LAB.homework.model.roles.User;
 
 import java.util.List;
 
@@ -24,6 +24,13 @@ public interface UserDAO {
      * @return возвращает пользователя,
      */
     User getUser(String username, String password);
+
+    /**
+     * Метод для получения уникального идентификатора пользователя из базы данных
+     * @param username логин пользователя
+     * @return Уникальный идентификатор пользователя, если пользователь с таким логином существует в базе данных
+     */
+    Long getUserId(String username);
 
     /**
      * Метод для получения пользователя из базы данных

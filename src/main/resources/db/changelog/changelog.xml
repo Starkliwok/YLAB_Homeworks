@@ -10,9 +10,10 @@
     <include file="004-create-coworking-reservation-type-table.xml" relativeToChangelogFile="true"/>
     <include file="005-create-coworking-reservation-place-table.xml" relativeToChangelogFile="true"/>
     <include file="006-create-coworking-reservation-table.xml" relativeToChangelogFile="true"/>
-    <include file="007-insert-coworking-user-data.xml" relativeToChangelogFile="true"/>
-    <include file="008-insert-coworking-admin-data.xml" relativeToChangelogFile="true"/>
-    <include file="009-insert-coworking-reservation-type-data.xml" relativeToChangelogFile="true"/>
-    <include file="010-insert-coworking-reservation-place-data.xml" relativeToChangelogFile="true"/>
-    <include file="011-insert-coworking-reservation-data.xml" relativeToChangelogFile="true"/>
+    <include file="007-create-coworking-user-audit-table.xml" relativeToChangelogFile="true"/>
+    <include file="008-insert-coworking-user-data.xml" relativeToChangelogFile="true"/>
+    <include file="009-insert-coworking-admin-data.xml" relativeToChangelogFile="true"/>
+    <include file="010-insert-coworking-reservation-type-data.xml" relativeToChangelogFile="true"/>
+    <include file="011-insert-coworking-reservation-place-data.xml" relativeToChangelogFile="true"/>
+    <include file="012-insert-coworking-reservation-data.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -7,9 +7,6 @@ package com.Y_LAB.homework.constants;
  */
 public class ApplicationConstants {
 
-    /** Константа пути до файла properties*/
-    public static final String PROPERTIES_PATH = "src/main/resources/application.properties";
-
     /** Константа значения ключа url в файле properties*/
     public static final String PROPERTIES_URL_KEY = "url";
 
@@ -21,4 +18,6 @@ public class ApplicationConstants {
 
     /** Константа значения ключа changeLogFile в файле properties*/
     public static final String PROPERTIES_CHANGE_LOG_FILE_KEY = "changeLogFile";
+
+    public static final String SQL_CREATE_LIQUIBASE_SERVICE_SCHEMA = "CREATE SCHEMA IF NOT EXISTS coworking_service";
 }

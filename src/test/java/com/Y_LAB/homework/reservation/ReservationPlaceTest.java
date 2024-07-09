@@ -1,9 +1,7 @@
 package com.Y_LAB.homework.reservation;
 
-import com.Y_LAB.homework.entity.reservation.ConferenceRoom;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
-import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,23 +12,17 @@ class ReservationPlaceTest {
 
     private ReservationPlace reservationPlace;
 
-    private final ReservationPlaceService reservationPlaceService = new ReservationPlaceServiceImpl();
-
     @BeforeEach
     void init() {
-        reservationPlace = new ConferenceRoom("001", 150.2, 120.2, 14);
-        reservationPlaceService.saveReservationPlace(reservationPlace);
+        reservationPlace = new ConferenceRoom(1,"001", 150.2, 120.2, 14);
     }
 
     @Test
     @DisplayName("Получение уникального идентификатора места")
     void getId() {
-        int expected = 543;
-        reservationPlace.setId(543);
-
         int actual = reservationPlace.getId();
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test

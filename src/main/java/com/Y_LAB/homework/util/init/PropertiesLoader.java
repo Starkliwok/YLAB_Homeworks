@@ -1,7 +1,7 @@
 package com.Y_LAB.homework.util.init;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -24,10 +24,10 @@ public class PropertiesLoader {
     public static Properties getProperties(String path){
         if (properties == null) {
             properties = new Properties();
-            try(FileInputStream in = new FileInputStream(path)){
+            try(InputStream in = PropertiesLoader.class.getClassLoader().getResourceAsStream(path)) {
                 properties.load(in);
             } catch (IOException e) {
-                System.out.println("Произошла ошибка, приложение завершает работу");
+                System.out.println("Произошла ошибка " + e.getMessage() + ", приложение завершает работу");
                 System.exit(-1);
             }
         }

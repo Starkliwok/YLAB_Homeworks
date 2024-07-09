@@ -1,6 +1,7 @@
 package com.Y_LAB.homework.service;
 
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
 
 import java.util.List;
 
@@ -36,6 +37,12 @@ public interface ReservationPlaceService {
      * @param reservationPlace объект места для бронирования
      */
     void saveReservationPlace(ReservationPlace reservationPlace);
+
+    /**
+     * Метод для сохранения объекта DTO места для бронирования
+     * @param reservationPlaceRequestDTO объект места DTO для бронирования
+     */
+    void saveReservationPlace(ReservationPlaceRequestDTO reservationPlaceRequestDTO);
 
     /**
      * Метод для обновления места для бронирования

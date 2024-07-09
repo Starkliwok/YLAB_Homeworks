@@ -1,19 +1,14 @@
 package com.Y_LAB.homework.service.implementation;
 
+import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
-import com.Y_LAB.homework.entity.roles.User;
-import com.Y_LAB.homework.exception.user.auth.RegistrationException;
-import com.Y_LAB.homework.exception.user.auth.PasswordFormatException;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
-import com.Y_LAB.homework.exception.user.auth.UsernameFormatException;
 import com.Y_LAB.homework.service.UserService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
-
-import static com.Y_LAB.homework.constants.UserConstants.*;
-import static com.Y_LAB.homework.constants.UserConstants.PASSWORD_MAX_LENGTH;
 
 /**
  * Сервис для взаимодействия с пользователями
@@ -48,15 +43,16 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUser(id);
     }
 
-    /**{@inheritDoc}*/
     @Override
-    public void saveUser(String username, String password) throws RegistrationException {
-        try {
-            checkUserLogin(username);
-            checkUserPassword(password);
-        } catch (RegistrationException e) {
-            throw new RegistrationException(e.getMessage());
-        }
+    public Long getUserId(String username) {
+        return userDAO.getUserId(username);
+    }
+
+    /**{@inheritDoc}*/
+    @Auditable
+    @Override
+    public void saveUser(String username, String password) throws UserAlreadyExistsException {
+        checkUserLogin(username);
         userDAO.saveUser(username, password);
     }
 
@@ -80,21 +76,9 @@ public class UserServiceImpl implements UserService {
 
     /**{@inheritDoc}*/
     @Override
-    public void checkUserLogin(String username) throws UsernameFormatException, UserAlreadyExistsException {
-        if(username.length() < LOGIN_MIN_LENGTH || username.length() > LOGIN_MAX_LENGTH) {
-            throw new UsernameFormatException("Минимальная длина логина - " + LOGIN_MIN_LENGTH +
-                    ", максимальная длина логина - " + LOGIN_MAX_LENGTH + " символов, повторите попытку\n");
-        } else if(isUserExist(username)) {
-            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует, повторите попытку\n");
-        }
-    }
-
-    /**{@inheritDoc}*/
-    @Override
-    public void checkUserPassword(String password) throws PasswordFormatException {
-        if(password.length() < PASSWORD_MIN_LENGTH || password.length() > PASSWORD_MAX_LENGTH) {
-            throw new PasswordFormatException("Минимальная длина пароля - " + PASSWORD_MIN_LENGTH +
-                    ", максимальная длина пароля - " + PASSWORD_MAX_LENGTH + " символов, повторите попытку\n");
+    public void checkUserLogin(String username) throws UserAlreadyExistsException {
+        if(isUserExist(username)) {
+            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует, повторите попытку");
         }
     }
 }

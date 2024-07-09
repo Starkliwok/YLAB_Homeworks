@@ -2,7 +2,10 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.entity.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
+import com.Y_LAB.homework.model.reservation.ConferenceRoom;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import lombok.AllArgsConstructor;
 
@@ -44,6 +47,20 @@ public class ReservationPlaceServiceImpl implements ReservationPlaceService {
     /** {@inheritDoc}*/
     @Override
     public void saveReservationPlace(ReservationPlace reservationPlace) {
+        reservationPlaceDAO.saveReservationPlace(reservationPlace);
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void saveReservationPlace(ReservationPlaceRequestDTO reservationPlaceRequestDTO) {
+        ReservationPlace reservationPlace;
+        if(reservationPlaceRequestDTO.getTypeId() == 1) {
+            reservationPlace = new ConferenceRoom(reservationPlaceRequestDTO.getName(), reservationPlaceRequestDTO.getPlaceArea(),
+                    reservationPlaceRequestDTO.getCostPerHour(), reservationPlaceRequestDTO.getNumberOfSeats());
+        } else {
+            reservationPlace = new Workplace(reservationPlaceRequestDTO.getName(), reservationPlaceRequestDTO.getPlaceArea(),
+                    reservationPlaceRequestDTO.getCostPerHour(), reservationPlaceRequestDTO.getNumberOfSeats());
+        }
         reservationPlaceDAO.saveReservationPlace(reservationPlace);
     }
 
