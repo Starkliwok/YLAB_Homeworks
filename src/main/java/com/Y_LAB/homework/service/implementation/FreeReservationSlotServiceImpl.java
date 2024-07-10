@@ -9,6 +9,7 @@ import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.util.reservation.ReservationDateTimeGenerator;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.util.*;
  * @author Денис Попов
  * @version 1.0
  */
+@Service
 @AllArgsConstructor
 public class FreeReservationSlotServiceImpl implements FreeReservationSlotService {
 

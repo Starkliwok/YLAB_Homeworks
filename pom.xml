@@ -10,8 +10,12 @@
     <version>1.0</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+        <aspectj-maven-plugin.version>1.14.0</aspectj-maven-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.11.0-M2</junit.jupiter.version>
         <assertj.version>3.26.0</assertj.version>
@@ -20,11 +24,13 @@
         <lombok.version>1.18.32</lombok.version>
         <postgresql.version>42.7.3</postgresql.version>
         <liquibase.version>4.28.0</liquibase.version>
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <aspectj.version>1.9.22.1</aspectj.version>
-        <aspectj-maven-plugin.version>1.13.1</aspectj-maven-plugin.version>
         <jackson.version>2.17.1</jackson.version>
         <servlet.version>6.0.0</servlet.version>
+        <spring-framework.version>6.1.10</spring-framework.version>
+        <org.yaml.version>2.2</org.yaml.version>
+        <logging.log4j.version>2.23.1</logging.log4j.version>
+        <org.springdoc-openapi.version>2.6.0</org.springdoc-openapi.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
@@ -106,7 +112,7 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
+            <version>${servlet.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -122,6 +128,66 @@
             <version>${aspectj.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-framework.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${org.yaml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${logging.log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${logging.log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${org.springdoc-openapi.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>${org.springdoc-openapi.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -129,7 +195,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -148,14 +214,14 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.14.0</version>
+                <version>${aspectj-maven-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.aspectj</groupId>
@@ -189,6 +255,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

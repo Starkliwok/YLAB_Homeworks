@@ -12,7 +12,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 
-import static com.Y_LAB.homework.in.servlet.constants.ControllerContextConstants.*;
+import static com.Y_LAB.homework.in.controller.constants.ControllerContextConstants.*;
 
 @WebListener
 public class ContextListener implements ServletContextListener {

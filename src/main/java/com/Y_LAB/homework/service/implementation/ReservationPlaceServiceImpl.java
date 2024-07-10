@@ -8,6 +8,7 @@ import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @author Денис Попов
  * @version 2.0
  */
+@Service
 @AllArgsConstructor
 public class ReservationPlaceServiceImpl implements ReservationPlaceService {
 

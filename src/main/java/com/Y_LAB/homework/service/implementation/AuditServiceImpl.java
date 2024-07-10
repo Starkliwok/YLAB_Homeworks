@@ -5,6 +5,7 @@ import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.service.AuditService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author Денис Попов
  * @version 1.0
  */
+@Service
 @AllArgsConstructor
 public class AuditServiceImpl implements AuditService {
 

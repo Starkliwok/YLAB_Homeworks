@@ -5,6 +5,7 @@ import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.util.db.ConnectionToDatabase;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
  * @author Денис Попов
  * @version 2.0
  */
+@Repository
 @AllArgsConstructor
 public class ReservationDAOImpl implements ReservationDAO {
 

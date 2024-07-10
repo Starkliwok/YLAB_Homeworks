@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 import java.time.LocalDate;
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ReservationPlaceMapper {
 
     @Mapping(target = "typeId", expression = "java(typeId(reservationPlace))")

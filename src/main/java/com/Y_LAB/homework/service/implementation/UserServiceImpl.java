@@ -3,10 +3,11 @@ package com.Y_LAB.homework.service.implementation;
 import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
-import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
+import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author Денис Попов
  * @version 2.0
  */
+@Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
