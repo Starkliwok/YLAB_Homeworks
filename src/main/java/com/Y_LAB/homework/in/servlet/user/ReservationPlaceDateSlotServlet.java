@@ -60,10 +60,6 @@ public class ReservationPlaceDateSlotServlet extends HttpServlet {
         objectMapper = (ObjectMapper) getServletContext().getAttribute(OBJECT_MAPPER);
     }
 
-    /**
-     * @param req  запрос на авторизацию пользователя UserLogInAuthDto
-     * @param resp ответ пользователю статус 200 и удаление сессии у пользователя
-     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();

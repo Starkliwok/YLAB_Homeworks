@@ -32,10 +32,6 @@ public class LogoutServlet extends HttpServlet {
         objectMapper = (ObjectMapper) getServletContext().getAttribute(OBJECT_MAPPER);
     }
 
-    /**
-     * @param req  запрос на выход из приложения
-     * @param resp ответ пользователю статус 204 и удаление его сессии
-     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();

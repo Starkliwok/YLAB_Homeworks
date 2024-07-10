@@ -56,10 +56,6 @@ public class AuthorizationServlet extends HttpServlet {
         objectMapper = (ObjectMapper) getServletContext().getAttribute(OBJECT_MAPPER);
     }
 
-    /**
-     * @param req  запрос на авторизацию пользователя UserLogInAuthDto
-     * @param resp ответ пользователю статус 200 и удаление сессии у пользователя
-     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserRequestDTO userRequestDTO;
