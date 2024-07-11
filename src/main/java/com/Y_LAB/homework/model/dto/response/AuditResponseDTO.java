@@ -1,5 +1,6 @@
 package com.Y_LAB.homework.model.dto.response;
 
+import com.Y_LAB.homework.model.audit.AuditResult;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,9 @@ public class AuditResponseDTO {
     @JsonFormat(pattern = DATE_TIME_PATTERN)
     private LocalDateTime localDateTime;
 
-    private String action;
+    private String className;
+
+    private String methodName;
+
+    private AuditResult result;
 }
