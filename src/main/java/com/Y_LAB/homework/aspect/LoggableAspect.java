@@ -4,6 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -12,6 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
  * @version 1.0
  */
 @Aspect
+@Component
 public class LoggableAspect {
 
     @Pointcut("execution(* com.Y_LAB.homework..* (..))")
