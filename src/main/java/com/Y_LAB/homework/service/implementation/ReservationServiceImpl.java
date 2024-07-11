@@ -2,13 +2,12 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.ReservationDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.service.ReservationService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,20 +17,14 @@ import java.util.List;
  * @author Денис Попов
  * @version 2.0
  */
-@Auditable
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     /**Поле ДАО слоя для взаимодействия с бронированиями*/
     private final ReservationDAO reservationDAO;
 
     private final ReservationPlaceService reservationPlaceService;
-
-    public ReservationServiceImpl() {
-        reservationDAO = new ReservationDAOImpl();
-        reservationPlaceService = new ReservationPlaceServiceImpl();
-    }
 
     /** {@inheritDoc}*/
     @Override
@@ -58,12 +51,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /** {@inheritDoc}*/
+    @Auditable
     @Override
     public List<Reservation> getAllUserReservations(long userId) {
         return reservationDAO.getAllUserReservations(userId);
     }
 
     /** {@inheritDoc}*/
+    @Auditable
     @Override
     public Reservation getReservation(long id) {
         return reservationDAO.getReservation(id);
@@ -76,6 +71,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /** {@inheritDoc}*/
+    @Auditable
     @Override
     public void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) {
         ReservationPlace reservationPlace =
@@ -91,12 +87,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /** {@inheritDoc}*/
+    @Auditable
     @Override
     public void updateReservation(Reservation reservation) {
         reservationDAO.updateReservation(reservation);
     }
 
     /** {@inheritDoc}*/
+    @Auditable
     @Override
     public void deleteReservation(long id) {
         reservationDAO.deleteReservation(id);

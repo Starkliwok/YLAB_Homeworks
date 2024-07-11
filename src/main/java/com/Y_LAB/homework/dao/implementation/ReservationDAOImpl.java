@@ -3,10 +3,10 @@ package com.Y_LAB.homework.dao.implementation;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.model.reservation.Reservation;
-import com.Y_LAB.homework.util.db.ConnectionToDatabase;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
  * @version 2.0
  */
 @Repository
-@AllArgsConstructor
 public class ReservationDAOImpl implements ReservationDAO {
 
     /** Поле для подключения к базе данных*/
@@ -28,9 +27,10 @@ public class ReservationDAOImpl implements ReservationDAO {
     /** Поле ДАО слоя мест для бронирования*/
     private final ReservationPlaceDAO reservationPlaceDAO;
 
-    public ReservationDAOImpl() {
-        connection = ConnectionToDatabase.getConnection();
-        reservationPlaceDAO = new ReservationPlaceDAOImpl();
+    @Autowired
+    public ReservationDAOImpl(DataSource dataSource, ReservationPlaceDAO reservationPlaceDAO) throws SQLException {
+        connection = dataSource.getConnection();
+        this.reservationPlaceDAO = reservationPlaceDAO;
     }
 
     /** {@inheritDoc}*/

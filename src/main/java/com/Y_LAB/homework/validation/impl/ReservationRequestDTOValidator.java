@@ -5,10 +5,10 @@ import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.service.implementation.FreeReservationSlotServiceImpl;
-import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -24,27 +24,15 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  * @author Денис Попов
  * @version 2.0
  */
+@Component
+@RequiredArgsConstructor
 public class ReservationRequestDTOValidator implements ValidatorDTO<ReservationRequestDTO> {
 
-    private static ReservationRequestDTOValidator instance;
-
-    private static NumberValidator numberValidator;
+    private final NumberValidator numberValidator;
 
     private final ReservationPlaceService reservationPlaceService;
 
     private final FreeReservationSlotService freeReservationSlotService;
-
-    private ReservationRequestDTOValidator() {
-        numberValidator = NumberValidator.getInstance();
-        reservationPlaceService = new ReservationPlaceServiceImpl();
-        freeReservationSlotService = new FreeReservationSlotServiceImpl();
-    }
-    public static ReservationRequestDTOValidator getInstance() {
-        if (instance == null) {
-            instance = new ReservationRequestDTOValidator();
-        }
-        return instance;
-    }
 
     /**{@inheritDoc}*/
     @Override

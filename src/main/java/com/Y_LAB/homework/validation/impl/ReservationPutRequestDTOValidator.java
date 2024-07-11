@@ -4,6 +4,8 @@ import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.ReservationPutRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -14,21 +16,11 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  * @author Денис Попов
  * @version 2.0
  */
+@Component
+@RequiredArgsConstructor
 public class ReservationPutRequestDTOValidator implements ValidatorDTO<ReservationPutRequestDTO> {
 
-    private static ReservationPutRequestDTOValidator instance;
-
-    private static NumberValidator numberValidator;
-
-    private ReservationPutRequestDTOValidator() {
-        numberValidator = NumberValidator.getInstance();
-    }
-    public static ReservationPutRequestDTOValidator getInstance() {
-        if (instance == null) {
-            instance = new ReservationPutRequestDTOValidator();
-        }
-        return instance;
-    }
+    private final NumberValidator numberValidator;
 
     /**{@inheritDoc}*/
     @Override

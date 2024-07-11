@@ -3,10 +3,10 @@ package com.Y_LAB.homework.dao.implementation;
 import com.Y_LAB.homework.dao.UserDAO;
 import com.Y_LAB.homework.model.roles.Admin;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.util.db.ConnectionToDatabase;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +19,16 @@ import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
  * @version 2.0
  */
 @Repository
-@AllArgsConstructor
 public class UserDAOImpl implements UserDAO {
 
     /** Поле для подключения к базе данных*/
     private final Connection connection;
 
-    public UserDAOImpl() {
-        connection = ConnectionToDatabase.getConnection();
+    @Autowired
+    public UserDAOImpl(DataSource dataSource) throws SQLException {
+        connection = dataSource.getConnection();
     }
+
 
     /** {@inheritDoc}*/
     @Override

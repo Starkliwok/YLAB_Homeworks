@@ -1,13 +1,12 @@
 package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.model.reservation.ConferenceRoom;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.ReservationPlaceService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,15 +17,11 @@ import java.util.List;
  * @version 2.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReservationPlaceServiceImpl implements ReservationPlaceService {
 
     /**Поле ДАО слоя для взаимодействия с местами для бронирований*/
     private final ReservationPlaceDAO reservationPlaceDAO;
-
-    public ReservationPlaceServiceImpl() {
-        reservationPlaceDAO = new ReservationPlaceDAOImpl();
-    }
 
     /** {@inheritDoc}*/
     @Override

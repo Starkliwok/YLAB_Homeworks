@@ -1,10 +1,9 @@
 package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.AuditDAO;
-import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
 import com.Y_LAB.homework.service.AuditService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +14,11 @@ import java.util.List;
  * @version 1.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
     /**Поле ДАО слоя для взаимодействия с местами для бронирований*/
     private final AuditDAO auditDAO;
-
-    public AuditServiceImpl() {
-        auditDAO = new AuditDAOImpl();
-    }
 
     /**{@inheritDoc}*/
     @Override

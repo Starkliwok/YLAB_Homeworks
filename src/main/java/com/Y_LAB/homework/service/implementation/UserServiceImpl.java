@@ -2,11 +2,10 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.UserDAO;
-import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.exception.user.auth.UserAlreadyExistsException;
 import com.Y_LAB.homework.model.roles.User;
 import com.Y_LAB.homework.service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,15 +16,11 @@ import java.util.List;
  * @version 2.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     /**Поле ДАО слоя для взаимодействия с пользователями*/
     private final UserDAO userDAO;
-
-    public UserServiceImpl() {
-        userDAO = new UserDAOImpl();
-    }
 
     /**{@inheritDoc}*/
     @Override
@@ -80,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void checkUserLogin(String username) throws UserAlreadyExistsException {
         if(isUserExist(username)) {
-            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует, повторите попытку");
+            throw new UserAlreadyExistsException("User with this login already exists");
         }
     }
 }

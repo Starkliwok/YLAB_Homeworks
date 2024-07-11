@@ -2,13 +2,11 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.util.reservation.ReservationDateTimeGenerator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -23,19 +21,14 @@ import java.util.*;
  * @version 1.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FreeReservationSlotServiceImpl implements FreeReservationSlotService {
 
     /** Поле сервиса мест для бронирования, предназначенное взаимодействия с местами для бронирования*/
-    private ReservationPlaceDAO reservationPlaceDAO;
+    private final ReservationPlaceDAO reservationPlaceDAO;
 
     /** Поле сервиса бронирований, предназначенное взаимодействия с бронированиями*/
-    private ReservationDAO reservationDAO;
-
-    public FreeReservationSlotServiceImpl() {
-        reservationPlaceDAO = new ReservationPlaceDAOImpl();
-        reservationDAO = new ReservationDAOImpl();
-    }
+    private final ReservationDAO reservationDAO;
 
     /**{@inheritDoc}*/
     @Override
