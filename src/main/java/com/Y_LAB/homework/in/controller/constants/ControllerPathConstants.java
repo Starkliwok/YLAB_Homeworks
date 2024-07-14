@@ -1,11 +1,15 @@
 package com.Y_LAB.homework.in.controller.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Класс содержит константы именований эндпоинтов
  * @author Денис Попов
  * @version 1.0
  */
-public class ControllerPathConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ControllerPathConstants {
 
     public static final String CONTROLLER_ADMIN_PATH = "/admin";
 
