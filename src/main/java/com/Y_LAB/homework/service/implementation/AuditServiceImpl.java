@@ -20,19 +20,16 @@ public class AuditServiceImpl implements AuditService {
     /**Поле ДАО слоя для взаимодействия с местами для бронирований*/
     private final AuditDAO auditDAO;
 
-    /**{@inheritDoc}*/
     @Override
     public List<Audit> getAllAudits() {
         return auditDAO.getAllAudits();
     }
 
-    /**{@inheritDoc}*/
     @Override
     public Audit getAudit(long id) {
         return auditDAO.getAudit(id);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void saveAudit(Audit audit) {
         auditDAO.saveAudit(audit);

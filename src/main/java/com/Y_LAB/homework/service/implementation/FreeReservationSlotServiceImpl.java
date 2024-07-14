@@ -30,7 +30,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
     /** Поле сервиса бронирований, предназначенное взаимодействия с бронированиями*/
     private final ReservationDAO reservationDAO;
 
-    /**{@inheritDoc}*/
     @Override
     public Map<ReservationPlace, List<LocalDate>> getAllAvailablePlaceForReservations() {
         List<ReservationPlace> reservationPlaces = reservationPlaceDAO.getAllReservationPlaces();
@@ -42,7 +41,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableReservations;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<LocalDate> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
         List<Reservation> allReservations = reservationDAO.getAllReservationsWithReservationPlace(reservationPlace.getId());
@@ -55,7 +53,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableDates;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public Map<LocalTime, LocalTime> getAllAvailableTimesForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = ReservationDateTimeGenerator.generateTimesPeriod();
@@ -73,7 +70,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableTimes;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<String> getAllAvailableTimeListForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = getAllAvailableTimesForReservation(reservationPlace, localDate);
@@ -88,7 +84,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return allAvailableTimes;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllAvailablePlacesForReserveDate(LocalDate localDate) {
         Map<ReservationPlace, List<LocalDate>> availableReservationsWithDates = getAllAvailablePlaceForReservations();

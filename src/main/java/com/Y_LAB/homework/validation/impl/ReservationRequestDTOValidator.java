@@ -8,6 +8,7 @@ import com.Y_LAB.homework.service.ReservationPlaceService;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -26,6 +27,7 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  */
 @Component
 @RequiredArgsConstructor
+@Qualifier("reservationReq")
 public class ReservationRequestDTOValidator implements ValidatorDTO<ReservationRequestDTO> {
 
     private final NumberValidator numberValidator;
@@ -34,7 +36,6 @@ public class ReservationRequestDTOValidator implements ValidatorDTO<ReservationR
 
     private final FreeReservationSlotService freeReservationSlotService;
 
-    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getReservationPlaceId(), FIELD_RESERVATION_PLACE_ID);

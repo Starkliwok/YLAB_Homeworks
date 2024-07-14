@@ -2,6 +2,7 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.annotation.Auditable;
 import com.Y_LAB.homework.dao.ReservationDAO;
+import com.Y_LAB.homework.exception.ObjectNotFoundException;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
@@ -26,57 +27,60 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationPlaceService reservationPlaceService;
 
-    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservations() {
         return reservationDAO.getAllReservations();
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByUsers() {
         return reservationDAO.getAllReservationsByUsers();
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsByDate() {
         return reservationDAO.getAllReservationsByDate();
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<Reservation> getAllReservationsWithReservationPlace(int reservationPlaceId) {
         return reservationDAO.getAllReservationsWithReservationPlace(reservationPlaceId);
     }
 
-    /** {@inheritDoc}*/
     @Auditable
     @Override
-    public List<Reservation> getAllUserReservations(long userId) {
-        return reservationDAO.getAllUserReservations(userId);
+    public List<Reservation> getAllUserReservations(long userId) throws ObjectNotFoundException {
+        List<Reservation> reservations = reservationDAO.getAllUserReservations(userId);
+        if(reservations.isEmpty()) {
+            throw new ObjectNotFoundException("Reservations for user with id " + userId + " does not exists");
+        }
+        return reservations;
     }
 
-    /** {@inheritDoc}*/
     @Auditable
     @Override
-    public Reservation getReservation(long id) {
-        return reservationDAO.getReservation(id);
+    public Reservation getReservation(long id) throws ObjectNotFoundException {
+        Reservation reservation = reservationDAO.getReservation(id);
+        if(reservation == null) {
+            throw new ObjectNotFoundException("Reservation with id " + id + " does not exists");
+        }
+        return reservation;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public void saveReservation(Reservation reservation) {
         reservationDAO.saveReservation(reservation);
     }
 
-    /** {@inheritDoc}*/
     @Auditable
     @Override
-    public void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) {
+    public void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) throws ObjectNotFoundException {
         ReservationPlace reservationPlace =
                 reservationPlaceService.getReservationPlace(reservationRequestDTO.getReservationPlaceId());
 
+        if(reservationPlace == null) {
+            throw new ObjectNotFoundException("Place with id " + reservationRequestDTO.getReservationPlaceId() + " does not exists");
+        }
         Reservation reservation = Reservation.builder()
                 .userId(userId)
                 .startDate(reservationRequestDTO.getStartDate())
@@ -86,17 +90,23 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDAO.saveReservation(reservation);
     }
 
-    /** {@inheritDoc}*/
     @Auditable
     @Override
-    public void updateReservation(Reservation reservation) {
+    public void updateReservation(Reservation reservation) throws ObjectNotFoundException {
+        if(reservationDAO.getReservation(reservation.getId()) == null) {
+            throw new ObjectNotFoundException("Reservation with id " + reservation.getId() + " does not exists");
+        } else if (reservationPlaceService.getReservationPlace(reservation.getReservationPlace().getId()) == null) {
+            throw new ObjectNotFoundException("Place with id " + reservation.getReservationPlace().getId() + " does not exists");
+        }
         reservationDAO.updateReservation(reservation);
     }
 
-    /** {@inheritDoc}*/
     @Auditable
     @Override
-    public void deleteReservation(long id) {
+    public void deleteReservation(long id) throws ObjectNotFoundException {
+        if(reservationDAO.getReservation(id) == null) {
+            throw new ObjectNotFoundException("Reservation with id " + id + " does not exists");
+        }
         reservationDAO.deleteReservation(id);
     }
 }

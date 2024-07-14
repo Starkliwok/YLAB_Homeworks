@@ -1,6 +1,7 @@
 package com.Y_LAB.homework.model.roles;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Класс пользователя приложения
@@ -11,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 public class User {
 
-    /** Поле уникального идентификатора, которое задается при создании объекта, это поле невозможно изменить.*/
+    /** Поле уникального идентификатора пользователя.*/
     private final long id;
 
     /** Поле уникального логина пользователя, используется при входе в систему.*/

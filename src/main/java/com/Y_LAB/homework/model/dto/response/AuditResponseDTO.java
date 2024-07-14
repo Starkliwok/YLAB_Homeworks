@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
 
 import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_TIME_PATTERN;
 
+/**
+ * DTO Response объекта аудита
+ * @author Денис Попов
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

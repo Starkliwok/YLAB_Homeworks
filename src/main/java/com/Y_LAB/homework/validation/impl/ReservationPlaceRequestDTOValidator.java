@@ -5,6 +5,7 @@ import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MAX_LENGTH;
@@ -18,12 +19,11 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  */
 @Component
 @RequiredArgsConstructor
+@Qualifier("placeReq")
 public class ReservationPlaceRequestDTOValidator implements ValidatorDTO<ReservationPlaceRequestDTO> {
 
     private final NumberValidator numberValidator;
 
-
-    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationPlaceRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getTypeId(), FIELD_TYPE_ID);

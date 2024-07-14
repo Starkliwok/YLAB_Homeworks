@@ -22,19 +22,16 @@ public class UserServiceImpl implements UserService {
     /**Поле ДАО слоя для взаимодействия с пользователями*/
     private final UserDAO userDAO;
 
-    /**{@inheritDoc}*/
     @Override
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
 
-    /**{@inheritDoc}*/
     @Override
     public User getUser(String username, String password) {
         return userDAO.getUser(username, password);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public User getUser(long id) {
         return userDAO.getUser(id);
@@ -45,7 +42,6 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUserId(username);
     }
 
-    /**{@inheritDoc}*/
     @Auditable
     @Override
     public void saveUser(String username, String password) throws UserAlreadyExistsException {
@@ -53,25 +49,21 @@ public class UserServiceImpl implements UserService {
         userDAO.saveUser(username, password);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void updateUser(User user) {
         userDAO.updateUser(user);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void deleteUser(long id) {
         userDAO.deleteUser(id);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public boolean isUserExist(String username) {
         return userDAO.isUserExist(username);
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void checkUserLogin(String username) throws UserAlreadyExistsException {
         if(isUserExist(username)) {

@@ -25,18 +25,33 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditableAspect {
 
+    /**Поле ДАО слоя мест для бронирования*/
+
     private final ReservationPlaceDAO reservationPlaceDAO;
 
+    /**Поле ДАО слоя броней*/
     private final ReservationDAO reservationDAO;
 
+    /**Поле ДАО слоя аудитов*/
     private final AuditService auditService;
 
+    /**Поле ДАО слоя пользователей*/
     private final UserDAO userDAO;
 
+    /**Срез для обнаружения методов помеченных аннотацией {@link com.Y_LAB.homework.annotation.Auditable}*/
     @Pointcut("within(@com.Y_LAB.homework.annotation.Auditable *) || " +
             "execution(@com.Y_LAB.homework.annotation.Auditable * *(..))) && execution(* *(..))")
     public void annotatedByAuditable() {}
 
+    /**
+     * Метод обрабатывает методы помеченные аннотацией {@link com.Y_LAB.homework.annotation.Auditable},
+     * в случае успешного завершения метода сохраняет аудит пользователя с результатом {@link AuditResult#SUCCESS}
+     * если во время выполнения метода выбрасывается исключение, то метод сохраняет аудит пользователя с результатом
+     * {@link AuditResult#FAIL}
+     * @param jp JoinPoint
+     * @return Возвращаемое значение обрабатываемого метода
+     * @throws Throwable Пробрасывает исключение если его выбрасывает обрабатываемый метод
+     */
     @Around("annotatedByAuditable()")
     public Object logMethod(ProceedingJoinPoint jp) throws Throwable {
         String className = jp.getSignature().getDeclaringTypeName();
