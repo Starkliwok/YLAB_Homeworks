@@ -1,7 +1,11 @@
 package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
+import com.Y_LAB.homework.exception.ObjectNotFoundException;
 import com.Y_LAB.homework.model.reservation.Reservation;
+import com.Y_LAB.homework.model.reservation.ReservationPlace;
+import com.Y_LAB.homework.model.reservation.Workplace;
+import com.Y_LAB.homework.service.implementation.ReservationPlaceServiceImpl;
 import com.Y_LAB.homework.service.implementation.ReservationServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,14 +14,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceImplTest {
 
     @Mock
     private ReservationDAOImpl reservationDAO;
+
+    @Mock
+    private ReservationPlaceServiceImpl reservationPlaceService;
 
     @InjectMocks
     private ReservationServiceImpl reservationService;
@@ -58,8 +67,11 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Проверка на вызов метода получения всех броней пользователя")
-    void getAllUserReservations() {
+    void getAllUserReservations() throws ObjectNotFoundException {
         int userId = 432;
+        List<Reservation> reservationList = new ArrayList<>();
+        reservationList.add(new Reservation());
+        when(reservationDAO.getAllUserReservations(userId)).thenReturn(reservationList);
 
         reservationService.getAllUserReservations(userId);
 
@@ -68,8 +80,10 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Проверка на вызов метода получения брони")
-    void getReservation() {
+    void getReservation() throws ObjectNotFoundException {
         int id = 1;
+        Reservation reservation = new Reservation();
+        when(reservationDAO.getReservation(id)).thenReturn(reservation);
 
         reservationService.getReservation(id);
 
@@ -88,8 +102,14 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Проверка на вызов метода обновления брони")
-    void updateReservation() {
+    void updateReservation() throws ObjectNotFoundException {
         Reservation reservation = new Reservation();
+        reservation.setId(1);
+        ReservationPlace reservationPlace = new Workplace();
+        reservationPlace.setId(2);
+        reservation.setReservationPlace(reservationPlace);
+        when(reservationDAO.getReservation(reservation.getId())).thenReturn(reservation);
+        when(reservationPlaceService.getReservationPlace(reservation.getReservationPlace().getId())).thenReturn(new Workplace());
 
         reservationService.updateReservation(reservation);
 
@@ -98,8 +118,10 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Проверка на вызов метода удаления брони")
-    void deleteReservation() {
+    void deleteReservation() throws ObjectNotFoundException {
+        Reservation reservation = new Reservation();
         int reservationId = 2;
+        when(reservationDAO.getReservation(reservationId)).thenReturn(reservation);
 
         reservationService.deleteReservation(reservationId);
 
