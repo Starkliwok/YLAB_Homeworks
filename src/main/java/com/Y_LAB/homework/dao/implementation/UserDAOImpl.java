@@ -29,8 +29,6 @@ public class UserDAOImpl implements UserDAO {
         connection = dataSource.getConnection();
     }
 
-
-    /** {@inheritDoc}*/
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -46,13 +44,14 @@ public class UserDAOImpl implements UserDAO {
                 else
                     users.add(new User(id, username, password));
             }
+            statement.close();
+            userResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return users;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public User getUser(String username, String password) {
         User user = null;
@@ -69,13 +68,14 @@ public class UserDAOImpl implements UserDAO {
                 else
                     user = new User(id, username, password);
             }
+            statement.close();
+            userResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return user;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public Long getUserId(String username) {
         Long userId = null;
@@ -87,13 +87,14 @@ public class UserDAOImpl implements UserDAO {
             if(userResultSet.next()) {
                 userId = userResultSet.getLong(1);
             }
+            statement.close();
+            userResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return userId;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public User getUser(long id) {
         User user = null;
@@ -110,13 +111,14 @@ public class UserDAOImpl implements UserDAO {
                 else
                     user = new User(id, username, password);
             }
+            statement.close();
+            userResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return user;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public boolean isUserExist(String username) {
         try {
@@ -125,6 +127,8 @@ public class UserDAOImpl implements UserDAO {
             statement.execute();
             ResultSet userResultSet = statement.getResultSet();
             if(userResultSet.next()) {
+                statement.close();
+                userResultSet.close();
                 return true;
             }
         } catch (SQLException e) {
@@ -133,22 +137,19 @@ public class UserDAOImpl implements UserDAO {
         return false;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public void saveUser(String username, String password) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(USER_FULL_INSERT);
-
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
-
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
     }
 
-    /** {@inheritDoc}*/
     @Override
     public void updateUser(User user) {
         try {
@@ -157,19 +158,19 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setLong(3, user.getId());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
     }
 
-    /** {@inheritDoc}*/
     @Override
     public void deleteUser(long id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(USER_DELETE_WHERE_ID);
             preparedStatement.setLong(1, id);
-
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
@@ -180,15 +181,14 @@ public class UserDAOImpl implements UserDAO {
      * @param id идентификационный номер аккаунта
      * @return true - если передан id администратора, false - если переданный id пользователя не является администратором
      */
-    private boolean isAdmin(long id) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(USER_FIND_IN_ADMIN_TABLE_WHERE_ID);
-            statement.setLong(1, id);
-            statement.execute();
-            return statement.getResultSet().next();
-        } catch (SQLException e) {
-            System.out.println("Произошла ошибка " + e.getMessage());
-        }
-        return false;
+    private boolean isAdmin(long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(USER_FIND_IN_ADMIN_TABLE_WHERE_ID);
+        statement.setLong(1, id);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        boolean admin = resultSet.next();
+        resultSet.close();
+        statement.close();
+        return admin;
     }
 }

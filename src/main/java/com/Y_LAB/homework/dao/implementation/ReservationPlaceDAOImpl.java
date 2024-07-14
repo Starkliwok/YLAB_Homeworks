@@ -30,7 +30,6 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         connection = dataSource.getConnection();
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlaces() {
         List<ReservationPlace> reservationPlaces = new ArrayList<>();
@@ -42,13 +41,14 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
                 reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
                 reservationPlaces.add(reservationPlace);
             }
+            statement.close();
+            reservationPlaceResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return reservationPlaces;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllReservationPlacesByTypes(ReservationPlace reservationPlace) {
         List<ReservationPlace> reservationPlaces = new ArrayList<>();
@@ -73,13 +73,14 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
                     reservationPlaces.add(reservationPlace2);
                 }
             }
+            preparedStatement.close();
+            reservationPlaceResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return reservationPlaces;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public ReservationPlace getReservationPlace(int id) {
        ReservationPlace reservationPlace = null;
@@ -91,6 +92,8 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
             if(reservationPlaceResultSet.next()) {
                 reservationPlace = getReservationPlaceFromResultSet(reservationPlaceResultSet);
             }
+            preparedStatement.close();
+            reservationPlaceResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
@@ -118,19 +121,18 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         return null;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void saveReservationPlace(ReservationPlace reservationPlace) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_FULL_INSERT);
             setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void updateReservationPlace(ReservationPlace reservationPlace) {
         try {
@@ -138,6 +140,7 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
             setReservationPlaceToPreparedStatement(reservationPlace, preparedStatement);
             preparedStatement.setInt(6, reservationPlace.getId());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
@@ -159,13 +162,13 @@ public class ReservationPlaceDAOImpl implements ReservationPlaceDAO {
         preparedStatement.setInt(5, reservationPlace.getNumberOfSeats());
     }
 
-    /**{@inheritDoc}*/
     @Override
     public void deleteReservationPlace(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_PLACE_DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }

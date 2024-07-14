@@ -22,6 +22,7 @@ import static com.Y_LAB.homework.dao.constants.SQLConstants.*;
 @Repository
 public class AuditDAOImpl implements AuditDAO {
 
+    /** Поле для подключения к базе данных*/
     private final Connection connection;
 
     @Autowired
@@ -29,7 +30,6 @@ public class AuditDAOImpl implements AuditDAO {
         connection = dataSource.getConnection();
     }
 
-    /** {@inheritDoc}*/
     @Override
     public List<Audit> getAllAudits() {
         List<Audit> audits = new ArrayList<>();
@@ -49,13 +49,14 @@ public class AuditDAOImpl implements AuditDAO {
                 audit = new Audit(id, userID, date, className, methodName, result);
                 audits.add(audit);
             }
+            preparedStatement.close();
+            auditResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return audits;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public Audit getAudit(long id) {
         Audit audit = null;
@@ -73,13 +74,14 @@ public class AuditDAOImpl implements AuditDAO {
                 AuditResult result = auditResult.equals(AuditResult.FAIL.toString()) ? AuditResult.FAIL : AuditResult.SUCCESS;
                 audit = new Audit(id, userID, date, className, methodName, result);
             }
+            preparedStatement.close();
+            auditResultSet.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }
         return audit;
     }
 
-    /** {@inheritDoc}*/
     @Override
     public void saveAudit(Audit audit) {
         try {
@@ -90,6 +92,7 @@ public class AuditDAOImpl implements AuditDAO {
             preparedStatement.setString(4, audit.getMethodName());
             preparedStatement.setString(5, audit.getResult().toString());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Произошла ошибка " + e.getMessage());
         }

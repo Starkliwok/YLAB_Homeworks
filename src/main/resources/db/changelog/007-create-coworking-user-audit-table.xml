@@ -27,7 +27,15 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="action" type="VARCHAR(50)">
+            <column name="class_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="method_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="audit_result" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
