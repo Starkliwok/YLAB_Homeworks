@@ -14,7 +14,6 @@ import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.service.ReservationPlaceService;
-import com.Y_LAB.homework.validation.NumberValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,9 +59,6 @@ class ReservationPlaceControllerTest {
 
     @Mock
     private FreeReservationSlotService freeReservationSlotService;
-
-    @Mock
-    private NumberValidator numberValidator;
 
     private final UserRequestDTO userRequestDTO = new UserRequestDTO();
 

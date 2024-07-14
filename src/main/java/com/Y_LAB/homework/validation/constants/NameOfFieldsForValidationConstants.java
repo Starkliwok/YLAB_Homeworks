@@ -24,8 +24,6 @@ public final class NameOfFieldsForValidationConstants {
 
     public static final String FIELD_TYPE_ID = "typeId";
 
-    public static final String FIELD_ID = "id";
-
     public static final String FIELD_PLACE_AREA = "placeArea";
 
     public static final String FIELD_COST_PER_HOUR = "costPerHour";

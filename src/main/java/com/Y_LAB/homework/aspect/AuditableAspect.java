@@ -25,20 +25,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuditableAspect {
 
-    /**Поле ДАО слоя мест для бронирования*/
+    /** Поле ДАО слоя мест для бронирования*/
 
     private final ReservationPlaceDAO reservationPlaceDAO;
 
-    /**Поле ДАО слоя броней*/
+    /** Поле ДАО слоя броней*/
     private final ReservationDAO reservationDAO;
 
-    /**Поле ДАО слоя аудитов*/
+    /** Поле ДАО слоя аудитов*/
     private final AuditService auditService;
 
-    /**Поле ДАО слоя пользователей*/
+    /** Поле ДАО слоя пользователей*/
     private final UserDAO userDAO;
 
-    /**Срез для обнаружения методов помеченных аннотацией {@link com.Y_LAB.homework.annotation.Auditable}*/
+    /** Срез для обнаружения методов помеченных аннотацией {@link com.Y_LAB.homework.annotation.Auditable}*/
     @Pointcut("within(@com.Y_LAB.homework.annotation.Auditable *) || " +
             "execution(@com.Y_LAB.homework.annotation.Auditable * *(..))) && execution(* *(..))")
     public void annotatedByAuditable() {}
