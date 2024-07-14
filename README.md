@@ -6,6 +6,8 @@
 
 [3-dz](https://github.com/Starkliwok/YLAB_Homeworks/tree/3-dz)
 
+[4-dz](https://github.com/Starkliwok/YLAB_Homeworks/tree/4-dz)
+
 -------------------------------------------------------------------------------------------------------------------------------------
 > [!IMPORTANT]
 > Создано с помощью:
