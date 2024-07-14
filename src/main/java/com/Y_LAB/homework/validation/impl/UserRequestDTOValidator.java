@@ -3,8 +3,8 @@ package com.Y_LAB.homework.validation.impl;
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.UserRequestDTO;
 import com.Y_LAB.homework.validation.ValidatorDTO;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.*;
 import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationConstants.FIELD_PASSWORD;
@@ -15,19 +15,10 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  * @author Денис Попов
  * @version 2.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
+@Qualifier("userReq")
 public class UserRequestDTOValidator implements ValidatorDTO<UserRequestDTO> {
 
-    private static UserRequestDTOValidator instance;
-
-    public static UserRequestDTOValidator getInstance() {
-        if (instance == null) {
-            instance = new UserRequestDTOValidator();
-        }
-        return instance;
-    }
-
-    /**{@inheritDoc}*/
     @Override
     public void validate(UserRequestDTO dto) throws FieldNotValidException {
         if (dto.getUsername().length() < LOGIN_MIN_LENGTH || dto.getUsername().length() > LOGIN_MAX_LENGTH) {

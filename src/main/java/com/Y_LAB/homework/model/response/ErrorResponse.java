@@ -5,5 +5,5 @@ package com.Y_LAB.homework.model.response;
  * @author Денис Попов
  * @version 1.0
  */
-public record ErrorResponse(String message) {
+public record ErrorResponse(String errorMessage) {
 }

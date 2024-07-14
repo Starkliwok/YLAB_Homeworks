@@ -1,49 +1,39 @@
 package com.Y_LAB.homework.testcontainers;
 
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
+import com.Y_LAB.homework.finder.ObjectFinderForTests;
 import com.Y_LAB.homework.model.reservation.ConferenceRoom;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
-import com.Y_LAB.homework.finder.ObjectFinderForTests;
-import com.Y_LAB.homework.util.db.ConnectionToDatabase;
-import com.Y_LAB.homework.util.init.LiquibaseMigration;
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import javax.sql.DataSource;
 import java.util.List;
-import java.util.Properties;
 
-import static com.Y_LAB.homework.constants.ApplicationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {TestContainerConfig.class})
 class ReservationPlaceDAOImplTest {
 
-    @Container
-    private static final PostgreSQLContainer<?> postgresContainer = TestcontrainerManager.getPostgreSQLContainer();
-    private static Connection connection;
-    private static ReservationPlaceDAO reservationPlaceDAO;
-    private static ReservationPlace reservationPlace;
-    private static ReservationPlace reservationPlace1;
-    private static ReservationPlace reservationPlace2;
+    @Autowired
+    private DataSource dataSource;
 
-    @BeforeAll
-    static void beforeAll() throws SQLException {
-        Properties properties = new Properties();
-        properties.setProperty(PROPERTIES_URL_KEY, postgresContainer.getJdbcUrl());
-        properties.setProperty(PROPERTIES_USERNAME_KEY, postgresContainer.getUsername());
-        properties.setProperty(PROPERTIES_PASSWORD_KEY, postgresContainer.getPassword());
-        LiquibaseMigration.initMigration(ConnectionToDatabase.getConnectionFromProperties(properties));
-        connection = ConnectionToDatabase.getConnectionFromProperties(properties);
-        connection.setAutoCommit(false);
+    @Autowired
+    private ReservationPlaceDAO reservationPlaceDAO;
 
-        reservationPlaceDAO = new ReservationPlaceDAOImpl(connection);
-    }
+    private ReservationPlace reservationPlace;
+
+    private ReservationPlace reservationPlace1;
+
+    private ReservationPlace reservationPlace2;
 
     @BeforeEach
     void init() {
@@ -53,9 +43,9 @@ class ReservationPlaceDAOImplTest {
         reservationPlaceDAO.saveReservationPlace(reservationPlace);
         reservationPlaceDAO.saveReservationPlace(reservationPlace1);
         reservationPlaceDAO.saveReservationPlace(reservationPlace2);
-        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, connection);
-        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace1, connection);
-        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace2, connection);
+        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, dataSource);
+        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace1, dataSource);
+        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace2, dataSource);
     }
 
     @AfterEach
@@ -105,7 +95,7 @@ class ReservationPlaceDAOImplTest {
         reservationPlaceDAO.deleteReservationPlace(reservationPlace.getId());
         ReservationPlace actual = reservationPlaceDAO.getReservationPlace(reservationPlace.getId());
         reservationPlaceDAO.saveReservationPlace(reservationPlace);
-        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, connection);
+        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, dataSource);
         ReservationPlace actual2 = reservationPlaceDAO.getReservationPlace(reservationPlace.getId());
 
         assertThat(actual).isNull();

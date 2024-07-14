@@ -1,5 +1,6 @@
 package com.Y_LAB.homework.service;
 
+import com.Y_LAB.homework.exception.ObjectNotFoundException;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 
@@ -42,14 +43,14 @@ public interface ReservationService {
      * @param userId уникальный идентификатор пользователя
      * @return коллекция всех броней пользователя
      */
-    List<Reservation> getAllUserReservations(long userId);
+    List<Reservation> getAllUserReservations(long userId) throws ObjectNotFoundException;
 
     /**
      * Метод для получения брони по уникальному идентификатору
      * @param id уникальный идентификатор брони
      * @return объект брони
      */
-    Reservation getReservation(long id);
+    Reservation getReservation(long id) throws ObjectNotFoundException;
 
     /**
      * Метод для сохранения объекта брони
@@ -62,17 +63,17 @@ public interface ReservationService {
      * @param reservationRequestDTO DTO объект брони
      * @param userId уникальный идентификатор пользователя
      */
-    void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId);
+    void saveReservation(ReservationRequestDTO reservationRequestDTO, long userId) throws ObjectNotFoundException;
 
     /**
      * Метод для обновления брони
      * @param reservation объект брони
      */
-    void updateReservation(Reservation reservation);
+    void updateReservation(Reservation reservation) throws ObjectNotFoundException;
 
     /**
      * Метод для удаления брони
      * @param id уникальный идентификатор брони
      */
-    void deleteReservation(long id);
+    void deleteReservation(long id) throws ObjectNotFoundException;
 }

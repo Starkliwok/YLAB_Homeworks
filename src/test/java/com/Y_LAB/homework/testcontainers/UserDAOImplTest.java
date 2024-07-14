@@ -1,45 +1,27 @@
 package com.Y_LAB.homework.testcontainers;
 
 import com.Y_LAB.homework.dao.UserDAO;
-import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.model.roles.Admin;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.util.db.ConnectionToDatabase;
-import com.Y_LAB.homework.util.init.LiquibaseMigration;
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.*;
-import java.util.Properties;
-
-import static com.Y_LAB.homework.constants.ApplicationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {TestContainerConfig.class})
 class UserDAOImplTest {
 
-    @Container
-    private static final PostgreSQLContainer<?> postgresContainer = TestcontrainerManager.getPostgreSQLContainer();
-
-    private static UserDAO userDAO;
+    @Autowired
+    private UserDAO userDAO;
 
     private User user;
-
-    @BeforeAll
-    static void beforeAll() throws SQLException {
-        Properties properties = new Properties();
-        properties.setProperty(PROPERTIES_URL_KEY, postgresContainer.getJdbcUrl());
-        properties.setProperty(PROPERTIES_USERNAME_KEY, postgresContainer.getUsername());
-        properties.setProperty(PROPERTIES_PASSWORD_KEY, postgresContainer.getPassword());
-        LiquibaseMigration.initMigration(ConnectionToDatabase.getConnectionFromProperties(properties));
-        Connection connection = ConnectionToDatabase.getConnectionFromProperties(properties);
-        connection.setAutoCommit(false);
-
-        userDAO = new UserDAOImpl(connection);
-    }
-
 
     @BeforeEach
     void init() {

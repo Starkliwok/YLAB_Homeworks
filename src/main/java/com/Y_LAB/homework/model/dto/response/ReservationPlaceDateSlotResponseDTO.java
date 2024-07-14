@@ -10,6 +10,11 @@ import java.util.List;
 
 import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_PATTERN;
 
+/**
+ * DTO Response объекта места для бронирования содержащее доступные даты для бронирования этого места
+ * @author Денис Попов
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
