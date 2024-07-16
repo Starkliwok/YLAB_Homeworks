@@ -2,6 +2,7 @@ package com.Y_LAB.homework.service;
 
 import com.Y_LAB.homework.dao.implementation.AuditDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
+import com.Y_LAB.homework.model.audit.AuditResult;
 import com.Y_LAB.homework.service.implementation.AuditServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,7 +46,7 @@ class AuditServiceImplTest {
     @Test
     @DisplayName("Проверка на вызов метода сохранения аудита")
     void saveAudit() {
-        Audit audit = new Audit(1L, "ds");
+        Audit audit = new Audit(1, 2L, LocalDateTime.now(), "class", "method", AuditResult.SUCCESS);
 
         auditService.saveAudit(audit);
 

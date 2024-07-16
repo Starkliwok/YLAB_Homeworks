@@ -2,13 +2,12 @@ package com.Y_LAB.homework.service.implementation;
 
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.service.FreeReservationSlotService;
 import com.Y_LAB.homework.util.reservation.ReservationDateTimeGenerator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -21,21 +20,16 @@ import java.util.*;
  * @author Денис Попов
  * @version 1.0
  */
-@AllArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class FreeReservationSlotServiceImpl implements FreeReservationSlotService {
 
     /** Поле сервиса мест для бронирования, предназначенное взаимодействия с местами для бронирования*/
-    private ReservationPlaceDAO reservationPlaceDAO;
+    private final ReservationPlaceDAO reservationPlaceDAO;
 
     /** Поле сервиса бронирований, предназначенное взаимодействия с бронированиями*/
-    private ReservationDAO reservationDAO;
+    private final ReservationDAO reservationDAO;
 
-    public FreeReservationSlotServiceImpl() {
-        reservationPlaceDAO = new ReservationPlaceDAOImpl();
-        reservationDAO = new ReservationDAOImpl();
-    }
-
-    /**{@inheritDoc}*/
     @Override
     public Map<ReservationPlace, List<LocalDate>> getAllAvailablePlaceForReservations() {
         List<ReservationPlace> reservationPlaces = reservationPlaceDAO.getAllReservationPlaces();
@@ -47,7 +41,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableReservations;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<LocalDate> getAllAvailableDatesForReservePlace(ReservationPlace reservationPlace) {
         List<Reservation> allReservations = reservationDAO.getAllReservationsWithReservationPlace(reservationPlace.getId());
@@ -60,7 +53,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableDates;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public Map<LocalTime, LocalTime> getAllAvailableTimesForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = ReservationDateTimeGenerator.generateTimesPeriod();
@@ -78,7 +70,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return availableTimes;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<String> getAllAvailableTimeListForReservation(ReservationPlace reservationPlace, LocalDate localDate) {
         Map<LocalTime, LocalTime> availableTimes = getAllAvailableTimesForReservation(reservationPlace, localDate);
@@ -93,7 +84,6 @@ public class FreeReservationSlotServiceImpl implements FreeReservationSlotServic
         return allAvailableTimes;
     }
 
-    /**{@inheritDoc}*/
     @Override
     public List<ReservationPlace> getAllAvailablePlacesForReserveDate(LocalDate localDate) {
         Map<ReservationPlace, List<LocalDate>> availableReservationsWithDates = getAllAvailablePlaceForReservations();

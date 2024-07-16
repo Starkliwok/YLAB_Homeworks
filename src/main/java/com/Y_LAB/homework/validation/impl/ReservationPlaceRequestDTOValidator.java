@@ -4,6 +4,9 @@ import com.Y_LAB.homework.exception.validation.FieldNotValidException;
 import com.Y_LAB.homework.model.dto.request.ReservationPlaceRequestDTO;
 import com.Y_LAB.homework.validation.NumberValidator;
 import com.Y_LAB.homework.validation.ValidatorDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MAX_LENGTH;
 import static com.Y_LAB.homework.validation.constants.FieldConstraintConstants.NAME_MIN_LENGTH;
@@ -14,23 +17,13 @@ import static com.Y_LAB.homework.validation.constants.NameOfFieldsForValidationC
  * @author Денис Попов
  * @version 2.0
  */
+@Component
+@RequiredArgsConstructor
+@Qualifier("placeReq")
 public class ReservationPlaceRequestDTOValidator implements ValidatorDTO<ReservationPlaceRequestDTO> {
 
-    private static ReservationPlaceRequestDTOValidator instance;
+    private final NumberValidator numberValidator;
 
-    private static NumberValidator numberValidator;
-
-    private ReservationPlaceRequestDTOValidator() {
-        numberValidator = NumberValidator.getInstance();
-    }
-    public static ReservationPlaceRequestDTOValidator getInstance() {
-        if (instance == null) {
-            instance = new ReservationPlaceRequestDTOValidator();
-        }
-        return instance;
-    }
-
-    /**{@inheritDoc}*/
     @Override
     public void validate(ReservationPlaceRequestDTO dto) throws FieldNotValidException {
         numberValidator.validate(dto.getTypeId(), FIELD_TYPE_ID);

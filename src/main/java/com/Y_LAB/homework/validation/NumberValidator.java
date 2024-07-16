@@ -1,24 +1,16 @@
 package com.Y_LAB.homework.validation;
 
 import com.Y_LAB.homework.exception.validation.FieldNotValidException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * Интерфейс описывает валидацию чисел
  * @author Денис Попов
  * @version 2.0
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class NumberValidator {
-    private static NumberValidator instance;
-    public static NumberValidator getInstance() {
-        if (instance == null) {
-            instance = new NumberValidator();
-        }
-        return instance;
-    }
 
     /**
      * Проверяет переданное число на валидность

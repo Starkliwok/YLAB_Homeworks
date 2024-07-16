@@ -3,64 +3,48 @@ package com.Y_LAB.homework.testcontainers;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.UserDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
+import com.Y_LAB.homework.finder.ObjectFinderForTests;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.model.reservation.ReservationPlace;
 import com.Y_LAB.homework.model.reservation.Workplace;
 import com.Y_LAB.homework.model.roles.User;
-import com.Y_LAB.homework.finder.ObjectFinderForTests;
-import com.Y_LAB.homework.util.db.ConnectionToDatabase;
-import com.Y_LAB.homework.util.init.LiquibaseMigration;
-import org.junit.jupiter.api.*;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.*;
+import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
 
-import static com.Y_LAB.homework.constants.ApplicationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {TestContainerConfig.class})
 class ReservationDAOImplTest {
 
-    @Container
-    private static final PostgreSQLContainer<?> postgresContainer = TestcontrainerManager.getPostgreSQLContainer();
-    private static Connection connection;
+    @Autowired
+    private DataSource dataSource;
 
-    private static ReservationDAO reservationDAO;
+    @Autowired
+    private ReservationDAO reservationDAO;
 
-    private static UserDAO userDAO;
+    @Autowired
+    private UserDAO userDAO;
 
-    private static ReservationPlaceDAO reservationPlaceDAO;
+    @Autowired
+    private ReservationPlaceDAO reservationPlaceDAO;
 
     private Reservation reservation;
 
     private ReservationPlace reservationPlace;
 
     private User user;
-
-    @BeforeAll
-    static void beforeAll() throws SQLException {
-        Properties properties = new Properties();
-        properties.setProperty(PROPERTIES_URL_KEY, postgresContainer.getJdbcUrl());
-        properties.setProperty(PROPERTIES_USERNAME_KEY, postgresContainer.getUsername());
-        properties.setProperty(PROPERTIES_PASSWORD_KEY, postgresContainer.getPassword());
-        LiquibaseMigration.initMigration(ConnectionToDatabase.getConnectionFromProperties(properties));
-        connection = ConnectionToDatabase.getConnectionFromProperties(properties);
-        connection.setAutoCommit(false);
-
-        reservationPlaceDAO = new ReservationPlaceDAOImpl(connection);
-        reservationDAO = new ReservationDAOImpl(connection, reservationPlaceDAO);
-        userDAO = new UserDAOImpl(connection);
-    }
 
     @BeforeEach
     void init() {
@@ -70,12 +54,12 @@ class ReservationDAOImplTest {
         user = userDAO.getUser(username, password);
         reservationPlace = new Workplace("009", 543, 34, 20);
         reservationPlaceDAO.saveReservationPlace(reservationPlace);
-        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, connection);
+        ObjectFinderForTests.setReservationPlaceIdFromDB(reservationPlace, dataSource);
         reservation = new Reservation(1, user.getId(),
                 LocalDateTime.now().withSecond(0).withNano(0),
                 LocalDateTime.now().withSecond(0).withNano(0).plusHours(2), reservationPlace);
         reservationDAO.saveReservation(reservation);
-        ObjectFinderForTests.setReservationIdFromDB(reservation, connection);
+        ObjectFinderForTests.setReservationIdFromDB(reservation, dataSource);
     }
 
     @AfterEach
@@ -91,7 +75,7 @@ class ReservationDAOImplTest {
         reservationDAO.deleteReservation(reservation.getId());
         int expected = reservationDAO.getAllReservations().size() + 1;
         reservationDAO.saveReservation(reservation);
-        ObjectFinderForTests.setReservationIdFromDB(reservation, connection);
+        ObjectFinderForTests.setReservationIdFromDB(reservation, dataSource);
 
         int actual = reservationDAO.getAllReservations().size();
 
@@ -101,10 +85,10 @@ class ReservationDAOImplTest {
     @Test
     @DisplayName("Получение всех броней отсортированных по пользователям из бд")
     void getAllReservationsByUsers() {
-        List<Reservation> expected = reservationDAO.getAllReservations().stream()
-                .sorted(Comparator.comparing(Reservation::getUserId)).toList();
+        List<Long> expected = reservationDAO.getAllReservations().stream()
+                .sorted(Comparator.comparing(Reservation::getUserId)).map(Reservation::getUserId).toList();
 
-        List<Reservation> actual = reservationDAO.getAllReservationsByUsers();
+        List<Long> actual = reservationDAO.getAllReservationsByUsers().stream().map(Reservation::getUserId).toList();
 
         assertThat(actual.isEmpty()).isFalse();
         assertThat(expected.isEmpty()).isFalse();
@@ -114,10 +98,10 @@ class ReservationDAOImplTest {
     @Test
     @DisplayName("Получение всех броней отсортированных по датам из бд")
     void getAllReservationsByDate() {
-        List<Reservation> expected = reservationDAO.getAllReservations().stream()
-                .sorted(Comparator.comparing(Reservation::getStartDate)).collect(Collectors.toList());
+        List<LocalDateTime> expected = reservationDAO.getAllReservations().stream()
+                .sorted(Comparator.comparing(Reservation::getStartDate)).map(Reservation::getStartDate).toList();
 
-        List<Reservation> actual = reservationDAO.getAllReservationsByDate();
+        List<LocalDateTime> actual = reservationDAO.getAllReservationsByDate().stream().map(Reservation::getStartDate).toList();
 
         assertThat(actual.isEmpty()).isFalse();
         assertThat(expected.isEmpty()).isFalse();
@@ -150,7 +134,7 @@ class ReservationDAOImplTest {
         reservationDAO.deleteReservation(reservation.getId());
         Reservation actual = reservationDAO.getReservation(reservation.getId());
         reservationDAO.saveReservation(reservation);
-        ObjectFinderForTests.setReservationIdFromDB(reservation, connection);
+        ObjectFinderForTests.setReservationIdFromDB(reservation, dataSource);
         Reservation actual2 = reservationDAO.getReservation(reservation.getId());
 
         assertThat(actual).isNull();

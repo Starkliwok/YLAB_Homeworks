@@ -1,11 +1,15 @@
 package com.Y_LAB.homework.validation.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Класс содержит константы для описания границ полей объектов
  * @author Денис Попов
  * @version 2.0
  */
-public class FieldConstraintConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class FieldConstraintConstants {
     /** Константа минимальной длины логина пользователя*/
     public static final int LOGIN_MIN_LENGTH = 2;
 
@@ -21,4 +25,8 @@ public class FieldConstraintConstants {
     public static final int NAME_MIN_LENGTH = 2;
 
     public static final int NAME_MAX_LENGTH = 30;
+
+    public static final int TYPE_ID_MIN_LENGTH = 1;
+
+    public static final int TYPE_ID_MAX_LENGTH = 2;
 }

@@ -9,6 +9,11 @@ import java.time.LocalDate;
 
 import static com.Y_LAB.homework.constants.DateTimePatternConstants.DATE_PATTERN;
 
+/**
+ * Request объект содержащий дату
+ * @author Денис Попов
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,11 +1,15 @@
 package com.Y_LAB.homework.constants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Класс содержит константы для создания бронирований
  * @author Денис Попов
  * @version 1.0
  */
-public class ReservationConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ReservationConstants {
 
     /** Константа количества часов начала бронирования мест*/
     public static final int START_HOUR_FOR_RESERVATION = 8;

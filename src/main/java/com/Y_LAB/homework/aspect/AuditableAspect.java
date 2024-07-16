@@ -3,18 +3,17 @@ package com.Y_LAB.homework.aspect;
 import com.Y_LAB.homework.dao.ReservationDAO;
 import com.Y_LAB.homework.dao.ReservationPlaceDAO;
 import com.Y_LAB.homework.dao.UserDAO;
-import com.Y_LAB.homework.dao.implementation.ReservationDAOImpl;
-import com.Y_LAB.homework.dao.implementation.ReservationPlaceDAOImpl;
-import com.Y_LAB.homework.dao.implementation.UserDAOImpl;
 import com.Y_LAB.homework.model.audit.Audit;
+import com.Y_LAB.homework.model.audit.AuditResult;
 import com.Y_LAB.homework.model.dto.request.ReservationRequestDTO;
 import com.Y_LAB.homework.model.reservation.Reservation;
 import com.Y_LAB.homework.service.AuditService;
-import com.Y_LAB.homework.service.implementation.AuditServiceImpl;
-import org.aspectj.lang.JoinPoint;
+import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 /**
  * Аспект для обработки действий пользователя
@@ -22,40 +21,68 @@ import org.aspectj.lang.annotation.Pointcut;
  * @version 1.0
  */
 @Aspect
+@RequiredArgsConstructor
+@Component
 public class AuditableAspect {
 
-    private final ReservationPlaceDAO reservationPlaceDAO = new ReservationPlaceDAOImpl();
+    /** Поле ДАО слоя мест для бронирования*/
 
-    private final ReservationDAO reservationDAO = new ReservationDAOImpl();
+    private final ReservationPlaceDAO reservationPlaceDAO;
 
-    private final AuditService auditService = new AuditServiceImpl();
+    /** Поле ДАО слоя броней*/
+    private final ReservationDAO reservationDAO;
 
-    private final UserDAO userDAO = new UserDAOImpl();
+    /** Поле ДАО слоя аудитов*/
+    private final AuditService auditService;
 
-    @Pointcut("within(@com.Y_LAB.homework.annotation.Auditable *) && execution(* com.Y_LAB.homework..* (..))")
+    /** Поле ДАО слоя пользователей*/
+    private final UserDAO userDAO;
+
+    /** Срез для обнаружения методов помеченных аннотацией {@link com.Y_LAB.homework.annotation.Auditable}*/
+    @Pointcut("within(@com.Y_LAB.homework.annotation.Auditable *) || " +
+            "execution(@com.Y_LAB.homework.annotation.Auditable * *(..))) && execution(* *(..))")
     public void annotatedByAuditable() {}
 
-    @Before("annotatedByAuditable()")
-    public void logMethod(JoinPoint jp) {
+    /**
+     * Метод обрабатывает методы помеченные аннотацией {@link com.Y_LAB.homework.annotation.Auditable},
+     * в случае успешного завершения метода сохраняет аудит пользователя с результатом {@link AuditResult#SUCCESS}
+     * если во время выполнения метода выбрасывается исключение, то метод сохраняет аудит пользователя с результатом
+     * {@link AuditResult#FAIL}
+     * @param jp JoinPoint
+     * @return Возвращаемое значение обрабатываемого метода
+     * @throws Throwable Пробрасывает исключение если его выбрасывает обрабатываемый метод
+     */
+    @Around("annotatedByAuditable()")
+    public Object logMethod(ProceedingJoinPoint jp) throws Throwable {
+        String className = jp.getSignature().getDeclaringTypeName();
         String methodName = jp.getSignature().getName();
         Object[] args = jp.getArgs();
-
+        Object result = null;
+        Throwable throwable = null;
+        AuditResult auditResult = AuditResult.SUCCESS;
+        try {
+            result = jp.proceed();
+        } catch (Throwable e) {
+            auditResult = AuditResult.FAIL;
+            throwable = e;
+        }
         switch (methodName) {
             case "saveUser" -> {
                 String username = args[0].toString();
                 Long userId = userDAO.getUserId(username);
                 if(userId != null) {
-                    auditService.saveAudit(new Audit(userId, "зарегистрировался под логином " + username));
+                    auditService.saveAudit(new Audit(userId, className, methodName, auditResult));
                 }
             }
             case "getAllUserReservations" -> {
                 long userId = (long) args[0];
-                auditService.saveAudit(new Audit(userId, "посмотрел все свои брони"));
+                auditService.saveAudit(new Audit(userId, className, methodName, auditResult));
             }
-            case "getReservation" -> {
+            case "getReservation", "deleteReservation" -> {
                 long reservationId = (long) args[0];
                 long userId = reservationDAO.getReservation(reservationId).getUserId();
-                auditService.saveAudit(new Audit(userId, "посмотрел свою бронь с id " + reservationId));
+                auditService.saveAudit(
+                        new Audit(userId, className, methodName + "(" + reservationId + ")", auditResult));
             }
             case "saveReservation" -> {
                 if(jp.getSignature().getDeclaringType() == ReservationRequestDTO.class) {
@@ -66,21 +93,21 @@ public class AuditableAspect {
                             .endDate(reservationRequestDTO.getEndDate())
                             .reservationPlace(reservationPlaceDAO.getReservationPlace(reservationRequestDTO.getReservationPlaceId()))
                             .userId(userId).build();
-
                     long reservationId = reservationDAO.getReservationId(reservation);
-                    auditService.saveAudit(new Audit(userId, "добавил бронь с id с id " + reservationId));
+                    auditService.saveAudit(
+                            new Audit(userId, className, methodName + "(" + reservationId + ")", auditResult));
                 }
             }
             case "updateReservation" -> {
                 Reservation reservation = (Reservation) args[0];
-                auditService.saveAudit(new Audit(reservation.getUserId(),
-                        "обновил бронь с id " + reservation.getId()));
-            }
-            case "deleteReservation" -> {
-                long reservationId = (long) args[0];
-                long userId = reservationDAO.getReservation(reservationId).getUserId();
-                auditService.saveAudit(new Audit(userId, "удалил свою бронь с id " + reservationId));
+                auditService.saveAudit(
+                        new Audit(reservation.getUserId(), className,
+                                methodName + "(" + reservation.getId() + ")", auditResult));
             }
         }
+        if (auditResult.equals(AuditResult.FAIL)) {
+            throw throwable;
+        }
+        return result;
     }
 }
