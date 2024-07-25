@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/homework
+    username: starkliw
+    password: ylab
+  liquibase:
+    liquibase-schema: coworking_service
+    change-log: db/changelog/changelog.xml
+    default-schema: public
+  jpa:
+    properties:
+      hibernate:
+        default_schema: coworking_service
+jwt:
+  secretKey: 2745e47d1bd64fab7e4d0e706b1ed29d6f665f0d93d8b4c1e5cabafe807e11722fc6e6f94c25d45427e6315d6101a4583120b21990d67109771cc1e6c6d48d91
+  issuer: Coworking-service
+  lifeTime: 50000000

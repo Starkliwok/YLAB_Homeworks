@@ -1,8 +1,0 @@
-db:
-  classname: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5433/homework
-  username: starkliw
-  password: ylab
-migration:
-  change_log_file: db/changelog/changelog.xml
-  service_schema: coworking_service
